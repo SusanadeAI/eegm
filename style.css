@@ -1238,12 +1238,99 @@ footer {
 
 /* --- Responsive --- */
 @media (max-width: 968px) {
+    /* Base Resets */
     #hero h1 { font-size: 3.5rem; }
-    .vision-grid { grid-template-columns: 1fr; gap: 4rem; }
-    .footer-grid { grid-template-columns: 1fr; gap: 4rem; }
+    .vision-grid, .footer-grid, .history-grid, .founder-layout { 
+        grid-template-columns: 1fr; 
+        gap: 3rem; 
+    }
+    .founder-image, .image-wrapper { height: auto; min-height: 400px; }
+    
+    /* Navigation */
+    .nav-links { 
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--bg-dark);
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 0;
+        gap: 2rem;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+        transition: clip-path 0.4s ease-in-out;
+    }
+    
+    .nav-links.active {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+
+    .mobile-toggle { display: block; }
+
+    /* Bento Grid */
+    .ministry-bento {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto;
+    }
+    .bento-large { grid-column: span 2; grid-row: auto; }
+    .bento-wide { grid-column: span 2; }
+
+    /* Testimonies Masonry */
+    .masonry-grid { column-count: 2; }
+
+    /* Strategy & Outreaches */
+    .strategy-list { grid-template-columns: repeat(2, 1fr); }
+    .strategy-banner { border-radius: 12px; border-left: none; border-top: 3px solid var(--primary); padding: 2rem; }
+    .outreach-grid, .accounts-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+
+    /* Partnership & Healing */
+    .partnership-layout { padding: 2.5rem; }
+    .healing-message { padding: 3rem 2rem; }
+    .healing-message::before { font-size: 6rem; top: -10px; left: 10px; }
+
+    /* Legacy fallbacks */
     .giving-box { flex-direction: column; padding: 3rem; text-align: center; }
     .giving-text { max-width: 100%; margin-bottom: 3rem; }
     .giving-btns { justify-content: center; }
-    .nav ul { display: none; }
-    .mobile-toggle { display: block; }
+}
+
+@media (max-width: 768px) {
+    /* Typography Overrides */
+    #hero h1 { font-size: 2.5rem; }
+    .hero-content p { font-size: 1.1rem; }
+    .drop-cap:first-letter { font-size: 3.5rem; }
+
+    /* Structural Resets */
+    .logo img { height: 70px; }
+    .nav.scrolled .logo img { height: 60px; }
+    
+    .ministry-bento, .strategy-list, .outreach-grid, .accounts-grid { 
+        grid-template-columns: 1fr; 
+    }
+    
+    .bento-large, .bento-wide { grid-column: auto; }
+
+    /* Testimonies */
+    .masonry-grid { column-count: 1; }
+
+    /* Timeline Adjustments */
+    .timeline::before { left: 15px; }
+    .timeline-item { padding-left: 45px; }
+    .timeline-dot { left: 9px; width: 12px; height: 12px; }
+
+    /* Partnership adjustments */
+    .partnership-header h2 { font-size: 2.2rem; }
+    .budget-list { flex-direction: column; align-items: center; }
+    .budget-item { text-align: center; }
+    .budget-card { padding: 2rem; }
+    .account-block, .contact-block { padding: 1.5rem; }
+    
+    /* Healing */
+    .healing-content h3 { font-size: 1.6rem; }
+    .italic-quote { font-size: 1.2rem !important; }
+
+    /* Padding Adjustments */
+    .section { padding: 4rem 0; }
+    .mt-5 { margin-top: 3rem; }
 }

@@ -34,10 +34,23 @@ const mobileToggle = document.getElementById('mobile-toggle');
 const navMenu = document.getElementById('nav-menu');
 
 mobileToggle.addEventListener('click', () => {
-    // Basic mobile toggle could be added with a class of "open"
-    // To maintain a premium feel, normally would use a full overlay menu
-    // But keeping it minimal for now.
-    alert('Mobile menu feature would open a premium overlay here.');
+    navMenu.querySelector('.nav-links').classList.toggle('active');
+    // Change icon based on state
+    if (navMenu.querySelector('.nav-links').classList.contains('active')) {
+        mobileToggle.innerHTML = '<i data-feather="x"></i>';
+    } else {
+        mobileToggle.innerHTML = '<i data-feather="menu"></i>';
+    }
+    feather.replace();
+});
+
+// Close mobile menu when clicking a link
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        navMenu.querySelector('.nav-links').classList.remove('active');
+        mobileToggle.innerHTML = '<i data-feather="menu"></i>';
+        feather.replace();
+    });
 });
 
 // Smooth scroll implementation (already handled by CSS, but good to ensure accessibility)
