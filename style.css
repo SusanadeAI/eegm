@@ -1296,10 +1296,22 @@ footer {
 }
 
 @media (max-width: 768px) {
-    /* Typography Overrides */
-    #hero h1 { font-size: 2.5rem; }
-    .hero-content p { font-size: 1.1rem; }
+    /* Typography & Hero Overrides */
+    .container { padding: 0 1.5rem; }
+    #hero h1 { font-size: 2.1rem; hyphens: auto; word-wrap: break-word; }
+    .hero-content p { font-size: 1.05rem; margin-bottom: 2rem; }
+    .hero-pill { font-size: 0.75rem; padding: 0.5rem 1rem; margin-bottom: 1.5rem; }
     .drop-cap:first-letter { font-size: 3.5rem; }
+
+    .hero-btns {
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+    }
+    .hero-btns .btn {
+        width: 100%;
+        justify-content: center;
+    }
 
     /* Structural Resets */
     .logo img { height: 70px; }
