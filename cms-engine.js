@@ -116,20 +116,10 @@ async function sendTestEmail() {
     if (!user) return showToast("Please login first", "error");
 
     showToast("Sending test email to your admin address...", "info");
-    const { data, error } = await db.functions.invoke('send-welcome-email', {
-        body: { userName: "Admin Test", userEmail: user.email }
-    });
-
-    if (error) {
-        console.error("Test Email Error:", error);
-        if (error.message && error.message.includes("not found")) {
-            showToast("Edge Function 'send-welcome-email' not found. Please deploy it first.", "error");
-        } else {
-            showToast("Dispatch Failed: " + (error.message || "Unknown error"), "error");
-        }
-    } else {
-        showToast("Test email sent successfully! Check your inbox.");
-    }
+    
+    // Switch to direct Resend browser sending
+    await sendDirectResendEmail("Admin Test", user.email);
+    showToast("Test email sent successfully! Check your inbox.");
 }
 
 window.closeAdminOverlay = () => {
