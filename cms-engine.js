@@ -38,71 +38,33 @@ async function initCMS() {
     addManagementLink();
 }
 
-// --- Email Integration (Resend) ---
+/// --- Email Integration (via Supabase Edge Function - bypasses browser CORS) ---
 async function sendRegistrationEmail(userName, userEmail) {
-    console.log(`CMS: Sending premium welcome email to ${userEmail}...`);
+    if (!userName || !userEmail) return;
+    console.log(`CMS: Triggering welcome email to ${userEmail}...`);
     try {
-        const apiKey = "re_hoNsTPLF_JzdNN4pxu32JmUJ1Tq6amGf6"; 
-        
-        // --- CUSTOM SENDER SETUP ---
-        // Since you connected your domain, you can now change this to:
-        // Official Ministry Sender
-        const fromEmail = "Eternity Echoes <info@eternityechoes.org>"; 
+        // This calls the Supabase Edge Function which calls Resend server-side
+        // Browser cannot call Resend directly (CORS), so we use an Edge Function
+        const SUPABASE_URL = "https://fztctnfuxbtmqgqcmvyq.supabase.co";
+        const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6dGN0bmZ1eGJ0bXFncWNtdnlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNjE1NDAsImV4cCI6MjA4ODgzNzU0MH0.y9KC5URsGGvpBEu5sYAkneg1z1Su-vlMs-5Xvg0qBTY";
 
-        const response = await fetch("https://api.resend.com/emails", {
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/send-welcome-email`, {
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${apiKey}`,
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${ANON_KEY}`,
             },
-            body: JSON.stringify({
-                from: fromEmail,
-                to: [userEmail],
-                subject: "✨ Welcome to All Believers Conference 2026!",
-                html: `
-                    <div style="background-color: #050505; padding: 60px 20px; text-align: center; color: #ffffff; font-family: 'Inter', sans-serif;">
-                        <table width="100%" max-width="600" style="margin: 0 auto; background: #0a0a0a; border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 32px; padding: 40px; box-shadow: 0 40px 100px rgba(0,0,0,0.8);">
-                            <tr>
-                                <td>
-                                    <div style="margin-bottom: 30px;">
-                                        <img src="https://fztctnfuxbtmqgqcmvyq.supabase.co/storage/v1/object/public/ministry-assets/logo.png" style="height: 50px;">
-                                    </div>
-                                    <h1 style="font-family: 'Playfair Display', serif; color: #d4af37; font-size: 2.2rem; margin-bottom: 10px; font-weight: 700;">Welcome, ${userName}!</h1>
-                                    <p style="font-size: 1.1rem; opacity: 0.8; margin-bottom: 30px;">Your registration for the <strong>All Believers Conference</strong> is confirmed.</p>
-                                    
-                                    <div style="background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.1); border-radius: 20px; padding: 30px; margin-bottom: 30px; text-align: left;">
-                                        <h3 style="color: #d4af37; margin-top: 0;">What to Expect:</h3>
-                                        <p style="font-size: 0.95rem; opacity: 0.7; line-height: 1.6;">
-                                            - Life-changing encounters with the Word.<br>
-                                            - Spirit-filled worship and prophetic ministry.<br>
-                                            - A community of believers on fire for God.
-                                        </p>
-                                    </div>
-
-                                    <p style="font-size: 1rem; opacity: 0.7; line-height: 1.6; margin-bottom: 40px;">
-                                        Stay tuned to this email for exclusive event updates, schedules, and prayer guides. We cannot wait to see you there!
-                                    </p>
-
-                                    <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 30px; text-align: center;">
-                                        <p style="font-weight: 700; color: #d4af37; margin: 0;">Eternity Echoes Global Ministry</p>
-                                        <p style="font-size: 0.8rem; opacity: 0.4;">"Sounding the Call of Eternity"</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                `
-            })
+            body: JSON.stringify({ userName, userEmail })
         });
 
         if (response.ok) {
-            console.log("CMS: Premium email delivered via Resend.");
+            console.log("CMS: Welcome email dispatched via Edge Function.");
         } else {
-            const err = await response.json();
-            console.error("CMS: Resend Delivery Failed:", err);
+            const err = await response.text();
+            console.error("CMS: Edge Function email error:", err);
         }
     } catch (err) {
-        console.error("CMS: Email send failed", err);
+        console.error("CMS: Email dispatch failed", err);
     }
 }
 
