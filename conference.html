@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Believers Conference Registration | Eternity Echoes Global Ministry</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="form.css">
+    
+    <style>
+        /* Small override to keep nav dark immediately since there's no hero video */
+        header { background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <header id="main-header" class="scrolled">
+        <div class="container container-nav">
+            <div class="logo">
+                <a href="index.html"><img src="assets/images/logo.png" alt="Eternity Echoes Global Ministry Logo" id="site-logo"></a>
+            </div>
+            <nav id="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="index.html#hero">Home</a></li>
+                    <li><a href="index.html#about">Founder</a></li>
+                    <li><a href="conference.html" class="active accent">Conference</a></li>
+                    <li><a href="index.html#our-story">Our Story</a></li>
+                    <li><a href="index.html#crusades">Impact</a></li>
+                    <li><a href="index.html#ministries">Ministries</a></li>
+                    <li><a href="index.html#testimonies">Testimonies</a></li>
+                    <li><a href="index.html#give" class="btn btn-primary">Partner</a></li>
+                </ul>
+            </nav>
+            <div class="mobile-toggle" id="mobile-toggle">
+                <i data-feather="menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <section class="section form-section">
+        <div class="container">
+            <div class="form-header reveal">
+                <h1 data-cms-key="conf_h1">ALL BELIEVERS <span class="accent">CONFERENCE</span></h1>
+                <p class="visioneer" data-cms-key="conf_visioneer">Visioneer: Evangelist Elisha Olorunda</p>
+                <p data-cms-key="conf_description">Thank you for your interest in attending the All Believers Conference.<br>Kindly complete this form to confirm your participation. This will help us prepare adequately and keep you updated with important information about the conference.</p>
+                <div class="note" data-cms-key="conf_note">
+                    <i data-feather="info" style="display:inline-block; vertical-align:middle; margin-right:5px;"></i> Note: FREE BUS for those coming from ADO, IKERE, FUTA, SCHOOL OF NURSING, FECA, HEALTH TECH, BOUESTI, FUESTI, and EKSU.
+                </div>
+            </div>
+
+            <div class="form-container reveal delay-1">
+                <form id="conference-form" aria-label="Conference Registration Form">
+                    <!-- 1. Personal Information -->
+                    <fieldset>
+                        <legend>Personal Information</legend>
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Gender</label>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="gender" value="Male" required> Male</label>
+                                    <label><input type="radio" name="gender" value="Female"> Female</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="ageRange">Age Range</label>
+                                <select id="ageRange" name="ageRange" required>
+                                    <option value="" disabled selected>Select age range</option>
+                                    <option value="Under 18">Under 18</option>
+                                    <option value="18-25">18-25</option>
+                                    <option value="26-35">26-35</option>
+                                    <option value="36-45">36-45</option>
+                                    <option value="46-55">46-55</option>
+                                    <option value="56 and above">56 and above</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- 2. Contact Details -->
+                    <fieldset>
+                        <legend>Contact Details</legend>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">Phone Number (WhatsApp preferred)</label>
+                                <input type="tel" id="phone" name="phone" required placeholder="e.g. +2348000000000">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" required placeholder="example@mail.com">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City / Town</label>
+                                <input type="text" id="city" name="city" required placeholder="e.g. Akure">
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State / Country</label>
+                                <input type="text" id="state" name="state" required placeholder="e.g. Ondo State, Nigeria">
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- 3. Campus Information -->
+                    <fieldset>
+                        <legend>Campus Information</legend>
+                        <div class="form-group">
+                            <label for="campus">Name of Campus (If applicable)</label>
+                            <input type="text" id="campus" name="campus" placeholder="e.g. FUTA">
+                        </div>
+                    </fieldset>
+
+                    <!-- 4. Church / Ministry Information -->
+                    <fieldset>
+                        <legend>Church / Ministry Information</legend>
+                        <div class="form-group">
+                            <label>Do you currently attend a church?</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="attendChurch" value="Yes" required onclick="toggleField('church-details', true)"> Yes</label>
+                                <label><input type="radio" name="attendChurch" value="No" onclick="toggleField('church-details', false)"> No</label>
+                            </div>
+                        </div>
+                        <div id="church-details" class="conditional-field">
+                            <div class="form-group">
+                                <label for="churchLocation">Church Location</label>
+                                <input type="text" id="churchLocation" name="churchLocation" placeholder="Where is your church located?">
+                            </div>
+                            <div class="form-group">
+                                <label for="churchRole">Your Role in Church</label>
+                                <select id="churchRole" name="churchRole">
+                                    <option value="" disabled selected>Select your role</option>
+                                    <option value="Member">Member</option>
+                                    <option value="Worker">Worker</option>
+                                    <option value="Pastor / Minister">Pastor / Minister</option>
+                                    <option value="Evangelist">Evangelist</option>
+                                    <option value="Church Leader">Church Leader</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- 5. Conference Participation -->
+                    <fieldset>
+                        <legend>Conference Participation</legend>
+                        <div class="form-group">
+                            <label for="hearAbout">How did you hear about the conference?</label>
+                            <select id="hearAbout" name="hearAbout" required>
+                                <option value="" disabled selected>Select an option</option>
+                                <option value="Social Media">Social Media</option>
+                                <option value="Friend / Invitation">Friend / Invitation</option>
+                                <option value="Church Announcement">Church Announcement</option>
+                                <option value="Flyer / Poster">Flyer / Poster</option>
+                                <option value="Ministry Platform">Ministry Platform</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Will you be attending with other people?</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="attendingWithOthers" value="Yes" required onclick="toggleField('others-details', true)"> Yes</label>
+                                <label><input type="radio" name="attendingWithOthers" value="No" onclick="toggleField('others-details', false)"> No</label>
+                            </div>
+                        </div>
+                        <div id="others-details" class="conditional-field">
+                            <div class="form-group">
+                                <label for="othersCount">If Yes, how many people are coming with you?</label>
+                                <input type="number" id="othersCount" name="othersCount" min="1" placeholder="Number of people">
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- 6. Free Bus Transportation -->
+                    <fieldset>
+                        <legend>Free Bus Transportation</legend>
+                        <div class="form-group">
+                            <label for="busLocation">Will you be coming from any of the following locations with the FREE BUS?</label>
+                            <select id="busLocation" name="busLocation" required onchange="toggleBusLocation()">
+                                <option value="" disabled selected>Select location or Not Applicable</option>
+                                <option value="Ado">Ado</option>
+                                <option value="Ikere">Ikere</option>
+                                <option value="FUTA">FUTA</option>
+                                <option value="School of Nursing">School of Nursing</option>
+                                <option value="FECA">FECA</option>
+                                <option value="Health Tech">Health Tech</option>
+                                <option value="BOUESTI">BOUESTI</option>
+                                <option value="EKSU">EKSU</option>
+                                <option value="FUESTI">FUESTI</option>
+                                <option value="OWO POLY">OWO POLY</option>
+                                <option value="Not Applicable">Not Applicable</option>
+                            </select>
+                        </div>
+                        <div id="pickup-details" class="conditional-field">
+                            <div class="form-group">
+                                <label>Will you make yourself available at the designated pickup point?</label>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="pickupAvailable" value="Yes"> Yes</label>
+                                    <label><input type="radio" name="pickupAvailable" value="No"> No</label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- 7. Accommodation -->
+                    <fieldset>
+                        <legend>Accommodation</legend>
+                        <div class="form-group">
+                            <label>Do you require accommodation? (On Special Request)</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="requireAccommodation" value="Yes" required onclick="toggleField('acc-details', true)"> Yes</label>
+                                <label><input type="radio" name="requireAccommodation" value="No" onclick="toggleField('acc-details', false)"> No</label>
+                            </div>
+                        </div>
+                        <div id="acc-details" class="conditional-field">
+                            <div class="form-group">
+                                <label for="accommodationDetails">If Yes, please provide additional details:</label>
+                                <textarea id="accommodationDetails" name="accommodationDetails" placeholder="Any special needs or arrival time information"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- 8. Follow-Up -->
+                    <fieldset>
+                        <legend>Follow-Up</legend>
+                        <div class="form-group">
+                            <label>Would you like to receive updates, teachings, and future conference information from Eternity Echoes Global Ministries?</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="receiveUpdates" value="Yes" required onclick="toggleField('update-format', true)"> Yes</label>
+                                <label><input type="radio" name="receiveUpdates" value="No" onclick="toggleField('update-format', false)"> No</label>
+                            </div>
+                        </div>
+                        <div id="update-format" class="conditional-field">
+                            <div class="form-group">
+                                <label>Preferred way to receive updates (Select one or more):</label>
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" name="updatePreference" value="WhatsApp"> WhatsApp</label>
+                                    <label><input type="checkbox" name="updatePreference" value="Email"> Email</label>
+                                    <label><input type="checkbox" name="updatePreference" value="SMS"> SMS</label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- 9. Prayer Request -->
+                    <fieldset>
+                        <legend>Prayer Request (Optional)</legend>
+                        <div class="form-group">
+                            <label for="prayerRequest">Do you have any prayer requests you would like the ministry team to pray about?</label>
+                            <textarea id="prayerRequest" name="prayerRequest" placeholder="Share your prayer points here..."></textarea>
+                        </div>
+                    </fieldset>
+
+                    <!-- 10. Final Confirmation -->
+                    <fieldset style="border-color: var(--primary);">
+                        <legend>Final Confirmation</legend>
+                        <div class="checkbox-group" style="align-items: flex-start;">
+                            <label>
+                                <input type="checkbox" name="finalConfirmation" required style="margin-top: 5px;">
+                                <span>I confirm my interest in attending the All Believers Conferencе and agree to receive updates regarding the event.</span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <div id="form-message" style="display:none; padding: 1rem; margin-bottom: 1rem; border-radius: 4px; text-align: center;"></div>
+
+                    <div class="submit-btn-wrapper">
+                        <button type="submit" class="btn btn-primary glow-btn submit-btn" id="submit-btn">Submit Registration</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Panel Overlay (Hidden by default) -->
+    <div id="admin-overlay" class="admin-overlay">
+        <div class="admin-modal">
+            <div class="admin-header">
+                <h3>Admin Control Panel</h3>
+                <button id="close-admin" class="btn-close"><i data-feather="x"></i></button>
+            </div>
+            <div id="admin-auth" class="admin-section">
+                <!-- Login Form -->
+                <form id="login-form">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="admin-email" required placeholder="admin@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="admin-password" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Login to Dashboard</button>
+                </form>
+            </div>
+            <div id="admin-controls" class="admin-section shadow-text" style="display:none; color: #fff;">
+                <div class="admin-welcome mb-4">
+                    <h2>Welcome, Admin</h2>
+                    <p>You can now edit the website directly or manage registrations.</p>
+                </div>
+                <div class="admin-actions mb-4">
+                    <button id="toggle-edit-mode" class="btn btn-primary">Enable Edit Mode</button>
+                    <button onclick="showAdminSection('registrations')" class="btn btn-secondary glass-btn">View Registrations</button>
+                    <button onclick="showAdminSection('admins')" class="btn btn-secondary glass-btn">Add New Admin</button>
+                </div>
+                
+                <div id="admin-registrations" class="sub-section" style="display:none;">
+                    <h4>Conference Registrations</h4>
+                    <div id="registrations-list">Loading...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supabase SDK & CMS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-init.js"></script>
+    <script src="cms-engine.js"></script>
+
+    <script>
+        feather.replace();
+
+        function toggleField(id, show) {
+            const el = document.getElementById(id);
+            if (show) {
+                el.classList.add('active');
+            } else {
+                el.classList.remove('active');
+            }
+        }
+
+        function toggleBusLocation() {
+            const select = document.getElementById('busLocation');
+            if (select.value === 'Not Applicable' || select.value === '') {
+                toggleField('pickup-details', false);
+            } else {
+                toggleField('pickup-details', true);
+            }
+        }
+
+        // Updated for Supabase
+        document.getElementById('conference-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('submit-btn');
+            const msgBox = document.getElementById('form-message');
+            
+            btn.innerHTML = 'Submitting... <span class="spinner" style="display:inline-block; border: 2px solid #000; border-top-color: transparent; border-radius: 50%; width: 15px; height: 15px; animation: spin 1s linear infinite;"></span>';
+            btn.disabled = true;
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            data.update_preference = formData.getAll('updatePreference');
+            
+            try {
+                // Map frontend fields (camelCase) to DB fields (snake_case)
+                const dbData = {
+                    full_name: data.fullName,
+                    gender: data.gender,
+                    age_range: data.ageRange,
+                    phone: data.phone,
+                    email: data.email,
+                    city: data.city,
+                    state_country: data.state,
+                    campus: data.campus,
+                    attend_church: data.attendChurch === 'Yes',
+                    church_location: data.churchLocation,
+                    church_role: data.churchRole,
+                    hear_about: data.hearAbout,
+                    attending_with_others: data.attendingWithOthers === 'Yes',
+                    others_count: parseInt(data.othersCount) || 0,
+                    bus_location: data.busLocation,
+                    pickup_available: data.pickupAvailable === 'Yes',
+                    require_accommodation: data.requireAccommodation === 'Yes',
+                    accommodation_details: data.accommodationDetails,
+                    receive_updates: data.receiveUpdates === 'Yes',
+                    update_preference: data.update_preference,
+                    prayer_request: data.prayerRequest
+                };
+
+                const { error } = await supabase.from('conference_registrations').insert([dbData]);
+                
+                if (!error) {
+                    msgBox.style.display = 'block';
+                    msgBox.style.backgroundColor = 'rgba(0, 255, 0, 0.1)';
+                    msgBox.style.color = '#4ade80';
+                    msgBox.style.border = '1px solid #4ade80';
+                    msgBox.innerHTML = 'Registration successful! We have received your details.';
+                    e.target.reset();
+                    document.querySelectorAll('.conditional-field').forEach(el => el.classList.remove('active'));
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    throw error;
+                }
+            } catch (err) {
+                msgBox.style.display = 'block';
+                msgBox.style.backgroundColor = 'rgba(255, 0, 0, 0.1)';
+                msgBox.style.color = '#f87171';
+                msgBox.style.border = '1px solid #f87171';
+                msgBox.innerHTML = 'An error occurred: ' + err.message;
+            } finally {
+                btn.innerHTML = 'Submit Registration';
+                btn.disabled = false;
+            }
+        });
+    </script>
+    <style>
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
+</body>
+</html>

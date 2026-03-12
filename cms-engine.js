@@ -1,0 +1,196 @@
+/**
+ * Eternity Echoes CMS Engine v1.0
+ * Handles Dyamic Content, Auth, and Edit Mode
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+    initCMS();
+});
+
+async function initCMS() {
+    // 1. Load All Dynamic Content
+    await loadAllContent();
+
+    // 2. Check Auth Status
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+        showAdminControls();
+    }
+
+    // 3. Setup Listeners
+    setupEventListeners();
+}
+
+// --- Content Loading ---
+async function loadAllContent() {
+    // Load Site Content (Headers, Paragraphs, URLs)
+    const { data: content } = await supabase.from('site_content').select('*');
+    if (content) {
+        content.forEach(item => {
+            const elements = document.querySelectorAll(`[data-cms-key="${item.section_key}"]`);
+            elements.forEach(el => {
+                if (el.tagName === 'IMG') el.src = item.content_url;
+                else if (el.tagName === 'VIDEO') el.querySelector('source').src = item.content_url;
+                else el.innerHTML = item.content_text;
+            });
+        });
+    }
+
+    // Load Ministries (Bento)
+    // (Logic for dynamic grid generation could go here if needed)
+}
+
+// --- Auth & Admin ---
+async function setupEventListeners() {
+    // Login Form
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) alert('Login failed: ' + error.message);
+            else {
+                location.reload(); // Refresh to apply admin state
+            }
+        });
+    }
+
+    // Admin FAB (To open panel)
+    const fab = document.getElementById('admin-fab');
+    if (fab) {
+        fab.addEventListener('click', () => {
+            document.getElementById('admin-overlay').style.display = 'flex';
+        });
+    }
+
+    // Close Admin
+    const closeBtn = document.getElementById('close-admin');
+    if(closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            document.getElementById('admin-overlay').style.display = 'none';
+        });
+    }
+
+    // Toggle Edit Mode
+    const editBtn = document.getElementById('toggle-edit-mode');
+    if (editBtn) {
+        editBtn.addEventListener('click', () => {
+            document.body.classList.toggle('edit-mode-active');
+            const isActive = document.body.classList.contains('edit-mode-active');
+            editBtn.innerText = isActive ? 'Disable Edit Mode' : 'Enable Edit Mode';
+            
+            // Toggle contenteditable on all CMS elements
+            document.querySelectorAll('[data-cms-key]').forEach(el => {
+                if (el.tagName !== 'IMG' && el.tagName !== 'VIDEO') {
+                    el.contentEditable = isActive;
+                }
+            });
+
+            if (isActive) {
+                document.getElementById('save-bar').style.display = 'block';
+            } else {
+                document.getElementById('save-bar').style.display = 'none';
+            }
+        });
+    }
+
+    // Save Changes
+    const saveBtn = document.getElementById('save-all');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', async () => {
+            saveBtn.innerText = 'Saving...';
+            const updates = [];
+            document.querySelectorAll('[data-cms-key]').forEach(el => {
+                const key = el.getAttribute('data-cms-key');
+                const content = el.innerHTML;
+                updates.push({ section_key: key, content_text: content });
+            });
+
+            const { error } = await supabase.from('site_content').upsert(updates, { onConflict: 'section_key' });
+            if (error) alert('Save failed: ' + error.message);
+            else {
+                saveBtn.innerText = 'All Changes Saved!';
+                setTimeout(() => { saveBtn.innerText = 'Save Final Changes'; }, 2000);
+            }
+        });
+    }
+
+    // Add New Admin
+    const addAdminForm = document.getElementById('add-admin-form');
+    if (addAdminForm) {
+        addAdminForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('new-admin-email').value;
+            const password = document.getElementById('new-admin-password').value;
+            
+            // Supabase Admin API is usually for server-side, 
+            // but we can use signUp if enabled or a custom edge function.
+            // For now, we use public signUp.
+            const { error } = await supabase.auth.signUp({ email, password });
+            if (error) alert('Error: ' + error.message);
+            else alert('Admin invitation sent/created!');
+        });
+    }
+}
+
+function showAdminControls() {
+    const authSection = document.getElementById('admin-auth');
+    const controlSection = document.getElementById('admin-controls');
+    if (authSection) authSection.style.display = 'none';
+    if (controlSection) controlSection.style.display = 'block';
+    
+    // Show Floating Action Button
+    if (!document.getElementById('admin-fab')) {
+        const fab = document.createElement('button');
+        fab.id = 'admin-fab';
+        fab.className = 'admin-fab';
+        fab.innerHTML = '<i data-feather="settings"></i>';
+        document.body.appendChild(fab);
+        feather.replace();
+    }
+
+    // Show Save Bar (hidden initially)
+    if (!document.getElementById('save-bar')) {
+        const bar = document.createElement('div');
+        bar.id = 'save-bar';
+        bar.className = 'save-bar';
+        bar.innerHTML = 'EDIT MODE ACTIVE - <button id="save-all" class="btn btn-secondary" style="margin-left: 10px; padding: 5px 15px; background: #000; color: #fff;">Save Final Changes</button>';
+        document.body.prepend(bar);
+    }
+}
+
+// Section Switcher for Admin Panel
+window.showAdminSection = function(section) {
+    document.querySelectorAll('.sub-section').forEach(s => s.style.display = 'none');
+    if (section === 'registrations') {
+        document.getElementById('admin-registrations').style.display = 'block';
+        loadRegistrations();
+    } else if (section === 'admins') {
+        document.getElementById('admin-management').style.display = 'block';
+    }
+}
+
+async function loadRegistrations() {
+    const list = document.getElementById('registrations-list');
+    const { data: regs, error } = await supabase.from('conference_registrations').select('*').order('created_at', { ascending: false });
+    
+    if (error) list.innerHTML = 'Error loading registrations.';
+    else if (regs.length === 0) list.innerHTML = 'No registrations yet.';
+    else {
+        let html = '<table class="admin-table"><thead><tr><th>Name</th><th>Phone</th><th>Email</th><th>Campus</th><th>Date</th></tr></thead><tbody>';
+        regs.forEach(r => {
+            html += `<tr>
+                <td>${r.full_name}</td>
+                <td>${r.phone}</td>
+                <td>${r.email}</td>
+                <td>${r.campus || 'N/A'}</td>
+                <td>${new Date(r.created_at).toLocaleDateString()}</td>
+            </tr>`;
+        });
+        html += '</tbody></table>';
+        list.innerHTML = html;
+    }
+}

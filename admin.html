@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Conference Registrations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { padding: 2rem; background: var(--bg-dark); }
+        .admin-header { margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .admin-container { max-width: 1400px; margin: 0 auto; }
+        .table-responsive { overflow-x: auto; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        th { background: rgba(212, 175, 55, 0.1); color: var(--primary); font-weight: 600; white-space: nowrap; }
+        td { color: var(--text-secondary); }
+        tr:hover { background: rgba(255,255,255,0.05); }
+        .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.2rem; }
+        .badge-bus { background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid #38bdf8; }
+        .badge-acc { background: rgba(244, 114, 182, 0.1); color: #f472b6; border: 1px solid #f472b6; }
+        .empty-state { padding: 3rem; text-align: center; color: var(--text-secondary); }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>Conference Registrations <span class="accent">Dashboard</span></h1>
+            <a href="index.html" class="btn btn-outline" style="padding: 0.5rem 1rem;">Back to Home</a>
+        </div>
+        
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Demographics</th>
+                        <th>Campus/Church</th>
+                        <th>Logistics</th>
+                        <th>Additional Details</th>
+                    </tr>
+                </thead>
+                <tbody id="registrations-body">
+                    <tr><td colspan="8" class="empty-state">Loading registrations...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        async function fetchRegistrations() {
+            try {
+                const res = await fetch('/api/admin/registrations');
+                let result;
+                try {
+                    result = await res.json();
+                } catch {
+                    throw new Error("Make sure you are running the Node.js server to fetch data.");
+                }
+                
+                const tbody = document.getElementById('registrations-body');
+                
+                if (!res.ok) throw new Error(result.error || 'Failed to fetch');
+                
+                if (!result.data || result.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No registrations found yet.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = result.data.map(r => `
+                    <tr>
+                        <td>#${r.id}</td>
+                        <td style="white-space:nowrap">${new Date(r.created_at).toLocaleString()}</td>
+                        <td><strong>${r.fullName || '-'}</strong></td>
+                        <td>
+                            ${r.phone || '-'}<br>
+                            <small>${r.email || '-'}</small>
+                        </td>
+                        <td>
+                            ${r.gender || '-'}, ${r.ageRange || '-'}<br>
+                            <small>${r.city || '-'}, ${r.state || '-'}</small>
+                        </td>
+                        <td>
+                            ${r.campus ? r.campus : (r.attendChurch === 'Yes' ? (r.churchRole || '') + ' at ' + (r.churchLocation || '') : 'No Church')}
+                        </td>
+                        <td>
+                            ${r.busLocation && r.busLocation !== 'Not Applicable' ? '<span class="badge badge-bus">Bus: ' + r.busLocation + '</span><br>' : ''}
+                            ${r.requireAccommodation === 'Yes' ? '<span class="badge badge-acc">Acc Req</span>' : ''}
+                            ${r.attendingWithOthers === 'Yes' ? '<br><small>+ ' + r.othersCount + ' people</small>' : ''}
+                        </td>
+                        <td>
+                            ${r.prayerRequest ? '<small style="color:var(--primary);"><i>"'+r.prayerRequest+'"</i></small><br>' : ''}
+                            ${r.accommodationDetails ? '<small><strong>Acc Details:</strong> '+r.accommodationDetails+'</small>' : ''}
+                        </td>
+                    </tr>
+                `).join('');
+                
+            } catch (err) {
+                document.getElementById('registrations-body').innerHTML = 
+                    `<tr><td colspan="8" class="empty-state" style="color: #f87171;">Error loading data: ${err.message}</td></tr>`;
+            }
+        }
+        
+        // Init
+        fetchRegistrations();
+    </script>
+</body>
+</html>
