@@ -1396,7 +1396,7 @@ footer {
     backdrop-filter: blur(25px);
     z-index: 5000;
     display: none; /* Controlled by .active class */
-    overflow-y: auto;
+    overflow: hidden; /* Avoid double scrollbars */
 }
 
 .admin-overlay.active {
@@ -1408,10 +1408,11 @@ footer {
 /* Centering for Auth view */
 .admin-auth-view {
     width: 100%;
-    max-width: 450px;
-    padding: 2rem;
+    max-width: 480px;
+    padding: 1.5rem;
     animation: authFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     margin: auto;
+    position: relative;
 }
 
 @keyframes authFadeIn {
@@ -1423,7 +1424,7 @@ footer {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 32px;
-    padding: 3.5rem;
+    padding: 2.5rem; /* Reduced from 3.5rem to prevent distortion */
     box-shadow: 0 40px 100px rgba(0,0,0,0.8);
     backdrop-filter: blur(10px);
 }
@@ -1564,7 +1565,7 @@ footer {
 }
 
 .admin-top-bar {
-    padding: 1.8rem 4rem;
+    padding: 1.5rem 3rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1572,8 +1573,14 @@ footer {
     background: rgba(0, 0, 0, 0.4);
     position: sticky;
     top: 0;
-    z-index: 5;
+    z-index: 55;
     backdrop-filter: blur(20px);
+}
+
+.top-bar-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .admin-content-area {

@@ -39,12 +39,17 @@ async function initCMS() {
                 document.getElementById('admin-overlay').classList.add('active');
                 localStorage.removeItem('admin_login_success');
             }
+
+            // Persistence Check: If logged in but modal was closed, don't reopen
+            if (sessionStorage.getItem('admin_modal_closed')) {
+                document.getElementById('admin-overlay').classList.remove('active');
+            }
         }
+        setupEventListeners();
+        addManagementLink();
     } catch (err) {
         console.error("CMS: Init Error", err);
     }
-    setupEventListeners();
-    addManagementLink();
 }
 
 /// --- Email Integration (via Supabase Edge Function - bypasses browser CORS) ---
@@ -55,15 +60,25 @@ async function sendRegistrationEmail(userName, userEmail) {
         const db = window.supabaseClient;
         if (!db) return;
 
-        // Use the official Supabase invoke method
+        // Try the official Supabase invoke first
         const { data, error } = await db.functions.invoke('send-welcome-email', {
             body: { userName, userEmail }
         });
 
-        if (error) throw error;
+        if (error) {
+            console.error("CMS: SDK Invoke Error:", error);
+            // If it's a 404 or specific Edge Function error, we know it's not deployed
+            if (error.message && error.message.includes("not found")) {
+                showToast("Email Error: 'send-welcome-email' function not found. Please deploy it in Supabase.", "error");
+            } else {
+                showToast("Email Failed: " + (error.message || "Unknown Edge Function Error"), "error");
+            }
+            return;
+        }
         console.log("CMS: Welcome email dispatched successfully.", data);
     } catch (err) {
         console.error("CMS: Email dispatch failed (catch block)", err);
+        showToast("Email Dispatch Error: " + (err.message || "Network Error"), "error");
     }
 }
 
@@ -82,11 +97,20 @@ async function sendTestEmail() {
 
     if (error) {
         console.error("Test Email Error:", error);
-        showToast("Dispatch Failed: " + error.message, "error");
+        if (error.message && error.message.includes("not found")) {
+            showToast("Edge Function 'send-welcome-email' not found. Please deploy it first.", "error");
+        } else {
+            showToast("Dispatch Failed: " + (error.message || "Unknown error"), "error");
+        }
     } else {
         showToast("Test email sent successfully! Check your inbox.");
     }
 }
+
+window.closeAdminOverlay = () => {
+    document.getElementById('admin-overlay').classList.remove('active');
+    sessionStorage.setItem('admin_modal_closed', 'true');
+};
 
 // --- Dashboard Logic ---
 window.showAdminSection = (section) => {
@@ -344,34 +368,47 @@ async function loadRegistrations() {
                 </tr>
             </thead>
             <tbody>
-                ${regs.map(r => `
-                    <tr onclick="viewRegistrationDetail('${r.id}')">
-                        <td style="font-weight:700; color:#fff;">${r.full_name}</td>
-                        <td>${r.email}</td>
-                        <td>${r.phone}</td>
-                        <td>${new Date(r.created_at).toLocaleDateString()}</td>
+                ${regs.map(reg => `
+                    <tr onclick="showRegistrationDetail('${reg.id}')" style="cursor:pointer;" title="Click to view full details">
+                        <td>${new Date(reg.created_at).toLocaleDateString()}</td>
+                        <td><strong>${reg.full_name}</strong></td>
+                        <td>${reg.email}</td>
+                        <td><span class="badge badge-success">Submitted</span></td>
+                        <td><i data-feather="chevron-right"></i></td>
                     </tr>
                 `).join('')}
             </tbody>
         </table>
     `;
-    window.allRegistrations = regs; // Store for quick lookup
+    feather.replace();
 }
 
-window.viewRegistrationDetail = (id) => {
-    const reg = window.allRegistrations?.find(r => r.id === id);
-    if (!reg) return;
-
-    const detailView = document.getElementById('registrations-detail-view');
+window.showRegistrationDetail = async (id) => {
+    const db = window.supabaseClient;
     const tableView = document.getElementById('registrations-table-view');
+    const detailView = document.getElementById('registrations-detail-view');
     const content = document.getElementById('registration-detail-content');
+    
+    tableView.style.display = 'none';
+    detailView.style.display = 'block';
+    content.innerHTML = '<div class="loader-inline">Fetching full record...</div>';
+
+    const { data: reg, error } = await db.from('conference_registrations').select('*').eq('id', id).single();
+    
+    if (error) {
+        content.innerHTML = `<div class="error-msg">Error: ${error.message}</div>`;
+        return;
+    }
+
+    document.getElementById('detail-reg-name').innerText = reg.full_name;
 
     const fields = [
         ['Full Name', reg.full_name],
         ['Email', reg.email],
         ['Phone', reg.phone],
         ['Gender', reg.gender],
-        ['Age Range', reg.age_range],
+        ['Registration Type', reg.registration_type],
+        ['Church/Ministry', reg.church_ministry],
         ['City', reg.city],
         ['State/Country', reg.state_country],
         ['Campus', reg.campus],
@@ -389,29 +426,16 @@ window.viewRegistrationDetail = (id) => {
 
     content.innerHTML = `
         <div class="detail-view-card">
-            <div class="detail-header">
-                <div>
-                    <label>Registration ID: ${reg.id.slice(0,8)}</label>
-                    <h2 style="font-size:2rem; color:var(--primary);">${reg.full_name}</h2>
-                </div>
-                <button class="btn-back" onclick="closeDetailView()">
-                    <i data-feather="arrow-left"></i> Back to List
-                </button>
-            </div>
-            
             <div class="detail-grid">
                 ${fields.map(([label, val]) => `
                     <div class="detail-item">
                         <label>${label}</label>
-                        <p>${val || 'Not provided'}</p>
+                        <p>${val === true ? 'Yes' : (val === false ? 'No' : (val || ''))}</p>
                     </div>
                 `).join('')}
             </div>
         </div>
     `;
-
-    tableView.style.display = 'none';
-    detailView.style.display = 'block';
     feather.replace();
 };
 

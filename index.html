@@ -509,6 +509,7 @@
             <div id="admin-auth" class="admin-auth-view">
                 <div class="auth-card">
                     <div class="auth-header">
+                        <button type="button" class="btn-close auth-close" onclick="closeAdminOverlay()">&times;</button>
                         <img src="assets/images/logo.png" alt="Logo" class="auth-logo">
                         <h3>Ministry Dashboard</h3>
                         <p>Access your secure command center</p>
@@ -578,10 +579,11 @@
                         <div class="page-title">
                             <h2 id="admin-current-section">Control Center</h2>
                         </div>
-                        <div class="admin-user">
+                        <div class="top-bar-actions">
                             <button id="toggle-edit-mode" class="btn btn-edit-toggle">
                                 <i data-feather="edit-3"></i> Enable Edit Mode
                             </button>
+                            <button class="btn btn-close" onclick="closeAdminOverlay()">&times;</button>
                         </div>
                     </header>
 
@@ -635,9 +637,15 @@
                             </div>
                             
                             <!-- Detailed View Container (Hidden) -->
-                            <div id="registrations-detail-view" style="display:none;">
-                                <div id="registration-detail-content"></div>
-                            </div>
+                             <div id="registrations-detail-view" style="display:none;">
+                                 <div class="section-header-inline">
+                                     <button onclick="showAdminSection('registrations')" class="btn-back"><i data-feather="arrow-left"></i> Back to list</button>
+                                     <h4 id="detail-reg-name">Submission Detail</h4>
+                                 </div>
+                                 <div id="registration-detail-content" class="detail-card">
+                                     <!-- Populated by JS -->
+                                 </div>
+                             </div>
                         </div>
 
                         <!-- Gallery -->
