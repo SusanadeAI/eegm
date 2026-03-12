@@ -1,12 +1,23 @@
 -- ==========================================
--- EEMG MASTER DATABASE SETUP & FIX
+-- EEMG DATABASE FIX v2 (RECURSION PATCH)
 -- RUN THIS IN YOUR SUPABASE SQL EDITOR
 -- ==========================================
 
 -- 0. Enable UUID Extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- 1. SITE CONTENT TABLE
+-- 1. CLEANUP OLD POLICIES (Wipe everything to be sure)
+-- This clears any "infinite recursion" by deleting the broken policies first
+DO $$ 
+BEGIN
+    -- Drop all policies on the tables we manage
+    EXECUTE (SELECT string_agg('DROP POLICY IF EXISTS ' || quote_ident(policyname) || ' ON ' || quote_ident(tablename) || ';', ' ')
+             FROM pg_policies 
+             WHERE schemaname = 'public' 
+             AND tablename IN ('site_content', 'conference_registrations', 'admin_profiles', 'gallery_images'));
+END $$;
+
+-- 2. ENSURE TABLES EXIST
 CREATE TABLE IF NOT EXISTS site_content (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   section_key TEXT UNIQUE NOT NULL,
@@ -15,7 +26,6 @@ CREATE TABLE IF NOT EXISTS site_content (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
 );
 
--- 2. CONFERENCE REGISTRATIONS TABLE
 CREATE TABLE IF NOT EXISTS conference_registrations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   full_name TEXT NOT NULL,
@@ -42,7 +52,6 @@ CREATE TABLE IF NOT EXISTS conference_registrations (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
 );
 
--- 3. ADMIN PROFILES TABLE
 CREATE TABLE IF NOT EXISTS admin_profiles (
   id UUID PRIMARY KEY REFERENCES auth.users ON DELETE CASCADE,
   full_name TEXT,
@@ -50,7 +59,6 @@ CREATE TABLE IF NOT EXISTS admin_profiles (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
 );
 
--- 4. GALLERY IMAGES TABLE
 CREATE TABLE IF NOT EXISTS gallery_images (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   url TEXT NOT NULL,
@@ -60,44 +68,39 @@ CREATE TABLE IF NOT EXISTS gallery_images (
 );
 
 -- ==========================================
--- SECURITY (RLS POLICIES)
+-- NEW ROBUST SECURITY (RLS)
 -- ==========================================
 
--- Enable RLS on all tables
+-- Enable RLS
 ALTER TABLE site_content ENABLE ROW LEVEL SECURITY;
 ALTER TABLE conference_registrations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE admin_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE gallery_images ENABLE ROW LEVEL SECURITY;
 
--- Delete old policies to avoid duplicates
-DROP POLICY IF EXISTS "Public Read Access" ON site_content;
-DROP POLICY IF EXISTS "Admins Update Content" ON site_content;
-DROP POLICY IF EXISTS "Public Can Register" ON conference_registrations;
-DROP POLICY IF EXISTS "Admins View Registrations" ON conference_registrations;
-DROP POLICY IF EXISTS "Public View Gallery" ON gallery_images;
-DROP POLICY IF EXISTS "Admins Manage Gallery" ON gallery_images;
-DROP POLICY IF EXISTS "Admin Profile View" ON admin_profiles;
+-- 1. ADMIN PROFILES (Safe - no recursion)
+-- Allow anyone logged in to see if a UUID exists in admin_profiles
+CREATE POLICY "Public Admin Read" ON admin_profiles FOR SELECT USING (true);
+-- Only the user themselves or a superadmin can update their profile (manual setup required for superadmin)
+CREATE POLICY "Self Management" ON admin_profiles FOR ALL USING (auth.uid() = id);
 
--- 1. Site Content Policies
-CREATE POLICY "Public Read Access" ON site_content FOR SELECT USING (true);
-CREATE POLICY "Admins Update Content" ON site_content FOR ALL 
-USING (auth.uid() IN (SELECT id FROM admin_profiles));
+-- 2. SITE CONTENT
+CREATE POLICY "Public View Content" ON site_content FOR SELECT USING (true);
+CREATE POLICY "Admin Edit Content" ON site_content FOR ALL 
+  USING (EXISTS (SELECT 1 FROM admin_profiles WHERE id = auth.uid()));
 
--- 2. Registration Policies
-CREATE POLICY "Public Can Register" ON conference_registrations FOR INSERT WITH CHECK (true);
-CREATE POLICY "Admins View Registrations" ON conference_registrations FOR SELECT 
-USING (auth.uid() IN (SELECT id FROM admin_profiles));
-
--- 3. Gallery Policies
+-- 3. GALLERY
 CREATE POLICY "Public View Gallery" ON gallery_images FOR SELECT USING (true);
-CREATE POLICY "Admins Manage Gallery" ON gallery_images FOR ALL 
-USING (auth.uid() IN (SELECT id FROM admin_profiles));
+CREATE POLICY "Admin Manage Gallery" ON gallery_images FOR ALL 
+  USING (EXISTS (SELECT 1 FROM admin_profiles WHERE id = auth.uid()));
 
--- 4. Admin Profile Policies
-CREATE POLICY "Admin Profile View" ON admin_profiles FOR SELECT USING (true);
+-- 4. REGISTRATIONS
+CREATE POLICY "Public Insert Registration" ON conference_registrations FOR INSERT WITH CHECK (true);
+-- This is the one that was failing - the EXISTS check against the safe "Public Admin Read" policy will now work
+CREATE POLICY "Admin View Submissions" ON conference_registrations FOR SELECT 
+  USING (EXISTS (SELECT 1 FROM admin_profiles WHERE id = auth.uid()));
 
 -- ==========================================
--- SEED INITIAL DATA (Only if it doesn't exist)
+-- SEED DATA
 -- ==========================================
 INSERT INTO site_content (section_key, content_text) 
 VALUES ('hero_h1', 'Igniting the Echoes <br> of <span class="accent glass-text">Eternity</span> in Every Heart.')

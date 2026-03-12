@@ -505,88 +505,178 @@
 
     <!-- Admin Panel Overlay (Hidden by default) -->
     <div id="admin-overlay" class="admin-overlay">
-        <div class="admin-modal">
-            <div class="admin-header">
-                <h3>Admin Control Panel</h3>
-                <button id="close-admin" class="btn-close"><i data-feather="x"></i></button>
-            </div>
-            <div id="admin-auth" class="admin-section">
-                <!-- Login Form -->
-                <form id="login-form">
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="admin-email" required placeholder="admin@example.com">
+            <!-- Login View -->
+            <div id="admin-auth" class="admin-auth-view">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <img src="assets/images/logo.png" alt="Logo" class="auth-logo">
+                        <h3>Ministry Dashboard</h3>
+                        <p>Access your secure command center</p>
                     </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="admin-password" required placeholder="••••••••">
-                    </div>
-                    <button type="submit" class="btn btn-primary glow-btn w-100 mt-3">Access Dashboard</button>
-                    <p class="mt-3 text-center" style="font-size: 0.8rem; opacity: 0.7;">
-                        First time? <a href="#" id="toggle-signup" style="color: var(--primary); text-decoration: underline;">Create Admin Account</a>
-                    </p>
-                </form>
-
-                <!-- Signup Form (Hidden by default) -->
-                <form id="signup-form" style="display:none;">
-                    <div class="form-group">
-                        <label>New Admin Email</label>
-                        <input type="email" id="signup-email" required placeholder="you@example.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Create Password</label>
-                        <input type="password" id="signup-password" required placeholder="••••••••">
-                    </div>
-                    <button type="submit" class="btn btn-secondary glow-btn w-100 mt-3" style="background: #fff; color: #000;">Register Account</button>
-                    <p class="mt-3 text-center" style="font-size: 0.8rem; opacity: 0.7;">
-                        Already have an account? <a href="#" id="toggle-login" style="color: var(--primary); text-decoration: underline;">Back to Login</a>
-                    </p>
-                </form>
-            </div>
-            <div id="admin-controls" class="admin-section shadow-text" style="display:none; color: #fff;">
-                <div class="admin-welcome mb-4">
-                    <h2>Welcome, Admin</h2>
-                    <p>You can now edit the website directly or manage registrations.</p>
-                </div>
-                <div class="admin-actions mb-4">
-                    <button id="toggle-edit-mode" class="btn btn-primary">Enable Edit Mode</button>
-                    <button onclick="showAdminSection('registrations')" class="btn btn-secondary glass-btn">Submissions</button>
-                    <button onclick="showAdminSection('gallery')" class="btn btn-secondary glass-btn">Gallery</button>
-                    <button onclick="showAdminSection('admins')" class="btn btn-secondary glass-btn">Manage</button>
-                </div>
-                
-                <div id="admin-registrations" class="sub-section" style="display:none;">
-                    <h4>Conference Registrations</h4>
-                    <div class="admin-table-wrapper">
-                        <div id="registrations-list">Loading...</div>
-                    </div>
-                </div>
-
-                <div id="admin-gallery" class="sub-section" style="display:none;">
-                    <h4>Manage Gallery</h4>
-                    <div class="gallery-upload-zone">
-                        <input type="file" id="gallery-file-input" accept="image/*" style="display:none;">
-                        <button onclick="document.getElementById('gallery-file-input').click()" class="btn btn-primary w-100 mb-3">Upload New Gallery Photo</button>
-                    </div>
-                    <div id="admin-gallery-list" class="gallery-admin-list">
-                        <!-- Thumbnails with delete buttons -->
-                    </div>
-                </div>
-                
-                <div id="admin-management" class="sub-section" style="display:none;">
-                    <h4>Create New Admin Account</h4>
-                    <form id="add-admin-form">
+                    <!-- Login Form -->
+                    <form id="login-form">
                         <div class="form-group">
-                            <input type="email" id="new-admin-email" placeholder="Email Address" required>
+                            <label><i data-feather="mail"></i> Email</label>
+                            <input type="email" id="admin-email" required placeholder="admin@example.com">
                         </div>
                         <div class="form-group">
-                            <input type="password" id="new-admin-password" placeholder="Secure Password" required>
+                            <label><i data-feather="lock"></i> Password</label>
+                            <input type="password" id="admin-password" required placeholder="••••••••">
                         </div>
-                        <button type="submit" class="btn btn-primary">Invite Admin</button>
+                        <button type="submit" class="btn btn-primary glow-btn w-100 mt-3">Enter Dashboard</button>
+                        <p class="mt-4 text-center signup-toggle">
+                            First time? <a href="#" id="toggle-signup">Create Admin Account</a>
+                        </p>
+                    </form>
+
+                    <!-- Signup Form (Hidden) -->
+                    <form id="signup-form" style="display:none;">
+                        <div class="form-group">
+                            <label><i data-feather="user-plus"></i> Admin Email</label>
+                            <input type="email" id="signup-email" required placeholder="you@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label><i data-feather="shield"></i> Create Password</label>
+                            <input type="password" id="signup-password" required placeholder="••••••••">
+                        </div>
+                        <button type="submit" class="btn btn-secondary w-100 mt-3">Register Admin</button>
+                        <p class="mt-4 text-center signup-toggle">
+                            Already have an account? <a href="#" id="toggle-login">Back to Login</a>
+                        </p>
                     </form>
                 </div>
             </div>
+
+            <!-- Dashboard View (Sidebar Layout) -->
+            <div id="admin-controls" class="admin-dashboard-view" style="display:none;">
+                <aside class="admin-sidebar">
+                    <div class="sidebar-header">
+                        <img src="assets/images/logo.png" alt="EEMG" class="sidebar-logo">
+                        <span>EEMG PRO</span>
+                    </div>
+                    <nav class="sidebar-nav">
+                        <a href="#" class="nav-item active" onclick="showAdminSection('dashboard')">
+                            <i data-feather="grid"></i> Dashboard
+                        </a>
+                        <a href="#" class="nav-item" onclick="showAdminSection('registrations')">
+                            <i data-feather="users"></i> Submissions
+                        </a>
+                        <a href="#" class="nav-item" onclick="showAdminSection('gallery')">
+                            <i data-feather="image"></i> Gallery
+                        </a>
+                        <a href="#" class="nav-item" onclick="showAdminSection('admins')">
+                            <i data-feather="shield"></i> Management
+                        </a>
+                    </nav>
+                    <div class="sidebar-footer">
+                        <button id="logout-btn" class="btn-logout"><i data-feather="log-out"></i> Sign Out</button>
+                    </div>
+                </aside>
+
+                <main class="admin-main">
+                    <header class="admin-top-bar">
+                        <div class="page-title">
+                            <h2 id="admin-current-section">Control Center</h2>
+                        </div>
+                        <div class="admin-user">
+                            <button id="toggle-edit-mode" class="btn btn-edit-toggle">
+                                <i data-feather="edit-3"></i> Enable Edit Mode
+                            </button>
+                        </div>
+                    </header>
+
+                    <div class="admin-content-area">
+                        <!-- Dashboard Stats Area -->
+                        <div id="admin-dashboard" class="sub-section">
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-icon"><i data-feather="users"></i></div>
+                                    <div class="stat-info">
+                                        <h4>Registrations</h4>
+                                        <p class="stat-val" id="stat-regs">...</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon"><i data-feather="image"></i></div>
+                                    <div class="stat-info">
+                                        <h4>Gallery Items</h4>
+                                        <p class="stat-val" id="stat-gallery">...</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon"><i data-feather="activity"></i></div>
+                                    <div class="stat-info">
+                                        <h4>Live Site</h4>
+                                        <p class="stat-val">Active</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="quick-actions mt-5">
+                                <h3>Quick Actions</h3>
+                                <div class="action-buttons">
+                                    <button onclick="showAdminSection('gallery')" class="btn glass-btn"><i data-feather="plus"></i> Add Gallery Image</button>
+                                    <a href="conference.html" class="btn glass-btn" target="_blank"><i data-feather="external-link"></i> View Conference Page</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Registrations -->
+                        <div id="admin-registrations" class="sub-section" style="display:none;">
+                            <div class="section-header-inline">
+                                <h4>Attendee Submissions</h4>
+                                <button onclick="loadRegistrations()" class="btn-refresh"><i data-feather="refresh-cw"></i></button>
+                            </div>
+                            <div class="admin-table-wrapper">
+                                <div id="registrations-list">Loading submissions...</div>
+                            </div>
+                        </div>
+
+                        <!-- Gallery -->
+                        <div id="admin-gallery" class="sub-section" style="display:none;">
+                            <div class="section-header-inline">
+                                <h4>Ministry Gallery</h4>
+                                <button onclick="document.getElementById('gallery-file-input').click()" class="btn btn-primary btn-sm">
+                                    <i data-feather="upload"></i> Upload Photo
+                                </button>
+                            </div>
+                            <input type="file" id="gallery-file-input" accept="image/*" style="display:none;">
+                            <div id="admin-gallery-list" class="gallery-admin-list">
+                                <!-- Thumbnails -->
+                            </div>
+                        </div>
+
+                        <!-- Management -->
+                        <div id="admin-management" class="sub-section" style="display:none;">
+                            <h4>Add New Administrator</h4>
+                            <div class="management-form-card">
+                                <form id="add-admin-form">
+                                    <div class="form-group">
+                                        <input type="email" id="new-admin-email" placeholder="Admin Email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" id="new-admin-password" placeholder="Temporary Password" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Create Account</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
         </div>
+    </div>
+
+    <!-- EmailJS Integration -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            // Placeholder for User's EmailJS Public Key
+            emailjs.init({
+              publicKey: "YOUR_PUBLIC_KEY_HERE",
+            });
+        })();
+    </script>
     </div>
 
     <!-- Hidden File Input for Page Image Swapping -->
