@@ -16,6 +16,10 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="form.css">
     
+    <!-- Supabase SDK - loaded in head so client is ready before any scripts fire -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-init.js"></script>
+    
     <style>
         /* Small override to keep nav dark immediately since there's no hero video */
         header { background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
@@ -443,7 +447,10 @@
                     prayer_request: data.prayerRequest
                 };
 
-                const supabaseClient = window.supabase;
+                const supabaseClient = window.supabase || supabaseLib.createClient(
+                    'https://fztctnfuxbtmqgqcmvyq.supabase.co',
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6dGN0bmZ1eGJ0bXFncWNtdnlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNjE1NDAsImV4cCI6MjA4ODgzNzU0MH0.y9KC5URsGGvpBEu5sYAkneg1z1Su-vlMs-5Xvg0qBTY'
+                );
                 const { error } = await supabaseClient.from('conference_registrations').insert([dbData]);
                 
                 if (!error) {
