@@ -16,19 +16,8 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="form.css">
     
-    <!-- Supabase SDK -->
+    <!-- Supabase SDK & Initialization -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        // Capture the library BEFORE supabase-init.js potentially renames window.supabase
-        // The CDN sets window.supabase = the library (with createClient)
-        // We create our own named client for this page to avoid any conflicts
-        const CONF_SB = (window.supabase && window.supabase.createClient)
-            ? window.supabase.createClient(
-                'https://fztctnfuxbtmqgqcmvyq.supabase.co',
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6dGN0bmZ1eGJ0bXFncWNtdnlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNjE1NDAsImV4cCI6MjA4ODgzNzU0MH0.y9KC5URsGGvpBEu5sYAkneg1z1Su-vlMs-5Xvg0qBTY'
-              )
-            : null;
-    </script>
     <script src="supabase-init.js"></script>
     
     <style>
@@ -458,9 +447,14 @@
                     prayer_request: data.prayerRequest
                 };
 
-                // Use CONF_SB which is guaranteed to be the actual db client
-                const dbClient = CONF_SB || window.supabase;
-                const { error } = await dbClient.from('conference_registrations').insert([dbData]);
+                // Use the globally available supabaseClient instance
+                const db = window.supabaseClient;
+                
+                if (!db) {
+                    throw new Error("Supabase client not initialized. Please refresh the page.");
+                }
+
+                const { error } = await db.from('conference_registrations').insert([dbData]);
                 
                 if (!error) {
                     // Send Welcome Email

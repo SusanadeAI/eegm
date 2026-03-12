@@ -10,12 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
 async function initCMS() {
     console.log("CMS: Initializing PRO Dashboard...");
     try {
-        if (!window.supabase) {
-            console.error("CMS: Supabase client not found.");
+        const db = window.supabaseClient;
+        if (!db) {
+            console.error("CMS: Supabase client instance (supabaseClient) not found.");
             return;
         }
-
-        const db = window.supabase;
 
         // 1. Load Content
         await loadAllContent(db);
@@ -99,7 +98,7 @@ window.showAdminSection = function(section) {
 };
 
 async function loadDashboardStats() {
-    const db = window.supabase;
+    const db = window.supabaseClient;
     
     // Count Registrations
     const { count: regCount } = await db.from('conference_registrations').select('*', { count: 'exact', head: true });
@@ -171,7 +170,7 @@ function addMediaEditor(el) {
 
 // --- Event Listeners & Auth ---
 function setupEventListeners() {
-    const db = window.supabase;
+    const db = window.supabaseClient;
 
     // Login
     document.getElementById('login-form')?.addEventListener('submit', async (e) => {
@@ -266,7 +265,9 @@ function setupEventListeners() {
 
 // --- Utility Functions ---
 async function loadRegistrations() {
-    const { data: regs } = await window.supabase.from('conference_registrations').select('*').order('created_at', { ascending: false });
+    const db = window.supabaseClient;
+    if (!db) return;
+    const { data: regs } = await db.from('conference_registrations').select('*').order('created_at', { ascending: false });
     const list = document.getElementById('registrations-list');
     if (!regs || !regs.length) { list.innerHTML = 'No submissions found.'; return; }
     
@@ -283,7 +284,9 @@ async function loadRegistrations() {
 }
 
 async function loadAdminGallery() {
-    const { data: images } = await window.supabase.from('gallery_images').select('*').order('created_at', { ascending: false });
+    const db = window.supabaseClient;
+    if (!db) return;
+    const { data: images } = await db.from('gallery_images').select('*').order('created_at', { ascending: false });
     const list = document.getElementById('admin-gallery-list');
     list.innerHTML = images?.map(img => `
         <div class="gallery-admin-item">
@@ -295,10 +298,11 @@ async function loadAdminGallery() {
 }
 
 window.deleteGalleryImage = async (id) => {
-    if (!confirm('Remove this image?')) return;
-    await window.supabase.from('gallery_images').delete().eq('id', id);
+    const db = window.supabaseClient;
+    if (!db || !confirm('Remove this image?')) return;
+    await db.from('gallery_images').delete().eq('id', id);
     loadAdminGallery();
-    loadGallery(window.supabase);
+    loadGallery(window.supabaseClient);
 };
 
 function showToast(msg, type = 'success') {
