@@ -11,10 +11,7 @@ async function initCMS() {
     console.log("CMS: Initializing PRO Dashboard...");
     try {
         const db = window.supabaseClient;
-        if (!db) {
-            console.error("CMS: Supabase client instance (supabaseClient) not found.");
-            return;
-        }
+        if (!db) return;
 
         // 1. Load Content
         await loadAllContent(db);
@@ -24,11 +21,11 @@ async function initCMS() {
         const { data: { session } } = await db.auth.getSession();
         
         if (session) {
-            // Profile Healing: Ensure the admin exists in the 'admin_profiles' table for RLS to work
+            // Profile Healing: Absolute guarantee that admin exists in safe DB table
             const { data: profile } = await db.from('admin_profiles').select('id').eq('id', session.user.id).single();
             if (!profile) {
-                console.log("CMS: No admin profile found, creating one for session user...");
-                await db.from('admin_profiles').insert([{ 
+                console.log("CMS: Healing admin profile...");
+                await db.from('admin_profiles').upsert([{ 
                     id: session.user.id, 
                     full_name: session.user.email.split('@')[0],
                     role: 'admin'
@@ -36,8 +33,10 @@ async function initCMS() {
             }
 
             showAdminControls();
+            
+            // Only show modal if the user just logged in (localStorage flag set in login handler)
             if (localStorage.getItem('admin_login_success')) {
-                document.getElementById('admin-overlay').style.display = 'flex';
+                document.getElementById('admin-overlay').classList.add('active');
                 localStorage.removeItem('admin_login_success');
             }
         }
@@ -64,24 +63,47 @@ async function sendRegistrationEmail(userName, userEmail) {
         if (error) throw error;
         console.log("CMS: Welcome email dispatched successfully.", data);
     } catch (err) {
-        console.error("CMS: Email dispatch failed", err);
+        console.error("CMS: Email dispatch failed (catch block)", err);
+    }
+}
+
+async function sendTestEmail() {
+    const db = window.supabaseClient;
+    if (!db) return;
+    
+    console.log("CMS: Attempting test email...");
+    const { data: { user } } = await db.auth.getUser();
+    if (!user) return showToast("Please login first", "error");
+
+    showToast("Sending test email to your admin address...", "info");
+    const { data, error } = await db.functions.invoke('send-welcome-email', {
+        body: { userName: "Admin Test", userEmail: user.email }
+    });
+
+    if (error) {
+        console.error("Test Email Error:", error);
+        showToast("Dispatch Failed: " + error.message, "error");
+    } else {
+        showToast("Test email sent successfully! Check your inbox.");
     }
 }
 
 // --- Dashboard Logic ---
-window.showAdminSection = function(section) {
+window.showAdminSection = (section) => {
     // 1. Update Sub-sections visibility
     document.querySelectorAll('.sub-section').forEach(s => s.style.display = 'none');
     const target = document.getElementById(`admin-${section}`);
     if (target) target.style.display = 'block';
+    
+    // Always reset registration view to table when switching to submissions
+    if (section === 'registrations') {
+        document.getElementById('registrations-table-view').style.display = 'block';
+        document.getElementById('registrations-detail-view').style.display = 'none';
+    }
 
     // 2. Update Nav active state
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-        if (item.getAttribute('onclick')?.includes(`'${section}'`)) {
-            item.classList.add('active');
-        }
-    });
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    document.querySelector(`[onclick="showAdminSection('${section}')"]`)?.classList.add('active');
 
     // 3. Update Header Title
     const titleMap = {
@@ -232,7 +254,7 @@ function setupEventListeners() {
 
     // Close Overlay
     document.getElementById('close-admin')?.addEventListener('click', () => {
-        document.getElementById('admin-overlay').style.display = 'none';
+        document.getElementById('admin-overlay').classList.remove('active');
     });
 
     // Edit Mode Toggle
@@ -298,30 +320,105 @@ async function loadRegistrations() {
     const db = window.supabaseClient;
     if (!db) return;
     
-    console.log("CMS: Fetching registrations...");
     const { data: regs, error } = await db.from('conference_registrations').select('*').order('created_at', { ascending: false });
     
     if (error) {
-        console.error("CMS: Fetch Error", error);
         showToast("Error loading submissions: " + error.message, "error");
         return;
     }
 
-    console.log(`CMS: Found ${regs?.length || 0} registrations.`);
     const list = document.getElementById('registrations-list');
-    if (!regs || !regs.length) { list.innerHTML = '<div class="no-data">No submissions found.</div>'; return; }
+    if (!regs || !regs.length) { 
+        list.innerHTML = '<div style="padding:4rem; text-align:center; opacity:0.3;">No submissions found.</div>'; 
+        return; 
+    }
     
     list.innerHTML = `
         <table class="admin-table">
             <thead>
-                <tr><th>Name</th><th>Email</th><th>Phone</th><th>Status</th></tr>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Email Address</th>
+                    <th>Phone Number</th>
+                    <th>Date Received</th>
+                </tr>
             </thead>
             <tbody>
-                ${regs.map(r => `<tr><td>${r.full_name}</td><td>${r.email}</td><td>${r.phone}</td><td style="color:#4ade80">Approved</td></tr>`).join('')}
+                ${regs.map(r => `
+                    <tr onclick="viewRegistrationDetail('${r.id}')">
+                        <td style="font-weight:700; color:#fff;">${r.full_name}</td>
+                        <td>${r.email}</td>
+                        <td>${r.phone}</td>
+                        <td>${new Date(r.created_at).toLocaleDateString()}</td>
+                    </tr>
+                `).join('')}
             </tbody>
         </table>
     `;
+    window.allRegistrations = regs; // Store for quick lookup
 }
+
+window.viewRegistrationDetail = (id) => {
+    const reg = window.allRegistrations?.find(r => r.id === id);
+    if (!reg) return;
+
+    const detailView = document.getElementById('registrations-detail-view');
+    const tableView = document.getElementById('registrations-table-view');
+    const content = document.getElementById('registration-detail-content');
+
+    const fields = [
+        ['Full Name', reg.full_name],
+        ['Email', reg.email],
+        ['Phone', reg.phone],
+        ['Gender', reg.gender],
+        ['Age Range', reg.age_range],
+        ['City', reg.city],
+        ['State/Country', reg.state_country],
+        ['Campus', reg.campus],
+        ['Attends Church?', reg.attend_church ? 'Yes' : 'No'],
+        ['Church Location', reg.church_location],
+        ['Church Role', reg.church_role],
+        ['Hear About Us', reg.hear_about],
+        ['Coming with Others?', reg.attending_with_others ? `Yes (${reg.others_count})` : 'No'],
+        ['Bus Pickup?', reg.bus_location || 'None'],
+        ['Accommodation?', reg.require_accommodation ? `Yes: ${reg.accommodation_details}` : 'No'],
+        ['Receive Updates?', reg.receive_updates ? 'Yes' : 'No'],
+        ['Preferences', reg.update_preference?.join(', ') || 'None'],
+        ['Prayer Request', reg.prayer_request || 'N/A']
+    ];
+
+    content.innerHTML = `
+        <div class="detail-view-card">
+            <div class="detail-header">
+                <div>
+                    <label>Registration ID: ${reg.id.slice(0,8)}</label>
+                    <h2 style="font-size:2rem; color:var(--primary);">${reg.full_name}</h2>
+                </div>
+                <button class="btn-back" onclick="closeDetailView()">
+                    <i data-feather="arrow-left"></i> Back to List
+                </button>
+            </div>
+            
+            <div class="detail-grid">
+                ${fields.map(([label, val]) => `
+                    <div class="detail-item">
+                        <label>${label}</label>
+                        <p>${val || 'Not provided'}</p>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+
+    tableView.style.display = 'none';
+    detailView.style.display = 'block';
+    feather.replace();
+};
+
+window.closeDetailView = () => {
+    document.getElementById('registrations-table-view').style.display = 'block';
+    document.getElementById('registrations-detail-view').style.display = 'none';
+};
 
 async function loadAdminGallery() {
     const db = window.supabaseClient;
@@ -365,7 +462,10 @@ function addManagementLink() {
         link.href = "#";
         link.style = "display:block; margin-top:2rem; font-size:0.7rem; opacity:0.3; color:#fff;";
         link.innerText = "Access Dashboard";
-        link.onclick = (e) => { e.preventDefault(); document.getElementById('admin-overlay').style.display = 'flex'; };
+        link.onclick = (e) => { 
+            e.preventDefault(); 
+            document.getElementById('admin-overlay').classList.add('active'); 
+        };
         foot.appendChild(link);
     }
 }

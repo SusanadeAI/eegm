@@ -616,6 +616,7 @@
                                 <h3>Quick Actions</h3>
                                 <div class="action-buttons">
                                     <button onclick="showAdminSection('gallery')" class="btn glass-btn"><i data-feather="plus"></i> Add Gallery Image</button>
+                                    <button onclick="sendTestEmail()" class="btn glass-btn"><i data-feather="mail"></i> Send Test Email</button>
                                     <a href="conference.html" class="btn glass-btn" target="_blank"><i data-feather="external-link"></i> View Conference Page</a>
                                 </div>
                             </div>
@@ -623,12 +624,19 @@
 
                         <!-- Registrations -->
                         <div id="admin-registrations" class="sub-section" style="display:none;">
-                            <div class="section-header-inline">
-                                <h4>Attendee Submissions</h4>
-                                <button onclick="loadRegistrations()" class="btn-refresh"><i data-feather="refresh-cw"></i></button>
+                            <div id="registrations-table-view">
+                                <div class="section-header-inline">
+                                    <h4>Attendee Submissions</h4>
+                                    <button onclick="loadRegistrations()" class="btn-refresh"><i data-feather="refresh-cw"></i></button>
+                                </div>
+                                <div class="admin-table-wrapper">
+                                    <div id="registrations-list">Loading submissions...</div>
+                                </div>
                             </div>
-                            <div class="admin-table-wrapper">
-                                <div id="registrations-list">Loading submissions...</div>
+                            
+                            <!-- Detailed View Container (Hidden) -->
+                            <div id="registrations-detail-view" style="display:none;">
+                                <div id="registration-detail-content"></div>
                             </div>
                         </div>
 
