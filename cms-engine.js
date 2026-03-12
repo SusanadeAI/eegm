@@ -18,6 +18,12 @@ async function initCMS() {
             const { data: { session } } = await supabase.auth.getSession();
             if (session) {
                 showAdminControls();
+
+                // Auto-open if we just logged in
+                if (localStorage.getItem('admin_login_success')) {
+                    document.getElementById('admin-overlay').style.display = 'flex';
+                    localStorage.removeItem('admin_login_success');
+                }
             }
         }
     } catch (err) {
@@ -77,6 +83,7 @@ async function setupEventListeners() {
             const { data, error } = await supabase.auth.signInWithPassword({ email, password });
             if (error) alert('Login failed: ' + error.message);
             else {
+                localStorage.setItem('admin_login_success', 'true');
                 location.reload(); // Refresh to apply admin state
             }
         });
@@ -171,6 +178,11 @@ function showAdminControls() {
         const fab = document.createElement('button');
         fab.id = 'admin-fab';
         fab.className = 'admin-fab';
+        // Pulsate if just logged in
+        if (localStorage.getItem('admin_login_success')) {
+            fab.classList.add('pulsate');
+            setTimeout(() => fab.classList.remove('pulsate'), 10000); // Pulsate for 10s
+        }
         fab.innerHTML = '<i data-feather="settings"></i>';
         document.body.appendChild(fab);
         feather.replace();

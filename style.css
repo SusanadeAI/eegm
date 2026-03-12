@@ -1499,6 +1499,15 @@ footer {
     transition: var(--transition);
 }
 
+.admin-fab.pulsate {
+    animation: fab-pulsate 1s infinite alternate;
+}
+
+@keyframes fab-pulsate {
+    from { transform: scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+    to { transform: scale(1.15); box-shadow: 0 0 40px rgba(212, 175, 55, 0.7); }
+}
+
 .admin-fab:hover {
     transform: scale(1.1) rotate(15deg);
 }
