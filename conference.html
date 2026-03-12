@@ -443,7 +443,7 @@
                     prayer_request: data.prayerRequest
                 };
 
-                const { error } = await _supabase.from('conference_registrations').insert([dbData]);
+                const { error } = await supabase.from('conference_registrations').insert([dbData]);
                 
                 if (!error) {
                     if (typeof showToast === 'function') showToast('Registration successful! Welcome.');

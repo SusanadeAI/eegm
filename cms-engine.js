@@ -1,6 +1,6 @@
 /**
- * Eternity Echoes CMS Engine v1.2
- * Pro Edition: Gallery, Toasts, and Media Swaps
+ * Eternity Echoes CMS Engine v1.2.1
+ * Hardened Edition: Improved Error Handling & Logging
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -8,24 +8,33 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function initCMS() {
+    console.log("CMS: Initializing...");
     try {
+        // Use window.supabase which should be our client instance
+        if (!window.supabase) {
+            console.error("CMS: Supabase client not found on window. Ensure supabase-init.js loads first.");
+            return;
+        }
+
+        const db = window.supabase;
+
         // 1. Load All Content & Gallery
-        await loadAllContent();
-        await loadGallery();
+        await loadAllContent(db);
+        await loadGallery(db);
 
         // 2. Check Auth
-        if (typeof _supabase !== 'undefined') {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if (session) {
-                showAdminControls();
-                if (localStorage.getItem('admin_login_success')) {
-                    document.getElementById('admin-overlay').style.display = 'flex';
-                    localStorage.removeItem('admin_login_success');
-                }
+        const { data: { session }, error: sessionErr } = await db.auth.getSession();
+        if (sessionErr) console.error("CMS: Auth Check Error", sessionErr);
+        
+        if (session) {
+            showAdminControls();
+            if (localStorage.getItem('admin_login_success')) {
+                document.getElementById('admin-overlay').style.display = 'flex';
+                localStorage.removeItem('admin_login_success');
             }
         }
     } catch (err) {
-        console.error("CMS: Init Error", err);
+        console.error("CMS: Critical Init Error", err);
     }
     setupEventListeners();
     addManagementLink();
@@ -51,9 +60,15 @@ function showToast(message, type = 'success') {
 }
 
 // --- Content & Gallery Loading ---
-async function loadAllContent() {
-    const { data: content, error } = await _supabase.from('site_content').select('*');
-    if (error) return console.error("CMS: Content Load Fail", error);
+async function loadAllContent(db) {
+    console.log("CMS: Loading site content...");
+    const { data: content, error } = await db.from('site_content').select('*');
+    if (error) {
+        console.error("CMS: Content Load Fail! Error details:", error);
+        return;
+    }
+
+    if (!content) return;
 
     content.forEach(item => {
         const elements = document.querySelectorAll(`[data-cms-key="${item.section_key}"]`);
@@ -75,14 +90,21 @@ async function loadAllContent() {
     });
 }
 
-async function loadGallery() {
+async function loadGallery(db) {
     const grid = document.getElementById('gallery-grid');
     if (!grid) return;
 
-    const { data: images, error } = await _supabase.from('gallery_images').select('*').order('created_at', { ascending: false });
-    if (error) return showToast("Failed to load gallery", "error");
+    console.log("CMS: Loading gallery images...");
+    const { data: images, error } = await db.from('gallery_images').select('*').order('created_at', { ascending: false });
+    
+    if (error) {
+        console.error("CMS: Gallery Load Fail! Error details:", error);
+        grid.innerHTML = '<p class="text-center w-100 opacity-50">Error loading gallery. Check console.</p>';
+        return;
+    }
 
     if (!images || images.length === 0) {
+        console.log("CMS: Gallery is empty.");
         grid.innerHTML = '<p class="text-center w-100 opacity-50">No images in gallery yet.</p>';
         return;
     }
@@ -101,16 +123,18 @@ async function loadGallery() {
     grid.addEventListener('mouseenter', () => isPaused = true);
     grid.addEventListener('mouseleave', () => isPaused = false);
     
-    setInterval(() => {
-        if (!isPaused) {
-            const maxScroll = grid.scrollWidth - grid.clientWidth;
-            if (grid.scrollLeft >= maxScroll - 1) {
-                grid.scrollTo({ left: 0, behavior: 'smooth' });
-            } else {
-                grid.scrollBy({ left: 300, behavior: 'smooth' });
+    if (images.length > 2) {
+        setInterval(() => {
+            if (!isPaused) {
+                const maxScroll = grid.scrollWidth - grid.clientWidth;
+                if (grid.scrollLeft >= maxScroll - 1) {
+                    grid.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    grid.scrollBy({ left: 300, behavior: 'smooth' });
+                }
             }
-        }
-    }, 4000);
+        }, 4000);
+    }
     
     feather.replace();
 }
@@ -134,14 +158,17 @@ window.triggerMediaSwap = (key) => {
 
 // --- Admin Features ---
 async function setupEventListeners() {
+    const db = window.supabase;
+    if (!db) return;
+
     // Signup
     document.getElementById('signup-form')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('signup-email').value;
         const password = document.getElementById('signup-password').value;
-        const { error } = await _supabase.auth.signUp({ email, password });
+        const { error } = await db.auth.signUp({ email, password });
         if (error) showToast(error.message, "error");
-        else showToast("Account Created! Use the SQL command to enable your role.", "success");
+        else showToast("Account Created! Check email and verify role in DB.", "success");
     });
 
     // Login
@@ -149,16 +176,10 @@ async function setupEventListeners() {
         e.preventDefault();
         const email = document.getElementById('admin-email').value;
         const password = document.getElementById('admin-password').value;
-        const { error } = await _supabase.auth.signInWithPassword({ email, password });
+        const { error } = await db.auth.signInWithPassword({ email, password });
         if (error) showToast(error.message, "error");
         else { localStorage.setItem('admin_login_success', 'true'); location.reload(); }
     });
-
-    // Logout
-    window.logoutAdmin = async () => {
-        await _supabase.auth.signOut();
-        location.reload();
-    };
 
     // Close Admin
     document.getElementById('close-admin')?.addEventListener('click', () => {
@@ -188,7 +209,7 @@ async function setupEventListeners() {
                 updates.push({ section_key: el.getAttribute('data-cms-key'), content_text: el.innerHTML });
             }
         });
-        const { error } = await _supabase.from('site_content').upsert(updates, { onConflict: 'section_key' });
+        const { error } = await db.from('site_content').upsert(updates, { onConflict: 'section_key' });
         if (error) showToast(error.message, "error");
         else { 
             showToast("Page Content Saved!"); 
@@ -205,12 +226,12 @@ async function setupEventListeners() {
 
         showToast("Uploading media...", "info");
         const fileName = `${Date.now()}_${file.name}`;
-        const { data, error: uploadErr } = await _supabase.storage.from('ministry-assets').upload(fileName, file);
+        const { data, error: uploadErr } = await db.storage.from('ministry-assets').upload(fileName, file);
 
         if (uploadErr) return showToast(uploadErr.message, "error");
 
-        const { data: { publicUrl } } = _supabase.storage.from('ministry-assets').getPublicUrl(fileName);
-        const { error: dbErr } = await _supabase.from('site_content').upsert({ section_key: window.currentSwapKey, content_url: publicUrl }, { onConflict: 'section_key' });
+        const { data: { publicUrl } } = db.storage.from('ministry-assets').getPublicUrl(fileName);
+        const { error: dbErr } = await db.from('site_content').upsert({ section_key: window.currentSwapKey, content_url: publicUrl }, { onConflict: 'section_key' });
 
         if (dbErr) showToast(dbErr.message, "error");
         else { showToast("Media updated! Refreshing..."); location.reload(); }
@@ -223,14 +244,14 @@ async function setupEventListeners() {
 
         showToast("Uploading to gallery...", "info");
         const fileName = `gallery_${Date.now()}_${file.name}`;
-        const { error: uploadErr } = await _supabase.storage.from('ministry-assets').upload(fileName, file);
+        const { error: uploadErr } = await db.storage.from('ministry-assets').upload(fileName, file);
         if (uploadErr) return showToast(uploadErr.message, "error");
 
-        const { data: { publicUrl } } = _supabase.storage.from('ministry-assets').getPublicUrl(fileName);
-        await _supabase.from('gallery_images').insert([{ url: publicUrl }]);
+        const { data: { publicUrl } } = db.storage.from('ministry-assets').getPublicUrl(fileName);
+        await db.from('gallery_images').insert([{ url: publicUrl }]);
         showToast("Added to Gallery!");
         loadAdminGallery();
-        loadGallery();
+        loadGallery(db);
     });
 }
 
@@ -296,10 +317,16 @@ window.showAdminSection = function(section) {
 };
 
 async function loadRegistrations() {
+    const db = window.supabase;
     const list = document.getElementById('registrations-list');
-    const { data: regs, error } = await _supabase.from('conference_registrations').select('*').order('created_at', { ascending: false });
+    console.log("CMS: Loading registrations...");
+    const { data: regs, error } = await db.from('conference_registrations').select('*').order('created_at', { ascending: false });
     
-    if (error) return list.innerHTML = '<p class="error">Error loading registrations.</p>';
+    if (error) {
+        console.error("CMS: Registrations Load Fail!", error);
+        return list.innerHTML = `<p class="error">Error loading registrations: ${error.message}</p>`;
+    }
+    
     if (!regs || !regs.length) return list.innerHTML = '<p>No registrations yet.</p>';
 
     list.innerHTML = `
@@ -329,9 +356,16 @@ async function loadRegistrations() {
 }
 
 async function loadAdminGallery() {
+    const db = window.supabase;
     const list = document.getElementById('admin-gallery-list');
-    const { data: images } = await _supabase.from('gallery_images').select('*').order('created_at', { ascending: false });
+    const { data: images, error } = await db.from('gallery_images').select('*').order('created_at', { ascending: false });
     
+    if (error) {
+        console.error("CMS: Admin Gallery Load Fail!", error);
+        list.innerHTML = 'Error loading images.';
+        return;
+    }
+
     list.innerHTML = images?.map(img => `
         <div class="gallery-admin-item">
             <img src="${img.url}">
@@ -343,8 +377,12 @@ async function loadAdminGallery() {
 
 window.deleteGalleryImage = async (id) => {
     if (!confirm('Delete this image?')) return;
-    await _supabase.from('gallery_images').delete().eq('id', id);
-    showToast("Image deleted");
-    loadAdminGallery();
-    loadGallery();
+    const db = window.supabase;
+    const { error } = await db.from('gallery_images').delete().eq('id', id);
+    if (error) showToast(error.message, "error");
+    else {
+        showToast("Image deleted");
+        loadAdminGallery();
+        loadGallery(db);
+    }
 };
