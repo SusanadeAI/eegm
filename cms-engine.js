@@ -52,34 +52,59 @@ async function initCMS() {
     }
 }
 
-/// --- Email Integration (via Supabase Edge Function - bypasses browser CORS) ---
+/// --- Direct Resend Integration (Browser-side) ---
+async function sendDirectResendEmail(userName, userEmail) {
+    const RESEND_API_KEY = "re_hoNsTPLF_JzdNN4pxu32JmUJ1Tq6amGf6"; // Hardcoded as requested
+    
+    console.log(`CMS: Direct Resend attempt to ${userEmail}...`);
+    try {
+        const response = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${RESEND_API_KEY}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                from: "Eternity Echoes <info@eternityechoes.org>",
+                to: [userEmail],
+                subject: "✨ Welcome to All Believers Conference 2026!",
+                html: `
+                    <div style="font-family:sans-serif; padding:40px; color:#333; background:#f9f9f9; border-radius:32px;">
+                        <h1 style="color:#d4af37;">Welcome, ${userName}!</h1>
+                        <p>Your registration is confirmed. We look forward to seeing you at the <strong>All Believers Conference</strong>.</p>
+                        <br>
+                        <p>Blessings,<br>Eternity Echoes Global Ministry</p>
+                    </div>
+                `
+            })
+        });
+
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || "Resend API Error");
+        
+        console.log("CMS: Direct email sent!", result);
+        showToast("Success: Welcome email sent directly!", "success");
+    } catch (err) {
+        console.error("CMS: Direct Email Failed", err);
+        showToast("Email Failed (Direct): " + err.message, "error");
+    }
+}
+
 async function sendRegistrationEmail(userName, userEmail) {
     if (!userName || !userEmail) return;
-    console.log(`CMS: Triggering welcome email to ${userEmail}...`);
+    
+    // Default to Direct Browser Sending as requested
+    await sendDirectResendEmail(userName, userEmail);
+    
+    /* 
+    Legacy Edge Function Call (Keep for reference)
     try {
         const db = window.supabaseClient;
         if (!db) return;
-
-        // Try the official Supabase invoke first
-        const { data, error } = await db.functions.invoke('send-welcome-email', {
-            body: { userName, userEmail }
-        });
-
-        if (error) {
-            console.error("CMS: SDK Invoke Error:", error);
-            // If it's a 404 or specific Edge Function error, we know it's not deployed
-            if (error.message && error.message.includes("not found")) {
-                showToast("Email Error: 'send-welcome-email' function not found. Please deploy it in Supabase.", "error");
-            } else {
-                showToast("Email Failed: " + (error.message || "Unknown Edge Function Error"), "error");
-            }
-            return;
-        }
-        console.log("CMS: Welcome email dispatched successfully.", data);
-    } catch (err) {
-        console.error("CMS: Email dispatch failed (catch block)", err);
-        showToast("Email Dispatch Error: " + (err.message || "Network Error"), "error");
-    }
+        const { error } = await db.functions.invoke('send-welcome-email', { body: { userName, userEmail } });
+        if (error) throw error;
+    } catch (err) { console.error(err); } 
+    */
 }
 
 async function sendTestEmail() {

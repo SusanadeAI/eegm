@@ -1668,6 +1668,18 @@ footer {
     align-items: center;
     gap: 8px;
     font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+@media (max-width: 1024px) {
+    .detail-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .detail-view-card { padding: 2rem; }
 }
 
 /* Stats Refining */
