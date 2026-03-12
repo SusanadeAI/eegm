@@ -29,6 +29,7 @@ async function initCMS() {
 }
 
 // --- Content Loading ---
+async function loadAllContent() {
     // Load Site Content (Headers, Paragraphs, URLs)
     const { data: content, error } = await supabase.from('site_content').select('*');
     if (error) {
@@ -61,6 +62,7 @@ async function initCMS() {
     } else {
         console.log("CMS: No dynamic content found in database. Using defaults.");
     }
+}
 
 // --- Auth & Admin ---
 async function setupEventListeners() {
