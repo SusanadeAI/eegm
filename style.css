@@ -1374,14 +1374,14 @@ footer {
 }
 
 .admin-modal {
-    background: rgba(15, 15, 15, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(15, 15, 15, 0.9);
+    border: 1px solid rgba(212, 175, 55, 0.15);
     border-radius: 24px;
     width: 90%;
-    max-width: 500px;
-    padding: 3rem;
+    max-width: 480px;
+    padding: 3.5rem;
     position: relative;
-    box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+    box-shadow: 0 40px 120px rgba(0,0,0,0.9), 0 0 40px rgba(212, 175, 55, 0.05);
     color: var(--text-primary);
 }
 
