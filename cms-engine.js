@@ -95,6 +95,23 @@ async function loadGallery() {
             </div>
         </div>
     `).join('');
+    
+    // Auto-scroll logic for "Sliding Gallery"
+    let isPaused = false;
+    grid.addEventListener('mouseenter', () => isPaused = true);
+    grid.addEventListener('mouseleave', () => isPaused = false);
+    
+    setInterval(() => {
+        if (!isPaused) {
+            const maxScroll = grid.scrollWidth - grid.clientWidth;
+            if (grid.scrollLeft >= maxScroll - 1) {
+                grid.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+                grid.scrollBy({ left: 300, behavior: 'smooth' });
+            }
+        }
+    }, 4000);
+    
     feather.replace();
 }
 
@@ -160,9 +177,11 @@ async function setupEventListeners() {
     });
 
     // Save All Text
-    document.getElementById('save-all')?.addEventListener('click', async () => {
-        const btn = document.getElementById('save-all');
-        btn.innerText = 'Saving...';
+    window.saveAllContent = async () => {
+        const btn = document.getElementById('save-all') || document.getElementById('save-all-bar');
+        const originalText = btn ? btn.innerText : 'Save';
+        if (btn) btn.innerText = 'Saving...';
+        
         const updates = [];
         document.querySelectorAll('[data-cms-key]').forEach(el => {
             if (!['IMG', 'VIDEO'].includes(el.tagName)) {
@@ -171,8 +190,13 @@ async function setupEventListeners() {
         });
         const { error } = await _supabase.from('site_content').upsert(updates, { onConflict: 'section_key' });
         if (error) showToast(error.message, "error");
-        else { showToast("Page Content Saved!"); btn.innerText = 'Save Final Changes'; }
-    });
+        else { 
+            showToast("Page Content Saved!"); 
+            if (btn) btn.innerText = originalText; 
+        }
+    };
+
+    document.getElementById('save-all')?.addEventListener('click', window.saveAllContent);
 
     // Media Swapping Logic
     document.getElementById('cms-media-input')?.addEventListener('change', async (e) => {
@@ -234,8 +258,7 @@ function showAdminControls() {
         bar.innerHTML = 'EDIT MODE ACTIVE - <button id="save-all-bar" class="btn btn-secondary" style="background:#000; color:#fff; padding:5px 15px; margin-left:15px; border-radius:4px;">Save Final Changes</button>';
         document.body.prepend(bar);
         document.getElementById('save-all-bar').addEventListener('click', () => {
-            const btn = document.getElementById('save-all');
-            if (btn) btn.click();
+            window.saveAllContent();
         });
     }
 }

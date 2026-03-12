@@ -22,6 +22,8 @@
     </style>
 </head>
 <body>
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
 
     <!-- Navigation -->
     <header id="main-header" class="scrolled">
@@ -328,21 +330,51 @@
             <div id="admin-controls" class="admin-section shadow-text" style="display:none; color: #fff;">
                 <div class="admin-welcome mb-4">
                     <h2>Welcome, Admin</h2>
-                    <p>You can now edit the website directly or manage registrations.</p>
+                    <p>You can now manage registrations and site settings.</p>
                 </div>
                 <div class="admin-actions mb-4">
                     <button id="toggle-edit-mode" class="btn btn-primary">Enable Edit Mode</button>
-                    <button onclick="showAdminSection('registrations')" class="btn btn-secondary glass-btn">View Registrations</button>
-                    <button onclick="showAdminSection('admins')" class="btn btn-secondary glass-btn">Add New Admin</button>
+                    <button onclick="showAdminSection('registrations')" class="btn btn-secondary glass-btn">Submissions</button>
+                    <button onclick="showAdminSection('gallery')" class="btn btn-secondary glass-btn">Gallery</button>
+                    <button onclick="showAdminSection('admins')" class="btn btn-secondary glass-btn">Manage</button>
                 </div>
                 
                 <div id="admin-registrations" class="sub-section" style="display:none;">
                     <h4>Conference Registrations</h4>
-                    <div id="registrations-list">Loading...</div>
+                    <div class="admin-table-wrapper">
+                        <div id="registrations-list">Loading...</div>
+                    </div>
+                </div>
+
+                <div id="admin-gallery" class="sub-section" style="display:none;">
+                    <h4>Manage Gallery</h4>
+                    <div class="gallery-upload-zone">
+                        <input type="file" id="gallery-file-input" accept="image/*" style="display:none;">
+                        <button onclick="document.getElementById('gallery-file-input').click()" class="btn btn-primary w-100 mb-3">Upload New Gallery Photo</button>
+                    </div>
+                    <div id="admin-gallery-list" class="gallery-admin-list">
+                        <!-- Thumbnails with delete buttons -->
+                    </div>
+                </div>
+
+                <div id="admin-management" class="sub-section" style="display:none;">
+                    <h4>Create New Admin Account</h4>
+                    <form id="add-admin-form">
+                        <div class="form-group">
+                            <input type="email" id="new-admin-email" placeholder="Email Address" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="new-admin-password" placeholder="Secure Password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Invite Admin</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Hidden File Input for Page Image Swapping -->
+    <input type="file" id="cms-media-input" style="display:none;" accept="image/*,video/*">
 
     <!-- Supabase SDK & CMS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -411,9 +443,10 @@
                     prayer_request: data.prayerRequest
                 };
 
-                const { error } = await supabase.from('conference_registrations').insert([dbData]);
+                const { error } = await _supabase.from('conference_registrations').insert([dbData]);
                 
                 if (!error) {
+                    if (typeof showToast === 'function') showToast('Registration successful! Welcome.');
                     msgBox.style.display = 'block';
                     msgBox.style.backgroundColor = 'rgba(0, 255, 0, 0.1)';
                     msgBox.style.color = '#4ade80';
