@@ -162,6 +162,29 @@ function showAdminControls() {
     }
 }
 
+// Add a visible Management link to the footer
+function addManagementLink() {
+    const footerBottom = document.querySelector('.footer-bottom');
+    if (footerBottom && !document.getElementById('mgmt-link')) {
+        const span = document.createElement('span');
+        span.id = 'mgmt-link';
+        span.style.display = 'block';
+        span.style.marginTop = '1rem';
+        span.style.fontSize = '0.75rem';
+        span.style.opacity = '0.5';
+        span.innerHTML = '<a href="#" id="open-admin-link" style="color: inherit; text-decoration: underline;">Site Management</a>';
+        footerBottom.appendChild(span);
+
+        document.getElementById('open-admin-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('admin-overlay').style.display = 'flex';
+        });
+    }
+}
+
+// Run management link after DOM load
+document.addEventListener('DOMContentLoaded', addManagementLink);
+
 // Section Switcher for Admin Panel
 window.showAdminSection = function(section) {
     document.querySelectorAll('.sub-section').forEach(s => s.style.display = 'none');
