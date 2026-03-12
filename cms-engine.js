@@ -29,9 +29,19 @@ async function loadAllContent() {
         content.forEach(item => {
             const elements = document.querySelectorAll(`[data-cms-key="${item.section_key}"]`);
             elements.forEach(el => {
-                if (el.tagName === 'IMG') el.src = item.content_url;
-                else if (el.tagName === 'VIDEO') el.querySelector('source').src = item.content_url;
-                else el.innerHTML = item.content_text;
+                try {
+                    if (el.tagName === 'IMG') {
+                        el.src = item.content_url;
+                    } else if (el.tagName === 'VIDEO') {
+                        const source = el.querySelector('source');
+                        if (source) source.src = item.content_url;
+                        el.load(); // Refresh video source
+                    } else {
+                        el.innerHTML = item.content_text;
+                    }
+                } catch (e) {
+                    console.error("CMS Load Error for key:", item.section_key, e);
+                }
             });
         });
     }

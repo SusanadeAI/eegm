@@ -296,13 +296,19 @@ nav ul li a:hover, nav ul li a.active {
     letter-spacing: -0.02em;
 }
 
-@media (max-width: 1400px) {
-    #hero h1 { font-size: 4rem; }
+@media (max-width: 1440px) {
+    #hero h1 { font-size: 4.2rem; }
+    .hero-content { padding-top: 100px; }
 }
 
-@media (max-width: 1100px) {
-    #hero h1 { font-size: 3.2rem; }
-    .hero-content { max-width: 800px; }
+@media (max-width: 1280px) {
+    #hero h1 { font-size: 3.5rem; }
+    .hero-content { max-width: 850px; padding: 120px 2rem 0; }
+}
+
+@media (max-width: 1024px) {
+    #hero h1 { font-size: 2.8rem; }
+    .hero-content { max-width: 700px; }
 }
 
 .glass-text {
@@ -1374,15 +1380,21 @@ footer {
 }
 
 .admin-modal {
-    background: rgba(15, 15, 15, 0.9);
-    border: 1px solid rgba(212, 175, 55, 0.15);
-    border-radius: 24px;
-    width: 90%;
-    max-width: 480px;
-    padding: 3.5rem;
+    background: rgba(10, 10, 10, 0.7);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 32px;
+    width: 95%;
+    max-width: 460px;
+    padding: 4rem;
     position: relative;
-    box-shadow: 0 40px 120px rgba(0,0,0,0.9), 0 0 40px rgba(212, 175, 55, 0.05);
+    box-shadow: 0 40px 150px rgba(0,0,0,1), 0 0 80px rgba(212, 175, 55, 0.1);
     color: var(--text-primary);
+    transform: translateY(20px);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.admin-overlay[style*="display: flex"] .admin-modal {
+    transform: translateY(0);
 }
 
 .admin-header {
