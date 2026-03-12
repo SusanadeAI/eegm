@@ -3,7 +3,7 @@
  * PRO EDITION: Sidebar Dashboard & Email Integration
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('load', () => {
     initCMS();
 });
 

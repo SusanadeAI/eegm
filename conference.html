@@ -16,9 +16,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="form.css">
     
-    <!-- Supabase SDK & Initialization -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-init.js"></script>
+    
     
     <style>
         /* Small override to keep nav dark immediately since there's no hero video */
@@ -380,11 +378,7 @@
     <!-- Hidden File Input for Page Image Swapping -->
     <input type="file" id="cms-media-input" style="display:none;" accept="image/*,video/*">
 
-    <!-- Supabase SDK & CMS -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-init.js"></script>
-    <script src="script.js"></script>
-    <script src="cms-engine.js"></script>
+    
 
     <script>
         feather.replace();
@@ -408,90 +402,94 @@
         }
 
         // Updated for Supabase
-        document.getElementById('conference-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
+        // Guarantee scripts are loaded and initialized before setting up the form
+        window.addEventListener('load', () => {
             const btn = document.getElementById('submit-btn');
             const msgBox = document.getElementById('form-message');
-            
-            btn.innerHTML = 'Submitting... <span class="spinner" style="display:inline-block; border: 2px solid #000; border-top-color: transparent; border-radius: 50%; width: 15px; height: 15px; animation: spin 1s linear infinite;"></span>';
-            btn.disabled = true;
-            
-            const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData.entries());
-            data.update_preference = formData.getAll('updatePreference');
-            
-            try {
-                // Map frontend fields (camelCase) to DB fields (snake_case)
-                const dbData = {
-                    full_name: data.fullName,
-                    gender: data.gender,
-                    age_range: data.ageRange,
-                    phone: data.phone,
-                    email: data.email,
-                    city: data.city,
-                    state_country: data.state,
-                    campus: data.campus,
-                    attend_church: data.attendChurch === 'Yes',
-                    church_location: data.churchLocation,
-                    church_role: data.churchRole,
-                    hear_about: data.hearAbout,
-                    attending_with_others: data.attendingWithOthers === 'Yes',
-                    others_count: parseInt(data.othersCount) || 0,
-                    bus_location: data.busLocation,
-                    pickup_available: data.pickupAvailable === 'Yes',
-                    require_accommodation: data.requireAccommodation === 'Yes',
-                    accommodation_details: data.accommodationDetails,
-                    receive_updates: data.receiveUpdates === 'Yes',
-                    update_preference: data.update_preference,
-                    prayer_request: data.prayerRequest
-                };
+            const form = document.getElementById('conference-form');
 
-                // Use the globally available supabaseClient instance
-                const db = window.supabaseClient;
-                
-                if (!db) {
-                    throw new Error("Supabase client not initialized. Please refresh the page.");
-                }
+            if (!form) return;
 
-                const { error } = await db.from('conference_registrations').insert([dbData]);
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
                 
-                if (!error) {
-                    // Send Welcome Email
-                    if (typeof sendRegistrationEmail === 'function') {
-                        sendRegistrationEmail(dbData.full_name, dbData.email);
+                btn.innerHTML = 'Submitting... <span class="spinner" style="display:inline-block; border: 2px solid #000; border-top-color: transparent; border-radius: 50%; width: 15px; height: 15px; animation: spin 1s linear infinite;"></span>';
+                btn.disabled = true;
+                
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+                data.update_preference = formData.getAll('updatePreference');
+                
+                try {
+                    const dbData = {
+                        full_name: data.fullName,
+                        gender: data.gender,
+                        age_range: data.ageRange,
+                        phone: data.phone,
+                        email: data.email,
+                        city: data.city,
+                        state_country: data.state,
+                        campus: data.campus,
+                        attend_church: data.attendChurch === 'Yes',
+                        church_location: data.churchLocation,
+                        church_role: data.churchRole,
+                        hear_about: data.hearAbout,
+                        attending_with_others: data.attendingWithOthers === 'Yes',
+                        others_count: parseInt(data.othersCount) || 0,
+                        bus_location: data.busLocation,
+                        pickup_available: data.pickupAvailable === 'Yes',
+                        require_accommodation: data.requireAccommodation === 'Yes',
+                        accommodation_details: data.accommodationDetails,
+                        receive_updates: data.receiveUpdates === 'Yes',
+                        update_preference: data.update_preference,
+                        prayer_request: data.prayerRequest
+                    };
+
+                    const db = window.supabaseClient;
+                    
+                    if (!db) {
+                        throw new Error("Supabase client not initialized. Wait a few seconds and try again.");
                     }
 
-                    if (typeof showToast === 'function') showToast('Registration successful! Welcome.');
+                    const { error } = await db.from('conference_registrations').insert([dbData]);
+                    
+                    if (!error) {
+                        if (typeof sendRegistrationEmail === 'function') {
+                            sendRegistrationEmail(dbData.full_name, dbData.email);
+                        }
+
+                        if (typeof showToast === 'function') showToast('Registration successful! Welcome.');
+                        msgBox.style.display = 'block';
+                        msgBox.style.backgroundColor = 'rgba(0, 255, 0, 0.1)';
+                        msgBox.style.color = '#4ade80';
+                        msgBox.style.border = '1px solid #4ade80';
+                        msgBox.innerHTML = 'Registration successful! We have received your details.';
+                        e.target.reset();
+                        document.querySelectorAll('.conditional-field').forEach(el => el.classList.remove('active'));
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                        throw error;
+                    }
+                } catch (err) {
                     msgBox.style.display = 'block';
-                    msgBox.style.backgroundColor = 'rgba(0, 255, 0, 0.1)';
-                    msgBox.style.color = '#4ade80';
-                    msgBox.style.border = '1px solid #4ade80';
-                    msgBox.innerHTML = 'Registration successful! We have received your details.';
-                    e.target.reset();
-                    document.querySelectorAll('.conditional-field').forEach(el => el.classList.remove('active'));
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else {
-                    throw error;
+                    msgBox.style.backgroundColor = 'rgba(255, 0, 0, 0.1)';
+                    msgBox.style.color = '#f87171';
+                    msgBox.style.border = '1px solid #f87171';
+                    msgBox.innerHTML = 'An error occurred: ' + err.message;
+                } finally {
+                    btn.innerHTML = 'Submit Registration';
+                    btn.disabled = false;
                 }
-            } catch (err) {
-                msgBox.style.display = 'block';
-                msgBox.style.backgroundColor = 'rgba(255, 0, 0, 0.1)';
-                msgBox.style.color = '#f87171';
-                msgBox.style.border = '1px solid #f87171';
-                msgBox.innerHTML = 'An error occurred: ' + err.message;
-            } finally {
-                btn.innerHTML = 'Submit Registration';
-                btn.disabled = false;
-            }
+            });
         });
     </script>
     <style>
         @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
-    <!-- Supabase + CMS Engine (provides supabase client + sendRegistrationEmail) -->
+    <!-- Consolidated Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-init.js"></script>
+    <script src="script.js"></script>
     <script src="cms-engine.js"></script>
 </body>
 </html>
