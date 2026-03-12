@@ -4,6 +4,7 @@
  */
 
 window.addEventListener('load', () => {
+    console.warn("🚀 CMS LOADING: VERSION 3.0 - BYPASSING ALL EDGE FUNCTIONS");
     initCMS();
 });
 
