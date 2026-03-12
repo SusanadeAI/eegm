@@ -81,7 +81,7 @@ ALTER TABLE gallery_images ENABLE ROW LEVEL SECURITY;
 -- Allow anyone logged in to see if a UUID exists in admin_profiles
 CREATE POLICY "Public Admin Read" ON admin_profiles FOR SELECT USING (true);
 -- Only the user themselves or a superadmin can update their profile (manual setup required for superadmin)
-CREATE POLICY "Self Management" ON admin_profiles FOR ALL USING (auth.uid() = id);
+CREATE POLICY "Self Management" ON admin_profiles FOR ALL USING (auth.uid() = id) WITH CHECK (auth.uid() = id);
 
 -- 2. SITE CONTENT
 CREATE POLICY "Public View Content" ON site_content FOR SELECT USING (true);

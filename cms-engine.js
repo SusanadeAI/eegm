@@ -24,6 +24,17 @@ async function initCMS() {
         const { data: { session } } = await db.auth.getSession();
         
         if (session) {
+            // Profile Healing: Ensure the admin exists in the 'admin_profiles' table for RLS to work
+            const { data: profile } = await db.from('admin_profiles').select('id').eq('id', session.user.id).single();
+            if (!profile) {
+                console.log("CMS: No admin profile found, creating one for session user...");
+                await db.from('admin_profiles').insert([{ 
+                    id: session.user.id, 
+                    full_name: session.user.email.split('@')[0],
+                    role: 'admin'
+                }]);
+            }
+
             showAdminControls();
             if (localStorage.getItem('admin_login_success')) {
                 document.getElementById('admin-overlay').style.display = 'flex';
@@ -42,26 +53,16 @@ async function sendRegistrationEmail(userName, userEmail) {
     if (!userName || !userEmail) return;
     console.log(`CMS: Triggering welcome email to ${userEmail}...`);
     try {
-        // This calls the Supabase Edge Function which calls Resend server-side
-        // Browser cannot call Resend directly (CORS), so we use an Edge Function
-        const SUPABASE_URL = "https://fztctnfuxbtmqgqcmvyq.supabase.co";
-        const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6dGN0bmZ1eGJ0bXFncWNtdnlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNjE1NDAsImV4cCI6MjA4ODgzNzU0MH0.y9KC5URsGGvpBEu5sYAkneg1z1Su-vlMs-5Xvg0qBTY";
+        const db = window.supabaseClient;
+        if (!db) return;
 
-        const response = await fetch(`${SUPABASE_URL}/functions/v1/send-welcome-email`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${ANON_KEY}`,
-            },
-            body: JSON.stringify({ userName, userEmail })
+        // Use the official Supabase invoke method
+        const { data, error } = await db.functions.invoke('send-welcome-email', {
+            body: { userName, userEmail }
         });
 
-        if (response.ok) {
-            console.log("CMS: Welcome email dispatched via Edge Function.");
-        } else {
-            const err = await response.text();
-            console.error("CMS: Edge Function email error:", err);
-        }
+        if (error) throw error;
+        console.log("CMS: Welcome email dispatched successfully.", data);
     } catch (err) {
         console.error("CMS: Email dispatch failed", err);
     }
@@ -179,7 +180,36 @@ function setupEventListeners() {
         const password = document.getElementById('admin-password').value;
         const { error } = await db.auth.signInWithPassword({ email, password });
         if (error) showToast(error.message, "error");
-        else { localStorage.setItem('admin_login_success', 'true'); location.reload(); }
+        else { 
+            showToast("Login successful! Entering dashboard...");
+            localStorage.setItem('admin_login_success', 'true'); 
+            setTimeout(() => location.reload(), 1000);
+        }
+    });
+
+    // Signup form
+    document.getElementById('signup-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        
+        showToast("Creating account...", "info");
+        const { data, error } = await db.auth.signUp({ email, password });
+        
+        if (error) return showToast(error.message, "error");
+        
+        if (data.user) {
+            // CRITICAL: Insert into admin_profiles so RLS works
+            const { error: profErr } = await db.from('admin_profiles').insert([
+                { id: data.user.id, full_name: email.split('@')[0], role: 'admin' }
+            ]);
+            
+            if (profErr) console.error("Profile Error:", profErr);
+            
+            showToast("Account created! You can now log in.", "success");
+            document.getElementById('signup-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        }
     });
 
     // Signup Toggle
@@ -267,9 +297,19 @@ function setupEventListeners() {
 async function loadRegistrations() {
     const db = window.supabaseClient;
     if (!db) return;
-    const { data: regs } = await db.from('conference_registrations').select('*').order('created_at', { ascending: false });
+    
+    console.log("CMS: Fetching registrations...");
+    const { data: regs, error } = await db.from('conference_registrations').select('*').order('created_at', { ascending: false });
+    
+    if (error) {
+        console.error("CMS: Fetch Error", error);
+        showToast("Error loading submissions: " + error.message, "error");
+        return;
+    }
+
+    console.log(`CMS: Found ${regs?.length || 0} registrations.`);
     const list = document.getElementById('registrations-list');
-    if (!regs || !regs.length) { list.innerHTML = 'No submissions found.'; return; }
+    if (!regs || !regs.length) { list.innerHTML = '<div class="no-data">No submissions found.</div>'; return; }
     
     list.innerHTML = `
         <table class="admin-table">
