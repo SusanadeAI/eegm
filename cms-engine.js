@@ -74,6 +74,26 @@ async function loadAllContent() {
 async function setupEventListeners() {
     // Login Form
     const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+    const toggleSignup = document.getElementById('toggle-signup');
+    const toggleLogin = document.getElementById('toggle-login');
+
+    if (toggleSignup) {
+        toggleSignup.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginForm.style.display = 'none';
+            signupForm.style.display = 'block';
+        });
+    }
+
+    if (toggleLogin) {
+        toggleLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            signupForm.style.display = 'none';
+            loginForm.style.display = 'block';
+        });
+    }
+
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -85,6 +105,22 @@ async function setupEventListeners() {
             else {
                 localStorage.setItem('admin_login_success', 'true');
                 location.reload(); // Refresh to apply admin state
+            }
+        });
+    }
+
+    if (signupForm) {
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            
+            const { data, error } = await supabase.auth.signUp({ email, password });
+            if (error) alert('Registration failed: ' + error.message);
+            else {
+                alert('Account Created! CHECK YOUR EMAIL to confirm, then run the SQL command I gave you to enable your admin permissions.');
+                signupForm.style.display = 'none';
+                loginForm.style.display = 'block';
             }
         });
     }

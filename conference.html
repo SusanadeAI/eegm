@@ -304,6 +304,25 @@
                         <input type="password" id="admin-password" required placeholder="••••••••">
                     </div>
                     <button type="submit" class="btn btn-primary glow-btn w-100 mt-3">Access Dashboard</button>
+                    <p class="mt-3 text-center" style="font-size: 0.8rem; opacity: 0.7;">
+                        First time? <a href="#" id="toggle-signup" style="color: var(--primary); text-decoration: underline;">Create Admin Account</a>
+                    </p>
+                </form>
+
+                <!-- Signup Form (Hidden by default) -->
+                <form id="signup-form" style="display:none;">
+                    <div class="form-group">
+                        <label>New Admin Email</label>
+                        <input type="email" id="signup-email" required placeholder="you@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Create Password</label>
+                        <input type="password" id="signup-password" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn btn-secondary glow-btn w-100 mt-3" style="background: #fff; color: #000;">Register Account</button>
+                    <p class="mt-3 text-center" style="font-size: 0.8rem; opacity: 0.7;">
+                        Already have an account? <a href="#" id="toggle-login" style="color: var(--primary); text-decoration: underline;">Back to Login</a>
+                    </p>
                 </form>
             </div>
             <div id="admin-controls" class="admin-section shadow-text" style="display:none; color: #fff;">
