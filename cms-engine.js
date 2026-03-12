@@ -8,13 +8,20 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function initCMS() {
-    // 1. Load All Dynamic Content
-    await loadAllContent();
+    try {
+        console.log("CMS: Initializing...");
+        // 1. Load All Dynamic Content
+        await loadAllContent();
 
-    // 2. Check Auth Status
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-        showAdminControls();
+        // 2. Check Auth Status
+        if (typeof supabase !== 'undefined') {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                showAdminControls();
+            }
+        }
+    } catch (err) {
+        console.error("CMS: Initialization failed, falling back to static content.", err);
     }
 
     // 3. Setup Listeners
@@ -22,33 +29,38 @@ async function initCMS() {
 }
 
 // --- Content Loading ---
-async function loadAllContent() {
     // Load Site Content (Headers, Paragraphs, URLs)
-    const { data: content } = await supabase.from('site_content').select('*');
-    if (content) {
+    const { data: content, error } = await supabase.from('site_content').select('*');
+    if (error) {
+        console.warn("CMS: Failed to fetch site content.", error.message);
+        return;
+    }
+
+    if (content && content.length > 0) {
         content.forEach(item => {
             const elements = document.querySelectorAll(`[data-cms-key="${item.section_key}"]`);
             elements.forEach(el => {
                 try {
+                    const value = item.content_text || item.content_url;
+                    if (!value) return; // Skip empty content
+
                     if (el.tagName === 'IMG') {
-                        el.src = item.content_url;
+                        el.src = value;
                     } else if (el.tagName === 'VIDEO') {
                         const source = el.querySelector('source');
-                        if (source) source.src = item.content_url;
-                        el.load(); // Refresh video source
+                        if (source) source.src = value;
+                        el.load();
                     } else {
-                        el.innerHTML = item.content_text;
+                        el.innerHTML = value;
                     }
                 } catch (e) {
                     console.error("CMS Load Error for key:", item.section_key, e);
                 }
             });
         });
+    } else {
+        console.log("CMS: No dynamic content found in database. Using defaults.");
     }
-
-    // Load Ministries (Bento)
-    // (Logic for dynamic grid generation could go here if needed)
-}
 
 // --- Auth & Admin ---
 async function setupEventListeners() {
