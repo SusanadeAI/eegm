@@ -192,16 +192,41 @@ document.addEventListener('DOMContentLoaded', () => {
         acc.style.cursor = 'pointer';
         acc.addEventListener('click', () => {
             const textToCopy = acc.getAttribute('data-account') || acc.innerText.replace(/[^0-9]/g, '');
-            navigator.clipboard.writeText(textToCopy).then(() => {
+            const showSuccess = () => {
                 const originalHtml = acc.innerHTML;
-                acc.innerHTML = `<span>Copied! ✓</span>`;
+                acc.innerHTML = `<span style="color: var(--gold-primary); font-weight: 800;">Copied! ✓</span>`;
                 setTimeout(() => {
                     acc.innerHTML = originalHtml;
                     if (window.feather) feather.replace();
                 }, 2200);
-            }).catch(err => console.error('Copy failed', err));
+            };
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(textToCopy).then(showSuccess).catch(() => {
+                    fallbackCopy(textToCopy, showSuccess);
+                });
+            } else {
+                fallbackCopy(textToCopy, showSuccess);
+            }
         });
     });
+
+    function fallbackCopy(text, callback) {
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = text;
+        tempTextArea.style.position = 'fixed';
+        tempTextArea.style.opacity = '0';
+        document.body.appendChild(tempTextArea);
+        tempTextArea.focus();
+        tempTextArea.select();
+        try {
+            document.execCommand('copy');
+            if (callback) callback();
+        } catch (e) {
+            console.warn('Fallback copy failed', e);
+        }
+        document.body.removeChild(tempTextArea);
+    }
 
     // 6. Top Scroll Progress Indicator
     const progressBar = document.createElement('div');
