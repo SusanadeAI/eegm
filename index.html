@@ -6,441 +6,534 @@
     <title>Eternity Echoes Global Ministry | Igniting Divine Destiny</title>
     <meta name="description" content="Eternity Echoes Global Ministry is a world-class spiritual sanctuary dedicated to spreading the message of hope, faith, and transformation across the globe.">
     
-    <!-- Google Fonts -->
+    <!-- Modern Clean Typography (Elevation style: Inter/Plus Jakarta Sans + Impact/Montserrat) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Feather Icons for a premium look -->
+    <!-- Feather Icons -->
     <script src="https://unpkg.com/feather-icons"></script>
     
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2026_elevation_v2">
 </head>
 <body>
     <!-- Toast Notifications -->
     <div id="toast-container" class="toast-container"></div>
 
-    <!-- Navigation -->
-    <header id="main-header">
-        <div class="container container-nav">
-            <div class="logo">
-                <img src="assets/images/logo.png" alt="Eternity Echoes Global Ministry Logo" id="site-logo" data-cms-key="site_logo">
+    <!-- Crisp White Elevation-Style Top Bar Navigation -->
+    <header id="main-header" class="elevation-nav">
+        <div class="nav-wrapper">
+            <div class="nav-left">
+                <button class="menu-btn" id="mobile-toggle" aria-label="Toggle navigation menu">
+                    <i data-feather="menu"></i>
+                </button>
+                <a href="#hero" class="brand-logo">
+                    <img src="assets/images/logo.png?v=2026_crop" alt="Eternity Echoes Global Ministry" id="site-logo" data-cms-key="site_logo">
+                </a>
             </div>
-            <nav id="nav-menu">
-                <ul class="nav-links">
-                    <li><a href="index.html#hero" class="active">Home</a></li>
-                    <li><a href="index.html#about">Founder</a></li>
-                    <li><a href="conference.html" class="accent">Conference</a></li>
-                    <li><a href="index.html#our-story">Our Story</a></li>
-                    <li><a href="index.html#crusades">Impact</a></li>
-                    <li><a href="index.html#ministries">Ministries</a></li>
-                    <li><a href="index.html#testimonies">Testimonies</a></li>
-                    <li><a href="index.html#give" class="btn btn-primary">Partner</a></li>
-                </ul>
-            </nav>
-            <div class="mobile-toggle" id="mobile-toggle">
-                <i data-feather="menu"></i>
+
+            <div class="nav-center">
+                <div class="search-pill">
+                    <i data-feather="search"></i>
+                    <input type="text" placeholder="Search" id="nav-search-input">
+                </div>
+            </div>
+
+            <div class="nav-right">
+                <nav id="nav-menu">
+                    <ul class="nav-links">
+                        <li><a href="#give" class="nav-give-link">Give</a></li>
+                        <li><a href="#ministries">Ministries</a></li>
+                        <li><a href="conference.html">Conference</a></li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section (2026 Sleek) -->
-    <section id="hero">
-        <div class="video-wrap">
-            <video autoplay loop muted playsinline class="hero-video" data-cms-key="hero_video">
-                <source src="assets/videos/bg-video.mp4" type="video/mp4">
-            </video>
+    <!-- Slide-Out Full Navigation Drawer (opened by hamburger menu) -->
+    <div id="nav-drawer-overlay" class="drawer-overlay"></div>
+    <aside id="nav-drawer" class="nav-drawer">
+        <div class="drawer-header">
+            <img src="assets/images/logo.png?v=2026_crop" alt="Eternity Echoes" class="drawer-logo">
+            <button class="drawer-close" id="drawer-close-btn" aria-label="Close menu">&times;</button>
         </div>
-        <div class="hero-overlay"></div>
-        <div class="container hero-content">
-            <div class="hero-pill fade-in">
-                <span class="pulse-dot"></span> Welcome to the Movement
-            </div>
-            <h1 class="fade-in delay-1" data-cms-key="hero_h1">Igniting the Echoes <br> of <span class="accent glass-text">Eternity</span> in Every Heart.</h1>
-            <p class="fade-in delay-2" data-cms-key="hero_p">Join us in a journey of faith, purpose, and global transformation. A sanctuary where the divine meets the mundane to shape eternal legacies.</p>
-            <div class="hero-btns fade-in delay-3">
-                <a href="#ministries" class="btn btn-primary glow-btn">Start Your Journey</a>
-                <a href="#sermons" class="btn btn-secondary glass-btn">Watch Latest Sermon <i data-feather="play-circle"></i></a>
-            </div>
-        </div>
-        <div class="scroll-indicator">
-            <div class="mouse"></div>
-            <span>Scroll to Explore</span>
-        </div>
-    </section>
+        <ul class="drawer-links">
+            <li><a href="#hero"><i data-feather="home"></i> Home</a></li>
+            <li><a href="#about"><i data-feather="user"></i> About the Founder</a></li>
+            <li><a href="#ministries"><i data-feather="heart"></i> Ministries</a></li>
+            <li><a href="#our-story"><i data-feather="book"></i> Our Story & Heritage</a></li>
+            <li><a href="#crusades"><i data-feather="activity"></i> Crusades & Impact</a></li>
+            <li><a href="#testimonies"><i data-feather="star"></i> Testimonies of Grace</a></li>
+            <li><a href="conference.html" class="drawer-highlight"><i data-feather="calendar"></i> All Believers Conference</a></li>
+            <li><a href="#give" class="drawer-give"><i data-feather="gift"></i> Give / Partner</a></li>
+        </ul>
+    </aside>
 
-    <!-- About Section -->
-    <section id="about" class="section about-founder">
-        <div class="container">
-            <div class="founder-layout">
-                <div class="founder-image reveal">
-                    <div class="image-wrapper">
-                        <!-- Replaced with the requested founder image -->
-                        <img src="assets/images/founder.png" alt="Evangelist Elisha Olorunda" class="founder-img" id="founder-img" data-cms-key="founder_img">
-                        <div class="founder-badge">
-                            <i data-feather="star"></i>
-                            <span>Founder</span>
+    <!-- Full-Screen Elevation Hero Slideshow -->
+    <section id="hero" class="fullscreen-slider-section">
+        <div class="slider-wrapper" id="hero-slider">
+            <!-- Slide 1: Main Crusade / Founder -->
+            <div class="slide active" data-slide="0">
+                <div class="slide-bg" style="background-image: url('assets/images/founder.png'); background-position: center 20%;"></div>
+                <div class="slide-overlay"></div>
+                <div class="slide-container">
+                    <div class="slide-content">
+                        <div class="slide-text-group">
+                            <span class="slide-kicker">UNDILUTED GOOD NEWS</span>
+                            <h1 class="slide-title">IGNITING THE ECHOES OF ETERNITY</h1>
+                            <p class="slide-speaker" data-cms-key="founder_name">Evangelist Elisha Olorunda</p>
+                            <p class="slide-desc" data-cms-key="hero_p">Founder & Setman &bull; Transforming lives through salvation, healing, and kingdom power.</p>
+                        </div>
+                        <div class="slide-cta-group">
+                            <a href="#about" class="btn btn-white"><i data-feather="user"></i> About Evangelist Elisha</a>
+                            <a href="#ministries" class="btn btn-transparent">Explore Ministries <i data-feather="chevron-right"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="founder-content reveal delay-1">
-                    <span class="section-tag">About The Founder</span>
-                    <h2 data-cms-key="founder_name">Evangelist Elisha <span class="accent">Olorunda</span></h2>
-                    
-                    <p class="drop-cap" data-cms-key="founder_p1">Evangelist Elisha Olorunda is a passionate preacher of the Gospel of Jesus Christ and the founder of Eternity Echoes Global Ministries. He is widely known for proclaiming the <strong>UNDILUTED GOOD NEWS</strong> of Jesus Christ, with a strong emphasis on salvation, healing, and the transforming power of God's grace.</p>
-                    
-                    <p>Through his crusade outreaches and evangelistic missions, many souls have been saved, and numerous testimonies of instant miracles and healings have been recorded.</p>
-                    
-                    <div class="quote-block">
-                        <i data-feather="message-square" class="quote-icon"></i>
-                        <p>"His ministry focuses on reaching people where they are and presenting the message of Jesus in a clear, practical, and powerful way that reveals the love and finished work of Christ."</p>
-                    </div>
-                    
-                    <p>He is recognized as a major pioneer of the <strong>JESUS CRUSADE</strong> movement, where the Gospel is taken directly to communities and nations. These crusades are marked by powerful demonstrations of God's presence through healings, deliverance, and salvation, leading many people into a life-changing encounter with Jesus Christ.</p>
-                    
-                    <p>Evangelist Elisha also leads <strong>Elisha Olorunda Ministries</strong>, a broadcast ministry committed to building, encouraging, and inspiring people through the Gospel. Through teachings, outreach programs, and online content, the ministry continues to reach audiences both locally and internationally.</p>
-                    
-                    <p>His ministry passion is centered on soul-winning, healing evangelism, and the global proclamation of the Gospel.</p>
+            </div>
 
-                    <p>Today, Evangelist Elisha Olorunda continues to raise believers who boldly proclaim the message of Christ and carry the Gospel to every corner of the world, accompanied by signs and wonders.</p>
+            <!-- Slide 2: Cinematic Crusade Movement Backdrop -->
+            <div class="slide" data-slide="1">
+                <div class="video-slide-bg">
+                    <video autoplay loop muted playsinline class="hero-video" data-cms-key="hero_video">
+                        <source src="assets/videos/bg-video.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="slide-overlay"></div>
+                <div class="slide-container">
+                    <div class="slide-content">
+                        <div class="slide-text-group">
+                            <span class="slide-kicker">GLOBAL KINGDOM MOVEMENT</span>
+                            <h1 class="slide-title">DEMONSTRATING GOD'S RAW POWER</h1>
+                            <p class="slide-speaker">Apostolic Crusades & Soul-Winning</p>
+                            <p class="slide-desc">Preaching salvation, divine deliverance, and miraculous healings across towns and nations.</p>
+                        </div>
+                        <div class="slide-cta-group">
+                            <a href="#crusades" class="btn btn-white"><i data-feather="activity"></i> View Crusade Impact</a>
+                            <a href="conference.html" class="btn btn-transparent">All Believers Conference <i data-feather="chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Community & Worship -->
+            <div class="slide" data-slide="2">
+                <div class="slide-bg" style="background-image: url('assets/images/community.png'); background-position: center center;"></div>
+                <div class="slide-overlay"></div>
+                <div class="slide-container">
+                    <div class="slide-content">
+                        <div class="slide-text-group">
+                            <span class="slide-kicker">COMMUNITY & FELLOWSHIP</span>
+                            <h1 class="slide-title">EXPERIENCE DYNAMIC WORSHIP</h1>
+                            <p class="slide-speaker">Eternity Echoes Sanctuary & Outreaches</p>
+                            <p class="slide-desc">Touching lives through soulful worship, discipleship mentorship, and caring for the next generation.</p>
+                        </div>
+                        <div class="slide-cta-group">
+                            <a href="#ministries" class="btn btn-white"><i data-feather="heart"></i> Our Ministries</a>
+                            <a href="#give" class="btn btn-transparent">Become a Partner <i data-feather="chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slider Navigation Controls -->
+        <button class="slider-arrow prev" id="slider-prev" aria-label="Previous slide">
+            <i data-feather="chevron-left"></i>
+        </button>
+        <button class="slider-arrow next" id="slider-next" aria-label="Next slide">
+            <i data-feather="chevron-right"></i>
+        </button>
+
+        <!-- Slider Pagination Dots -->
+        <div class="slider-pagination" id="slider-dots">
+            <span class="dot active" data-index="0"></span>
+            <span class="dot" data-index="1"></span>
+            <span class="dot" data-index="2"></span>
+        </div>
+    </section>
+
+    <!-- Elevation "Find the right experience for you" Section -->
+    <section class="section experience-intro-section">
+        <div class="container text-center">
+            <span class="sub-label">DISCOVER YOUR CALLING</span>
+            <h2 class="bold-headline">Find the right experience for you.</h2>
+            <p class="headline-sub">No matter where you are, online or in person, become a part of all God is doing across the globe through Eternity Echoes Global Ministry.</p>
+            
+            <div class="experience-bento-grid">
+                <div class="exp-card">
+                    <div class="exp-icon"><i data-feather="calendar"></i></div>
+                    <h3>All Believers Conference</h3>
+                    <p>Annual power-packed convergence with free bus transportation across institutions.</p>
+                    <a href="conference.html" class="exp-link">Register Online <i data-feather="arrow-right"></i></a>
+                </div>
+                <div class="exp-card">
+                    <div class="exp-icon"><i data-feather="zap"></i></div>
+                    <h3>Jesus Crusades</h3>
+                    <p>Experience instant miracles, salvations, and prophetic deliverance across cities.</p>
+                    <a href="#crusades" class="exp-link">Explore Crusades <i data-feather="arrow-right"></i></a>
+                </div>
+                <div class="exp-card">
+                    <div class="exp-icon"><i data-feather="heart"></i></div>
+                    <h3>Partnership Network</h3>
+                    <p>Co-labor with Evangelist Elisha Olorunda to sponsor soul-winning to the nations.</p>
+                    <a href="#give" class="exp-link">Partner Today <i data-feather="arrow-right"></i></a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Ministries Bento Grid -->
-    <section id="ministries" class="section bg-alt bento-section">
+    <!-- Founder Biography Spotlight (Clean Elevation Style) -->
+    <section id="about" class="section founder-elevation-section">
+        <div class="container">
+            <div class="founder-split-row">
+                <div class="founder-photo-col">
+                    <div class="photo-clean-frame">
+                        <img src="assets/images/founder.png" alt="Evangelist Elisha Olorunda" id="founder-img" data-cms-key="founder_img">
+                        <div class="photo-badge-chip">
+                            <i data-feather="check-circle"></i> Founder & Setman
+                        </div>
+                    </div>
+                </div>
+
+                <div class="founder-text-col">
+                    <span class="section-tag">ABOUT THE FOUNDER</span>
+                    <h2 class="col-title" data-cms-key="founder_name">Evangelist Elisha <span class="accent-gold">Olorunda</span></h2>
+                    
+                    <div class="bio-paragraphs">
+                        <p class="lead-bio" data-cms-key="founder_p1">Evangelist Elisha Olorunda is a passionate preacher of the Gospel of Jesus Christ and the founder of Eternity Echoes Global Ministries. He is widely known for proclaiming the <strong>UNDILUTED GOOD NEWS</strong> of Jesus Christ, with a strong emphasis on salvation, healing, and the transforming power of God's grace.</p>
+                        <p>Through his crusade outreaches and evangelistic missions, many souls have been saved, and numerous testimonies of instant miracles and healings have been recorded.</p>
+                    </div>
+
+                    <div class="elevation-quote-box">
+                        <p>"His ministry focuses on reaching people where they are and presenting the message of Jesus in a clear, practical, and powerful way that reveals the love and finished work of Christ."</p>
+                    </div>
+
+                    <div class="founder-highlights-grid">
+                        <div class="highlight-item">
+                            <div class="hl-icon"><i data-feather="map"></i></div>
+                            <div>
+                                <h4>Jesus Crusade Movement</h4>
+                                <p>Taking the Gospel directly to communities and villages with mighty demonstrations of healing and deliverance.</p>
+                            </div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="hl-icon"><i data-feather="tv"></i></div>
+                            <div>
+                                <h4>Broadcast Ministry</h4>
+                                <p>Leading <strong>Elisha Olorunda Ministries</strong> to reach local and global audiences with life-transforming teachings.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ministries Bento Section -->
+    <section id="ministries" class="section clean-bento-section">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Our Ministries</span>
-                <h2>Touching Lives, <span class="accent">Transforming</span> Worlds.</h2>
-                <p>Explore the various facets of our ministry designed to serve every age, background, and spiritual need.</p>
+                <span class="section-tag">TOUCHING LIVES</span>
+                <h2>Our Ministry Expressions</h2>
+                <p>Designed to serve every age, background, and spiritual walk.</p>
             </div>
-            
-            <div class="ministry-bento">
-                <div class="bento-item bento-large reveal">
-                    <div class="bento-icon"><i data-feather="mic"></i></div>
-                    <h3>Dynamic Worship</h3>
-                    <p>Experience the presence of the Divine through soulful, world-class worship led by our anointed team.</p>
+
+            <div class="elevation-bento-mosaic">
+                <!-- Large card: Dynamic Worship -->
+                <div class="bento-tile tile-large-feature">
+                    <div class="tile-image-bg" style="background-image: url('assets/images/community.png');"></div>
+                    <div class="tile-inner-wrap">
+                        <span class="tile-category">WORSHIP ALTAR</span>
+                        <h3>Dynamic Worship</h3>
+                        <p>Experience the presence of the Divine through soulful, world-class worship led by our anointed team.</p>
+                    </div>
                 </div>
-                <div class="bento-item bento-wide reveal delay-1">
-                    <div class="bento-icon"><i data-feather="users"></i></div>
+
+                <!-- Card 2: Global Missions -->
+                <div class="bento-tile tile-medium">
+                    <div class="tile-icon-circle"><i data-feather="globe"></i></div>
+                    <span class="tile-category">OUTREACH</span>
                     <h3>Global Missions</h3>
                     <p>Reaching beyond borders to provide aid, spiritual guidance, and sustainable impact to communities.</p>
                 </div>
-                <div class="bento-item reveal delay-2">
-                    <div class="bento-icon"><i data-feather="book-open"></i></div>
+
+                <!-- Card 3: Discipleship -->
+                <div class="bento-tile tile-medium">
+                    <div class="tile-icon-circle"><i data-feather="book-open"></i></div>
+                    <span class="tile-category">MENTORSHIP</span>
                     <h3>Discipleship</h3>
-                    <p>Deepen your understanding through mentorship.</p>
+                    <p>Deepen your understanding through mentorship, prayer vigils, and solid scriptural foundation.</p>
                 </div>
-                <div class="bento-item reveal delay-3">
-                    <div class="bento-icon"><i data-feather="heart"></i></div>
-                    <h3>Youth & Kids</h3>
-                    <p>Nurturing the next generation.</p>
+
+                <!-- Card 4: Youth & Kids -->
+                <div class="bento-tile tile-wide">
+                    <div class="tile-icon-circle"><i data-feather="heart"></i></div>
+                    <div class="tile-wide-info">
+                        <span class="tile-category">NEXT GENERATION</span>
+                        <h3>Youth & Kids Ministries</h3>
+                        <p>Nurturing the next generation into bold, passionate ambassadors of Jesus Christ equipped for eternal destiny.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- About The Ministry (History & Mission) -->
-    <section id="our-story" class="section">
+    <!-- Our Heritage & Strategic Vision Section -->
+    <section id="our-story" class="section heritage-section">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Our Heritage</span>
-                <h2>The Birth of a <span class="accent">Global Movement</span>.</h2>
+                <span class="section-tag">OUR HERITAGE</span>
+                <h2>The Birth of a Global Movement</h2>
+                <p>A testimony of unwavering prayer, consecration, and God's faithfulness.</p>
             </div>
-            
-            <div class="history-grid">
-                <div class="history-content reveal">
+
+            <div class="heritage-split-grid">
+                <div class="heritage-story-card">
+                    <h3>From Humble Beginnings</h3>
                     <p><strong>Eternity Echoes Global Ministries</strong> was established in the year 2021 with just 4 members and a marathon fast, tagged <em>"MEN OF ENCOUNTERS"</em>. We began holding vigils every Tuesday (with the last Tuesday acting as an interdenominational edition).</p>
-                    <p>Our journey began at the Ondo State National Library, then moved to the Holy Ghost Church at Oluwatuyi Akure, and later to Re360 Agent Development at Sijuwade Akure. Today, we stand as a registered entity (CAC 2023), continuing our mission from our current venue at Nepa Opposite Immigration Office.</p>
-                    <p>The Setman of Eternity Echoes Global Ministries is the person of <strong>Evangelist Elisha Olorunda</strong> and his amazing wife, <strong>Minstrel Opeyemi Elisha Olorunda</strong>.</p>
+                    <p>Our journey began at the Ondo State National Library, then moved to the Holy Ghost Church at Oluwatuyi Akure, and later to Re360 Agent Development at Sijuwade Akure. Today, we stand as a registered entity (CAC 2023), continuing our mission from our current venue at GroundFloor, Diamond Hotel, Alagbaka GRA, Akure, Ondo state.</p>
+                    <div class="setman-badge">
+                        <i data-feather="shield"></i>
+                        <span>Setman: <strong>Evangelist Elisha Olorunda</strong> & <strong>Minstrel Opeyemi Elisha Olorunda</strong>.</span>
+                    </div>
                 </div>
-                
-                <div class="mission-cards reveal delay-1">
-                    <div class="mission-card">
-                        <i data-feather="eye" class="primary-icon"></i>
-                        <h4>Our Vision</h4>
+
+                <div class="vision-mission-cards">
+                    <div class="vm-card">
+                        <div class="vm-badge"><i data-feather="eye"></i> Our Vision</div>
                         <p data-cms-key="vision_text">Preaching the undiluted Goodnews to nations of the world, demonstrating God's power in Healings and miraculous as the world awaits the manifestation of the sons of God. <em>(Luke 4:18, Romans 8:19)</em></p>
                     </div>
-                    <div class="mission-card">
-                        <i data-feather="target" class="primary-icon"></i>
-                        <h4>Our Mission</h4>
+                    <div class="vm-card">
+                        <div class="vm-badge"><i data-feather="target"></i> Our Mission</div>
                         <p data-cms-key="mission_text">Bringing salvation and repentance to the nations through the wholesome, Holy Spirit-filled, igniting, and transforming undiluted good news. <em>(Luke 4:18)</em></p>
                     </div>
                 </div>
             </div>
-            
-            <div class="strategy-banner reveal delay-2">
-                <h3>Our Strategy For The Nations</h3>
-                <ul class="strategy-list">
-                    <li><i data-feather="check"></i> Staging of Crusades</li>
-                    <li><i data-feather="check"></i> Village Outreach</li>
-                    <li><i data-feather="check"></i> Establishing Fellowships (Homes, Campuses)</li>
-                    <li><i data-feather="check"></i> Tent Crusades</li>
-                    <li><i data-feather="check"></i> Street & House-to-House Evangelism</li>
-                    <li><i data-feather="check"></i> Music Concerts</li>
-                </ul>
+
+            <!-- Strategy Grid -->
+            <div class="strategy-banner-clean">
+                <h4>Our Strategy For The Nations</h4>
+                <div class="strategy-chips-row">
+                    <div class="s-chip"><i data-feather="check"></i> Staging of Crusades</div>
+                    <div class="s-chip"><i data-feather="check"></i> Village Outreach</div>
+                    <div class="s-chip"><i data-feather="check"></i> Establishing Fellowships</div>
+                    <div class="s-chip"><i data-feather="check"></i> Tent Crusades</div>
+                    <div class="s-chip"><i data-feather="check"></i> Street & House-to-House</div>
+                    <div class="s-chip"><i data-feather="check"></i> Music Concerts</div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Crusades Timeline -->
-    <section id="crusades" class="section bg-alt bento-section">
+    <!-- Crusades & Outreaches Archive -->
+    <section id="crusades" class="section crusades-section">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Impact Log</span>
-                <h2>Echoes Across <span class="accent">Cities</span>.</h2>
-                <p>A look at the major crusades and outreaches where the power of God was demonstrated.</p>
+                <span class="section-tag">IMPACT ARCHIVE</span>
+                <h2>Echoes Across Cities</h2>
+                <p>Major crusades and community encounters where God demonstrated His saving grace.</p>
             </div>
-            
-            <div class="timeline">
-                <div class="timeline-item reveal">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">31st August 2021</span>
-                        <h3>JESUS CRUSADE</h3>
-                        <p>National Library</p>
-                    </div>
+
+            <div class="crusades-grid">
+                <div class="crusade-item-card">
+                    <span class="c-num">01</span>
+                    <span class="c-date">31st August 2021</span>
+                    <h3>JESUS CRUSADE</h3>
+                    <p><i data-feather="map-pin"></i> National Library</p>
                 </div>
-                <div class="timeline-item reveal delay-1">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">30th & 31st March 2022</span>
-                        <h3>APONMU JESUS CRUSADE</h3>
-                        <p>Aponmu Village</p>
-                    </div>
+                <div class="crusade-item-card">
+                    <span class="c-num">02</span>
+                    <span class="c-date">30th & 31st March 2022</span>
+                    <h3>APONMU JESUS CRUSADE</h3>
+                    <p><i data-feather="map-pin"></i> Aponmu Village</p>
                 </div>
-                <div class="timeline-item reveal delay-2">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">26th & 27th March 2023</span>
-                        <h3>SIJUWADE JESUS CRUSADE</h3>
-                        <p>Sijuwade Street</p>
-                    </div>
+                <div class="crusade-item-card">
+                    <span class="c-num">03</span>
+                    <span class="c-date">26th & 27th March 2023</span>
+                    <h3>SIJUWADE JESUS CRUSADE</h3>
+                    <p><i data-feather="map-pin"></i> Sijuwade Street</p>
                 </div>
-                <div class="timeline-item reveal delay-3">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">3rd, 4th, 5th July 2024</span>
-                        <h3>AGO ALAO JESUS CRUSADE</h3>
-                        <p>Ago Alao</p>
-                    </div>
+                <div class="crusade-item-card">
+                    <span class="c-num">04</span>
+                    <span class="c-date">3rd, 4th, 5th July 2024</span>
+                    <h3>AGO ALAO JESUS CRUSADE</h3>
+                    <p><i data-feather="map-pin"></i> Ago Alao</p>
                 </div>
             </div>
-            
-            <div class="outreach-grid mt-5">
-                <div class="bento-item reveal">
-                    <h4><i data-feather="sun"></i> Morning Prayers</h4>
+
+            <!-- Additional Outreaches -->
+            <div class="outreach-triplet-row">
+                <div class="outreach-card">
+                    <i data-feather="sun" class="o-icon"></i>
+                    <h4>Morning Prayers</h4>
                     <p>7 Days Prophetic Morning Prayer (Sept 2023) & Street Morning Prayer at Sijuwade Street (Jan 2023).</p>
                 </div>
-                <div class="bento-item reveal delay-1">
-                    <h4><i data-feather="book"></i> School Evangelism</h4>
-                    <p>Saint Peter Secondary School Outreach - January 29th, 2023.</p>
+                <div class="outreach-card">
+                    <i data-feather="book" class="o-icon"></i>
+                    <h4>School Evangelism</h4>
+                    <p>Saint Peter Secondary School Outreach - January 29th, 2023. Salvation of students and staff.</p>
                 </div>
-                <div class="bento-item reveal delay-2">
-                    <h4><i data-feather="coffee"></i> Food on the Street</h4>
-                    <p>Feeding the hungry in the Market Square, Old Garage, and Aponmu Village.</p>
+                <div class="outreach-card">
+                    <i data-feather="coffee" class="o-icon"></i>
+                    <h4>Food on the Street</h4>
+                    <p>Feeding the hungry and sharing practical love in the Market Square, Old Garage, and Aponmu Village.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Testimonies Masonry -->
-    <section id="testimonies" class="section">
+    <!-- Testimonies Section -->
+    <section id="testimonies" class="section testimonies-section">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Gathering of Testifiers</span>
-                <h2>Lives <span class="accent">Transformed</span>.</h2>
-                <p>Hear from those who have encountered God's grace and healing through this ministry.</p>
+                <span class="section-tag">TESTIMONIES OF GRACE</span>
+                <h2>Lives Transformed</h2>
+                <p>Hear from those who have encountered God's power and miracles through this ministry.</p>
             </div>
-            
-            <div class="masonry-grid">
-                <!-- Testimony 1 -->
-                <div class="testimonial-card reveal">
-                    <i data-feather="message-circle" class="quote-watermark"></i>
+
+            <div class="testimonies-columns">
+                <div class="testimony-clean-card">
+                    <div class="stars"><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i></div>
                     <p>"Joining Eternity Echoes... has provided me with a deeper understanding of God's Word. From the day I met Evang. Elisha Olorunda, it was evident that our connection was meant to be more than just acquaintances. His constant encouragement has motivated me to strive for better."</p>
-                    <div class="testifier">
-                        <div class="testifier-info">
-                            <h5>Jesuntofunmi Joy</h5>
-                        </div>
-                    </div>
+                    <div class="testifier-name">Jesuntofunmi Joy</div>
                 </div>
 
-                <!-- Testimony 2 -->
-                <div class="testimonial-card reveal delay-1">
-                    <i data-feather="message-circle" class="quote-watermark"></i>
+                <div class="testimony-clean-card">
+                    <div class="stars"><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i></div>
                     <p>"Before I refound my faith, I felt lost and empty... I joined 'The Emergence of the Chosen' and attended a prayer meeting where I saw young people praying with passion for Christ. Now, I have a purpose and joy that I had never experienced before."</p>
-                    <div class="testifier">
-                        <div class="testifier-info">
-                            <h5>Olamide Akinsote</h5>
-                        </div>
-                    </div>
+                    <div class="testifier-name">Olamide Akinsote</div>
                 </div>
 
-                <!-- Testimony 3 -->
-                <div class="testimonial-card reveal delay-2">
-                    <i data-feather="message-circle" class="quote-watermark"></i>
+                <div class="testimony-clean-card">
+                    <div class="stars"><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i></div>
                     <p>"Evang. Elisha gave me my first ₦50,000 cheque as support for my business when I was struggling... Today, I've made millions of naira and have catered to over 50 events. I was also healed of years of peptic ulcers during one of the Tuesday meetings."</p>
-                    <div class="testifier">
-                        <div class="testifier-info">
-                            <h5>Adewaire Samuel (Chef David)</h5>
-                        </div>
-                    </div>
+                    <div class="testifier-name">Adewaire Samuel (Chef David)</div>
                 </div>
 
-                <!-- Testimony 4 -->
-                <div class="testimonial-card reveal">
-                    <i data-feather="message-circle" class="quote-watermark"></i>
+                <div class="testimony-clean-card">
+                    <div class="stars"><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i></div>
                     <p>"Before my ordination at the Glorious Bible College of Nigeria, I went to meet Evangelist Elisha... He encouraged me saying, 'Don't worry, God will take control.' I believed, and now with gladness in my heart, I am an ordained Pastor."</p>
-                    <div class="testifier">
-                        <div class="testifier-info">
-                            <h5>Pastor Adikpe J. O. Divine</h5>
-                        </div>
-                    </div>
+                    <div class="testifier-name">Pastor Adikpe J. O. Divine</div>
                 </div>
-                
-                <!-- Testimony 5 -->
-                <div class="testimonial-card reveal delay-1">
-                    <i data-feather="message-circle" class="quote-watermark"></i>
+
+                <div class="testimony-clean-card">
+                    <div class="stars"><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i></div>
                     <p>"Struggling in medical school, I failed my council exams Paper 1. A man of God's prayers and guidance helped me overcome. With renewed determination, I passed and became a registered nurse, praising God for His faithfulness."</p>
-                    <div class="testifier">
-                        <div class="testifier-info">
-                            <h5>Ifeoluwa Ajayi RN</h5>
-                        </div>
-                    </div>
+                    <div class="testifier-name">Ifeoluwa Ajayi RN</div>
                 </div>
-                
-                <!-- Testimony 6 -->
-                <div class="testimonial-card reveal delay-2">
-                    <i data-feather="message-circle" class="quote-watermark"></i>
+
+                <div class="testimony-clean-card">
+                    <div class="stars"><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i></div>
                     <p>"God saved me from a lot of road accidents while coming from work. And in 2022 while coming from a rural rugged crusade in Apomu village, we had a fatal accident... but God saved us all. I specially appreciate PAPA Elisha for his resilience and contribution in my life."</p>
-                    <div class="testifier">
-                        <div class="testifier-info">
-                            <h5>Hannah Sulaimon Aishat</h5>
-                        </div>
-                    </div>
+                    <div class="testifier-name">Hannah Sulaimon Aishat</div>
                 </div>
-                <!-- Testimony 7 -->
-                <div class="testimonial-card reveal">
-                    <i data-feather="message-circle" class="quote-watermark"></i>
+
+                <div class="testimony-clean-card">
+                    <div class="stars"><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i></div>
                     <p>"It is a great privilege to share my testimony... Any time I fell sick, I would have to take injections... To the glory of God, since I joined this ministry, I have not had to take injections or drip... The Lord has touched many lives... sisters got married, gained admission, graduated... God is always faithful."</p>
-                    <div class="testifier">
-                        <div class="testifier-info">
-                            <h5>Omowumi Esther Ojo</h5>
-                        </div>
-                    </div>
+                    <div class="testifier-name">Omowumi Esther Ojo</div>
                 </div>
 
-                <!-- Testimony 8 -->
-                <div class="testimonial-card reveal delay-1">
-                    <i data-feather="message-circle" class="quote-watermark"></i>
+                <div class="testimony-clean-card">
+                    <div class="stars"><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i></div>
                     <p>"A Tribute to God's Faithful Servant... Even then, his passion for the Kingdom of God was evident and inspiring... One of the most significant lessons I have learned is the importance of consistency and diligence. His zeal is contagious... I pray that God continues to empower and uphold Evangelist Olorunda."</p>
-                    <div class="testifier">
-                        <div class="testifier-info">
-                            <h5>Apostle O. Chosen</h5>
-                        </div>
-                    </div>
+                    <div class="testifier-name">Apostle O. Chosen</div>
                 </div>
 
-                <!-- Testimony 9 -->
-                <div class="testimonial-card reveal delay-2">
-                    <i data-feather="message-circle" class="quote-watermark"></i>
+                <div class="testimony-clean-card">
+                    <div class="stars"><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i></div>
                     <p>"Knowing and having encounter with this great man of God has been a great blessing to me since the year 2020... He will always encourage me... For more than five years I have been seeking for admission... But last year 2023, the setman prayed on my documents and that same 2023 the door of admission opened up for me."</p>
-                    <div class="testifier">
-                        <div class="testifier-info">
-                            <h5>Peter Ifenyichukwu</h5>
-                        </div>
-                    </div>
+                    <div class="testifier-name">Peter Ifenyichukwu</div>
                 </div>
 
-                <!-- Testimony 10 -->
-                <div class="testimonial-card reveal">
-                    <i data-feather="message-circle" class="quote-watermark"></i>
+                <div class="testimony-clean-card">
+                    <div class="stars"><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i><i data-feather="star"></i></div>
                     <p>"The atmosphere was charged with God's presence, and his words carried a power that spoke directly to my soul... In my life, I have experienced the power of his prayers. During times of great burden... the results were nothing short of miraculous..."</p>
-                    <div class="testifier">
-                        <div class="testifier-info">
-                            <h5>Mrs Eriifeoluwasimi Aderomilehin</h5>
-                        </div>
-                    </div>
+                    <div class="testifier-name">Mrs Eriifeoluwasimi Aderomilehin</div>
                 </div>
             </div>
-            
-            <!-- Healing Message Block -->
-            <div class="healing-message reveal mt-5">
-                <div class="healing-content">
-                    <h3 data-cms-key="healing_h3">GOD WANTS TO HEAL YOUR SPIRIT, SOUL AND BODY.</h3>
-                    <span class="must-read">(MUST READ BY EVERYONE WITH DOCTOR'S REPORT)</span>
-                    <p data-cms-key="healing_p">Jesus heal, Jesus still in the business of Divine healing... He might proof Himself to you now by healing you. I want you to believe... touch where ever you have pains anywhere and declare I am healed.</p>
-                    <p class="italic-quote" data-cms-key="healing_quote">"Do good now to touch the pains... it is gone... Jesus Christ created you from your mother womb, He knew you."</p>
-                    <p data-cms-key="healing_p2">Readers, I came Here with a different Doctor report which supercedes the doctors report in your hand. I know a Doctor who doesn't make you undergo Chemotherapy, Surgical Operation, isolation... who heals without Medicine and His name is Doctor JESUS, whose by His Stripes you/we were healed.</p>
-                    <div class="healing-footer">
-                        <strong>#UNDILUTEDGOODNEWS</strong>
-                        <br>
-                        <span>Elisha Olorunda Ministries</span>
-                    </div>
+
+            <!-- Healing Message Proclamation -->
+            <div class="healing-clean-banner">
+                <span class="healing-tag">DIVINE HEALING PROCLAMATION</span>
+                <h3 data-cms-key="healing_h3">GOD WANTS TO HEAL YOUR SPIRIT, SOUL AND BODY.</h3>
+                <div class="must-read">(MUST READ BY EVERYONE WITH DOCTOR'S REPORT)</div>
+                <p data-cms-key="healing_p">Jesus heal, Jesus still in the business of Divine healing... He might proof Himself to you now by healing you. I want you to believe... touch where ever you have pains anywhere and declare I am healed.</p>
+                <div class="healing-quote-callout" data-cms-key="healing_quote">
+                    "Do good now to touch the pains... it is gone... Jesus Christ created you from your mother womb, He knew you."
+                </div>
+                <p data-cms-key="healing_p2">Readers, I came Here with a different Doctor report which supercedes the doctors report in your hand. I know a Doctor who doesn't make you undergo Chemotherapy, Surgical Operation, isolation... who heals without Medicine and His name is Doctor JESUS, whose by His Stripes you/we were healed.</p>
+                <div class="healing-author-foot">
+                    <strong>#UNDILUTEDGOODNEWS</strong> &bull; <span>Elisha Olorunda Ministries</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Partnership Section -->
-    <section id="give" class="section bg-alt partnership-section">
+    <!-- Partnership / Giving Section -->
+    <section id="give" class="section giving-section">
         <div class="container">
-            <div class="partnership-layout reveal">
-                <div class="partnership-header">
-                    <h2>CALL FOR <span class="accent">PARTNERSHIP</span></h2>
+            <div class="giving-container-clean">
+                <div class="section-header">
+                    <span class="section-tag">KINGDOM INVESTMENT</span>
+                    <h2>Call for Partnership</h2>
                     <p>How many people will hear the gospel of Jesus Christ for the very first time? How many will experience the touch of God? So Much is about to happen in the coming crusades and you are part of it as you partner with us. You are part of making history!</p>
                 </div>
-                
-                <div class="budget-card reveal delay-1">
-                    <p class="budget-subtitle">Below is the budget for our upcoming Crusades</p>
-                    <div class="budget-list">
-                        <div class="budget-item"><span>1ST CRUSADE:</span> <strong>10 MILLION</strong></div>
-                        <div class="budget-item"><span>2ND CRUSADE:</span> <strong>10 MILLION</strong></div>
-                        <div class="budget-item"><span>3RD CRUSADE:</span> <strong>10 MILLION</strong></div>
+
+                <!-- Budget Box -->
+                <div class="budget-clean-card">
+                    <span class="budget-title">Below is the budget for our upcoming Crusades</span>
+                    <div class="budget-numbers">
+                        <div class="bn-item"><span>1ST CRUSADE:</span> <strong>10 MILLION</strong></div>
+                        <div class="bn-item"><span>2ND CRUSADE:</span> <strong>10 MILLION</strong></div>
+                        <div class="bn-item"><span>3RD CRUSADE:</span> <strong>10 MILLION</strong></div>
                     </div>
                 </div>
 
-                <div class="accounts-grid reveal delay-2">
-                    <div class="account-block">
-                        <h4 class="account-type naira">Naira Account:</h4>
-                        
-                        <div class="bank-details">
-                            <p>Account Name:<br><strong>Eternity Echoes Global Ministries</strong></p>
-                            <p>Account Number: <strong class="highlight">5155132337</strong></p>
-                            <p>Bank Name: <strong>Monie Point</strong></p>
+                <!-- Account Grid -->
+                <div class="accounts-clean-grid">
+                    <div class="acc-box">
+                        <h4><i data-feather="credit-card"></i> Partnership / Seed Accounts</h4>
+                        <div class="bank-entry">
+                            <span class="b-name">Moniepoint MFB</span>
+                            <span class="b-owner">Eternity Echoes Global Ministries</span>
+                            <div class="b-num copyable-account" data-account="4004118065" title="Click to copy">
+                                <span>4004118065</span> <i data-feather="copy"></i>
+                            </div>
                         </div>
-
-                        <div class="bank-details mt-3">
-                            <p>Account Name:<br><strong>Elisha Olorunda</strong></p>
-                            <p>Account Number: <strong class="highlight">0772741512</strong></p>
-                            <p>Bank Name: <strong>Access Bank</strong></p>
-                        </div>
-                    </div>
-
-                    <div class="account-block">
-                        <h4 class="account-type dollar">Dollar Account</h4>
-                        
-                        <div class="bank-details">
-                            <p>Account Name:<br><strong>Elisha Olorunda</strong></p>
-                            <p>Account Number: <strong class="highlight">8398067918</strong></p>
-                            <p>Bank Name: <strong>Community Federal Savings Bank</strong></p>
-                            <p>ACH Routing: <strong>026073150</strong></p>
+                        <div class="bank-entry mt-2">
+                            <span class="b-name">Access Bank</span>
+                            <span class="b-owner">Elisha Olorunda</span>
+                            <div class="b-num copyable-account" data-account="0772741512" title="Click to copy">
+                                <span>0772741512</span> <i data-feather="copy"></i>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="contact-block">
-                        <h4 class="social-title">Social Media Handles@</h4>
-                        <ul class="social-list">
+                    <div class="acc-box">
+                        <h4><i data-feather="dollar-sign"></i> Dollar Account (USA)</h4>
+                        <div class="bank-entry">
+                            <span class="b-name">Community Federal Savings Bank</span>
+                            <span class="b-owner">Elisha Olorunda</span>
+                            <div class="b-num copyable-account" data-account="8398067918" title="Click to copy">
+                                <span>8398067918</span> <i data-feather="copy"></i>
+                            </div>
+                            <div class="routing-sub">ACH Routing: <strong class="copyable-account" data-account="026073150">026073150</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="acc-box">
+                        <h4><i data-feather="share-2"></i> Official Channels & Contact</h4>
+                        <ul class="clean-social-list">
                             <li><i data-feather="facebook"></i> Elisha Olorunda Ministries</li>
                             <li><i data-feather="youtube"></i> Elisha Olorunda Ministries</li>
                             <li><i data-feather="instagram"></i> Elisha Olorunda Ministries</li>
                             <li><i data-feather="message-circle"></i> +1 551 430 7562</li>
                         </ul>
-                        
-                        <h4 class="contact-title mt-4">Contact @</h4>
-                        <div class="phone-list">
+                        <div class="phone-contact-box">
+                            <span>Direct Lines:</span>
                             <a href="tel:+2348134863661">+234 813 486 3661</a>
                             <a href="tel:+15514307562">+1 551 430 7562</a>
                             <a href="tel:+2348076474980">+234 807 647 4980</a>
@@ -451,247 +544,225 @@
         </div>
     </section>
 
-    <!-- Gallery Section -->
+    <!-- Ministry Gallery -->
     <section id="gallery" class="section gallery-section">
         <div class="container">
-            <div class="section-header text-center reveal">
-                <h2 class="light-text">Ministry <span class="accent">Gallery</span></h2>
+            <div class="section-header">
+                <span class="section-tag">VISUAL CHRONICLES</span>
+                <h2>Ministry Gallery</h2>
                 <p>Capturing moments of faith, healing, and global impact.</p>
             </div>
-            <div id="gallery-grid" class="gallery-grid reveal delay-1">
-                <!-- Images loaded dynamically -->
-                <div class="loading-spinner"></div>
+            <div id="gallery-grid" class="gallery-scroll-strip">
+                <div class="loading-state">Loading gallery archives...</div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
+    <!-- Elevation Clean Footer -->
+    <footer class="elevation-footer">
         <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <img src="assets/images/logo.png" alt="EEMG Logo" class="footer-logo" data-cms-key="footer_logo">
-                    <p>Eternity Echoes Global Ministry is a global spiritual movement dedicated to excellence, faith, and transformation.</p>
-                    <div class="social-links">
+            <div class="footer-columns-row">
+                <div class="footer-info-col">
+                    <img src="assets/images/logo.png" alt="Eternity Echoes" class="f-logo" data-cms-key="footer_logo">
+                    <p>Eternity Echoes Global Ministry is a world-class spiritual sanctuary dedicated to spreading the undiluted message of faith, healing, and transformation.</p>
+                    <div class="f-socials">
                         <a href="#"><i data-feather="facebook"></i></a>
                         <a href="#"><i data-feather="instagram"></i></a>
                         <a href="#"><i data-feather="youtube"></i></a>
                         <a href="#"><i data-feather="twitter"></i></a>
                     </div>
                 </div>
-                <div class="footer-links">
-                    <h4>Quick Links</h4>
+                <div class="footer-links-col">
+                    <h4>Navigation</h4>
                     <ul>
                         <li><a href="#hero">Home</a></li>
-                        <li><a href="#about">Our Story</a></li>
+                        <li><a href="#about">The Founder</a></li>
                         <li><a href="#ministries">Ministries</a></li>
-                        <li><a href="#sermons">Sermons</a></li>
-                        <li><a href="#giving">Giving</a></li>
+                        <li><a href="#our-story">Our Story</a></li>
+                        <li><a href="conference.html">Conference 2026</a></li>
+                        <li><a href="#give">Partnership</a></li>
                     </ul>
                 </div>
-                <div class="footer-contact">
+                <div class="footer-contact-col">
                     <h4>Contact Us</h4>
-                    <p><i data-feather="map-pin"></i> 123 Global Echo Way, City, State, Country</p>
-                    <p><i data-feather="phone"></i> +1 (234) 567-890</p>
-                    <p><i data-feather="mail"></i> info@eternal-echoes.org</p>
+                    <p><i data-feather="map-pin"></i> GroundFloor, Diamond Hotel, Alagbaka GRA, Akure, Ondo state.</p>
+                    <p><i data-feather="phone"></i> +234 813 486 3661</p>
+                    <p><i data-feather="mail"></i> info@eternityechoes.org</p>
                 </div>
             </div>
-            <div class="footer-bottom">
+            <div class="footer-copyright-bar">
                 <p>&copy; 2026 Eternity Echoes Global Ministry. All Rights Reserved.</p>
-                <p class="designer-tag">Crafted for Excellence</p>
+                <p class="craft-tag">Proclaiming the Undiluted Gospel</p>
             </div>
         </div>
     </footer>
 
-    <!-- Admin Panel Overlay (Hidden by default) -->
+    <!-- Admin Panel Overlay (Preserves Supabase CMS functionality) -->
     <div id="admin-overlay" class="admin-overlay">
-            <!-- Login View -->
-            <div id="admin-auth" class="admin-auth-view">
-                <div class="auth-card">
-                    <div class="auth-header">
-                        <button type="button" class="btn-close auth-close" onclick="closeAdminOverlay()">&times;</button>
-                        <img src="assets/images/logo.png" alt="Logo" class="auth-logo">
-                        <h3>Ministry Dashboard</h3>
-                        <p>Access your secure command center</p>
-                    </div>
-                    <!-- Login Form -->
-                    <form id="login-form">
-                        <div class="form-group">
-                            <label><i data-feather="mail"></i> Email</label>
-                            <input type="email" id="admin-email" required placeholder="admin@example.com">
-                        </div>
-                        <div class="form-group">
-                            <label><i data-feather="lock"></i> Password</label>
-                            <input type="password" id="admin-password" required placeholder="••••••••">
-                        </div>
-                        <button type="submit" class="btn btn-primary glow-btn w-100 mt-3">Enter Dashboard</button>
-                        <p class="mt-4 text-center signup-toggle">
-                            First time? <a href="#" id="toggle-signup">Create Admin Account</a>
-                        </p>
-                    </form>
-
-                    <!-- Signup Form (Hidden) -->
-                    <form id="signup-form" style="display:none;">
-                        <div class="form-group">
-                            <label><i data-feather="user-plus"></i> Admin Email</label>
-                            <input type="email" id="signup-email" required placeholder="you@example.com">
-                        </div>
-                        <div class="form-group">
-                            <label><i data-feather="shield"></i> Create Password</label>
-                            <input type="password" id="signup-password" required placeholder="••••••••">
-                        </div>
-                        <button type="submit" class="btn btn-secondary w-100 mt-3">Register Admin</button>
-                        <p class="mt-4 text-center signup-toggle">
-                            Already have an account? <a href="#" id="toggle-login">Back to Login</a>
-                        </p>
-                    </form>
+        <div id="admin-auth" class="admin-auth-view">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <button type="button" class="btn-close auth-close" onclick="closeAdminOverlay()">&times;</button>
+                    <img src="assets/images/logo.png" alt="Logo" class="auth-logo">
+                    <h3>Command Center</h3>
+                    <p>Enter your administrator credentials</p>
                 </div>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label><i data-feather="mail"></i> Email</label>
+                        <input type="email" id="admin-email" required placeholder="admin@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label><i data-feather="lock"></i> Password</label>
+                        <input type="password" id="admin-password" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Authenticate</button>
+                    <p class="auth-toggle-note">First time? <a href="#" id="toggle-signup">Create Admin Account</a></p>
+                </form>
+
+                <form id="signup-form" style="display:none;">
+                    <div class="form-group">
+                        <label><i data-feather="user-plus"></i> Admin Email</label>
+                        <input type="email" id="signup-email" required placeholder="admin@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label><i data-feather="shield"></i> Create Password</label>
+                        <input type="password" id="signup-password" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn btn-secondary btn-full">Register Administrator</button>
+                    <p class="auth-toggle-note">Already have an account? <a href="#" id="toggle-login">Back to Login</a></p>
+                </form>
             </div>
+        </div>
 
-            <!-- Dashboard View (Sidebar Layout) -->
-            <div id="admin-controls" class="admin-dashboard-view" style="display:none;">
-                <aside class="admin-sidebar">
-                    <div class="sidebar-header">
-                        <img src="assets/images/logo.png" alt="EEMG" class="sidebar-logo">
-                        <span>EEMG PRO</span>
+        <div id="admin-controls" class="admin-dashboard-view" style="display:none;">
+            <aside class="admin-sidebar">
+                <div class="sidebar-header">
+                    <img src="assets/images/logo.png" alt="EEMG" class="sidebar-logo">
+                    <span>EEMG PRO</span>
+                </div>
+                <nav class="sidebar-nav">
+                    <a href="#" class="nav-item active" onclick="showAdminSection('dashboard')">
+                        <i data-feather="grid"></i> Dashboard
+                    </a>
+                    <a href="#" class="nav-item" onclick="showAdminSection('registrations')">
+                        <i data-feather="users"></i> Submissions
+                    </a>
+                    <a href="#" class="nav-item" onclick="showAdminSection('gallery')">
+                        <i data-feather="image"></i> Gallery
+                    </a>
+                    <a href="#" class="nav-item" onclick="showAdminSection('admins')">
+                        <i data-feather="shield"></i> Management
+                    </a>
+                </nav>
+                <div class="sidebar-footer">
+                    <button id="logout-btn" class="btn-logout"><i data-feather="log-out"></i> Sign Out</button>
+                </div>
+            </aside>
+
+            <main class="admin-main">
+                <header class="admin-top-bar">
+                    <h2 id="admin-current-section">Control Center</h2>
+                    <div class="top-bar-actions">
+                        <button id="toggle-edit-mode" class="btn btn-edit-toggle">
+                            <i data-feather="edit-3"></i> Enable Edit Mode
+                        </button>
+                        <button class="btn-close" onclick="closeAdminOverlay()">&times;</button>
                     </div>
-                    <nav class="sidebar-nav">
-                        <a href="#" class="nav-item active" onclick="showAdminSection('dashboard')">
-                            <i data-feather="grid"></i> Dashboard
-                        </a>
-                        <a href="#" class="nav-item" onclick="showAdminSection('registrations')">
-                            <i data-feather="users"></i> Submissions
-                        </a>
-                        <a href="#" class="nav-item" onclick="showAdminSection('gallery')">
-                            <i data-feather="image"></i> Gallery
-                        </a>
-                        <a href="#" class="nav-item" onclick="showAdminSection('admins')">
-                            <i data-feather="shield"></i> Management
-                        </a>
-                    </nav>
-                    <div class="sidebar-footer">
-                        <button id="logout-btn" class="btn-logout"><i data-feather="log-out"></i> Sign Out</button>
+                </header>
+
+                <div class="admin-content-area">
+                    <div id="admin-dashboard" class="sub-section">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon"><i data-feather="users"></i></div>
+                                <div class="stat-info">
+                                    <h4>Registrations</h4>
+                                    <p class="stat-val" id="stat-regs">...</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon"><i data-feather="image"></i></div>
+                                <div class="stat-info">
+                                    <h4>Gallery Items</h4>
+                                    <p class="stat-val" id="stat-gallery">...</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon"><i data-feather="activity"></i></div>
+                                <div class="stat-info">
+                                    <h4>Live Site</h4>
+                                    <p class="stat-val">Active</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="quick-actions" style="margin-top: 3.5rem;">
+                            <h3>Quick Actions</h3>
+                            <div class="action-buttons">
+                                <button onclick="showAdminSection('gallery')" class="btn btn-secondary"><i data-feather="plus"></i> Add Photo</button>
+                                <button onclick="sendTestEmail()" class="btn btn-secondary"><i data-feather="mail"></i> Test Email</button>
+                                <a href="conference.html" class="btn btn-secondary" target="_blank"><i data-feather="external-link"></i> Conference Page</a>
+                            </div>
+                        </div>
                     </div>
-                </aside>
 
-                <main class="admin-main">
-                    <header class="admin-top-bar">
-                        <div class="page-title">
-                            <h2 id="admin-current-section">Control Center</h2>
-                        </div>
-                        <div class="top-bar-actions">
-                            <button id="toggle-edit-mode" class="btn btn-edit-toggle">
-                                <i data-feather="edit-3"></i> Enable Edit Mode
-                            </button>
-                            <button class="btn btn-close" onclick="closeAdminOverlay()">&times;</button>
-                        </div>
-                    </header>
-
-                    <div class="admin-content-area">
-                        <!-- Dashboard Stats Area -->
-                        <div id="admin-dashboard" class="sub-section">
-                            <div class="stats-grid">
-                                <div class="stat-card">
-                                    <div class="stat-icon"><i data-feather="users"></i></div>
-                                    <div class="stat-info">
-                                        <h4>Registrations</h4>
-                                        <p class="stat-val" id="stat-regs">...</p>
-                                    </div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon"><i data-feather="image"></i></div>
-                                    <div class="stat-info">
-                                        <h4>Gallery Items</h4>
-                                        <p class="stat-val" id="stat-gallery">...</p>
-                                    </div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon"><i data-feather="activity"></i></div>
-                                    <div class="stat-info">
-                                        <h4>Live Site</h4>
-                                        <p class="stat-val">Active</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="quick-actions mt-5">
-                                <h3>Quick Actions</h3>
-                                <div class="action-buttons">
-                                    <button onclick="showAdminSection('gallery')" class="btn glass-btn"><i data-feather="plus"></i> Add Gallery Image</button>
-                                    <button onclick="sendTestEmail()" class="btn glass-btn"><i data-feather="mail"></i> Send Test Email</button>
-                                    <a href="conference.html" class="btn glass-btn" target="_blank"><i data-feather="external-link"></i> View Conference Page</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Registrations -->
-                        <div id="admin-registrations" class="sub-section" style="display:none;">
-                            <div id="registrations-table-view">
-                                <div class="section-header-inline">
-                                    <h4>Attendee Submissions</h4>
-                                    <button onclick="loadRegistrations()" class="btn-refresh"><i data-feather="refresh-cw"></i></button>
-                                </div>
-                                <div class="admin-table-wrapper">
-                                    <div id="registrations-list">Loading submissions...</div>
-                                </div>
-                            </div>
-                            
-                            <!-- Detailed View Container (Hidden) -->
-                             <div id="registrations-detail-view" style="display:none;">
-                                 <div class="section-header-inline">
-                                     <button onclick="showAdminSection('registrations')" class="btn-back"><i data-feather="arrow-left"></i> Back to list</button>
-                                     <h4 id="detail-reg-name">Submission Detail</h4>
-                                 </div>
-                                 <div id="registration-detail-content" class="detail-card">
-                                     <!-- Populated by JS -->
-                                 </div>
-                             </div>
-                        </div>
-
-                        <!-- Gallery -->
-                        <div id="admin-gallery" class="sub-section" style="display:none;">
+                    <div id="admin-registrations" class="sub-section" style="display:none;">
+                        <div id="registrations-table-view">
                             <div class="section-header-inline">
-                                <h4>Ministry Gallery</h4>
-                                <button onclick="document.getElementById('gallery-file-input').click()" class="btn btn-primary btn-sm">
-                                    <i data-feather="upload"></i> Upload Photo
-                                </button>
+                                <h4>Attendee Submissions</h4>
+                                <button onclick="loadRegistrations()" class="btn btn-secondary"><i data-feather="refresh-cw"></i> Refresh</button>
                             </div>
-                            <input type="file" id="gallery-file-input" accept="image/*" style="display:none;">
-                            <div id="admin-gallery-list" class="gallery-admin-list">
-                                <!-- Thumbnails -->
+                            <div class="admin-table-wrapper">
+                                <div id="registrations-list">Loading submissions...</div>
                             </div>
                         </div>
-
-                        <!-- Management -->
-                        <div id="admin-management" class="sub-section" style="display:none;">
-                            <h4>Add New Administrator</h4>
-                            <div class="management-form-card">
-                                <form id="add-admin-form">
-                                    <div class="form-group">
-                                        <input type="email" id="new-admin-email" placeholder="Admin Email" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="password" id="new-admin-password" placeholder="Temporary Password" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Create Account</button>
-                                </form>
+                        <div id="registrations-detail-view" style="display:none;">
+                            <div class="section-header-inline">
+                                <button onclick="showAdminSection('registrations')" class="btn btn-secondary"><i data-feather="arrow-left"></i> Back to list</button>
+                                <h4 id="detail-reg-name">Submission Detail</h4>
                             </div>
+                            <div id="registration-detail-content" class="detail-card"></div>
                         </div>
                     </div>
-                </main>
-            </div>
+
+                    <div id="admin-gallery" class="sub-section" style="display:none;">
+                        <div class="section-header-inline">
+                            <h4>Ministry Gallery</h4>
+                            <button onclick="document.getElementById('gallery-file-input').click()" class="btn btn-primary">
+                                <i data-feather="upload"></i> Upload Photo
+                            </button>
+                        </div>
+                        <input type="file" id="gallery-file-input" accept="image/*" style="display:none;">
+                        <div id="admin-gallery-list" class="gallery-admin-list"></div>
+                    </div>
+
+                    <div id="admin-management" class="sub-section" style="display:none;">
+                        <h4>Add New Administrator</h4>
+                        <div class="management-form-card">
+                            <form id="add-admin-form">
+                                <div class="form-group">
+                                    <input type="email" id="new-admin-email" placeholder="Admin Email" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" id="new-admin-password" placeholder="Temporary Password" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
 
-    </div>
-
-    <!-- Hidden File Input for Page Image Swapping -->
+    <!-- Hidden Input for Media Swaps -->
     <input type="file" id="cms-media-input" style="display:none;" accept="image/*,video/*">
 
-    <!-- Supabase SDK & CMS -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-init.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js?v=2026_elevation_v2"></script>
     <script src="cms-engine.js?v=999"></script>
 </body>
 </html>
