@@ -57,3 +57,6 @@ FOR UPDATE
 USING (
     EXISTS (SELECT 1 FROM admin_profiles WHERE id = auth.uid())
 );
+
+-- Force PostgREST to reload schema cache immediately
+NOTIFY pgrst, 'reload schema';
