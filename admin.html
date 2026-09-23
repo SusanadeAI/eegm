@@ -1273,9 +1273,25 @@
             const db = window.supabaseClient;
             try {
                 const filePath = `gallery/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '')}`;
-                const { error: uploadError } = await db.storage.from('ministry-assets').upload(filePath, file);
+                let { error: uploadError } = await db.storage.from('ministry-assets').upload(filePath, file);
 
-                if (uploadError) throw uploadError;
+                // If bucket not found, attempt auto-creation and retry once
+                if (uploadError && (uploadError.message?.toLowerCase().includes('bucket not found') || uploadError.error === 'Bucket not found')) {
+                    try {
+                        const { error: createErr } = await db.storage.createBucket('ministry-assets', { public: true });
+                        if (!createErr) {
+                            const retry = await db.storage.from('ministry-assets').upload(filePath, file);
+                            uploadError = retry.error;
+                        }
+                    } catch (_) {}
+                }
+
+                if (uploadError) {
+                    if (uploadError.message?.toLowerCase().includes('bucket not found')) {
+                        throw new Error("Storage bucket 'ministry-assets' does not exist in your Supabase project yet. Please create a public bucket named 'ministry-assets' in your Supabase Storage dashboard, or run the SQL in 'supabase_storage.sql'.");
+                    }
+                    throw uploadError;
+                }
 
                 const { data: { publicUrl } } = db.storage.from('ministry-assets').getPublicUrl(filePath);
                 const caption = captionInput.value.trim() || 'Eternity Echoes Ministry';

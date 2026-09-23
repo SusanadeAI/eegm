@@ -133,3 +133,34 @@ CREATE POLICY "Admin Update Bookings" ON minister_bookings FOR UPDATE
 INSERT INTO site_content (section_key, content_text) 
 VALUES ('hero_h1', 'Igniting the Echoes <br> of <span class="accent glass-text">Eternity</span> in Every Heart.')
 ON CONFLICT (section_key) DO NOTHING;
+
+-- ==========================================
+-- STORAGE BUCKETS (MINISTRY ASSETS)
+-- ==========================================
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+    'ministry-assets', 
+    'ministry-assets', 
+    true, 
+    52428800, -- 50MB
+    ARRAY['image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'image/gif', 'image/svg+xml']
+)
+ON CONFLICT (id) DO UPDATE SET public = true;
+
+DROP POLICY IF EXISTS "Public View Ministry Assets" ON storage.objects;
+CREATE POLICY "Public View Ministry Assets"
+ON storage.objects FOR SELECT
+USING ( bucket_id = 'ministry-assets' );
+
+DROP POLICY IF EXISTS "Admin Upload Ministry Assets" ON storage.objects;
+CREATE POLICY "Admin Upload Ministry Assets"
+ON storage.objects FOR INSERT
+TO authenticated
+WITH CHECK ( bucket_id = 'ministry-assets' );
+
+DROP POLICY IF EXISTS "Admin Delete Ministry Assets" ON storage.objects;
+CREATE POLICY "Admin Delete Ministry Assets"
+ON storage.objects FOR DELETE
+TO authenticated
+USING ( bucket_id = 'ministry-assets' );
+
