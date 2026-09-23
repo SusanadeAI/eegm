@@ -201,24 +201,6 @@
             border-color: var(--admin-gold);
         }
 
-        .credentials-hint {
-            background: rgba(229, 169, 60, 0.08);
-            border: 1px dashed var(--admin-gold);
-            border-radius: 8px;
-            padding: 0.9rem 1.1rem;
-            margin-bottom: 1.6rem;
-            font-size: 0.85rem;
-            color: var(--admin-text-main);
-            line-height: 1.5;
-        }
-
-        .credentials-hint code {
-            background: rgba(0,0,0,0.3);
-            color: var(--admin-gold);
-            padding: 0.15rem 0.4rem;
-            border-radius: 4px;
-            font-family: monospace;
-        }
 
         /* Stats Grid */
         .stats-grid {
@@ -563,23 +545,16 @@
             <h2>Admin Sign In</h2>
             <p>Enter your administrator credentials to access speaking bookings & conference registrations.</p>
 
-            <div class="credentials-hint">
-                <i data-feather="key" style="width:16px; height:16px; vertical-align:middle; color:var(--admin-gold); margin-right:4px;"></i>
-                <strong>Configured Admin Credentials:</strong><br>
-                Email: <code>admin@eegm.org</code><br>
-                Password: <code>AdminPassword2026!</code>
-            </div>
-
             <div id="login-error" style="display:none; background: rgba(239, 68, 68, 0.15); border: 1px solid #EF4444; color: #FCA5A5; padding: 0.8rem 1rem; border-radius: 8px; margin-bottom: 1.4rem; font-size: 0.9rem;"></div>
 
             <form id="admin-login-form">
                 <div class="form-group-adm">
-                    <label for="admin-email">Admin Email</label>
-                    <input type="email" id="admin-email" value="admin@eegm.org" required autocomplete="username">
+                    <label for="admin-email">Email</label>
+                    <input type="email" id="admin-email" placeholder="admin@eegm.org" required autocomplete="username">
                 </div>
                 <div class="form-group-adm">
                     <label for="admin-password">Password</label>
-                    <input type="password" id="admin-password" value="AdminPassword2026!" required autocomplete="current-password">
+                    <input type="password" id="admin-password" placeholder="••••••••" required autocomplete="current-password">
                 </div>
                 <button type="submit" id="login-btn" class="btn-sm btn-gold" style="width: 100%; padding: 0.85rem; font-size: 1rem; justify-content: center; border-radius: 8px;">
                     Sign In to Portal <i data-feather="arrow-right"></i>
