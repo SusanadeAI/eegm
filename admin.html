@@ -205,6 +205,8 @@
             background: #E2E8F0;
             padding: 3px;
             border-radius: var(--radius-sm);
+            flex-wrap: wrap;
+            gap: 2px;
         }
 
         .tab-btn {
@@ -391,7 +393,6 @@
             border: 1px solid var(--border-subtle);
         }
 
-        /* Status Selector Dropdown inside table */
         .status-select-sm {
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
@@ -407,7 +408,6 @@
             border-color: var(--border-hover);
         }
 
-        /* Empty State */
         .empty-state {
             padding: 4rem 2rem;
             text-align: center;
@@ -421,7 +421,198 @@
             margin-bottom: 0.75rem;
         }
 
-        /* Login Screen (Clean, Crisp Stripe-Like Card) */
+        /* Gallery Grid & Upload Panel */
+        .gallery-upload-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .gallery-upload-header {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            margin-bottom: 0.35rem;
+        }
+
+        .gallery-upload-sub {
+            color: var(--text-muted);
+            font-size: 0.84rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .upload-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .upload-row input[type="file"] {
+            font-size: 0.84rem;
+            color: var(--text-body);
+        }
+
+        .upload-row input[type="text"] {
+            padding: 0.5rem 0.85rem;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            font-size: 0.84rem;
+            color: var(--text-heading);
+            outline: none;
+            min-width: 260px;
+            flex-grow: 1;
+        }
+
+        .upload-row input[type="text"]:focus {
+            border-color: #0F172A;
+        }
+
+        .admin-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .gallery-item-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.15s ease;
+        }
+
+        .gallery-item-card:hover {
+            border-color: var(--border-hover);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.06);
+        }
+
+        .gallery-thumb {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            background: #F1F5F9;
+        }
+
+        .gallery-meta-box {
+            padding: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .gallery-caption-text {
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 0.25rem;
+            word-break: break-word;
+        }
+
+        .gallery-date-text {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .gallery-card-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: flex-end;
+            padding-top: 0.5rem;
+            border-top: 1px solid #F8FAFC;
+        }
+
+        .btn-delete-item {
+            background: transparent;
+            border: 1px solid #FEE2E2;
+            color: #DC2626;
+            padding: 0.25rem 0.6rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.76rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-delete-item:hover {
+            background: #FEF2F2;
+        }
+
+        /* Content Editor */
+        .content-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .content-section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            margin-bottom: 0.35rem;
+        }
+
+        .content-section-sub {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .content-field {
+            margin-bottom: 1.25rem;
+        }
+
+        .content-field label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 0.4rem;
+        }
+
+        .content-field input,
+        .content-field textarea {
+            width: 100%;
+            padding: 0.65rem 0.85rem;
+            background: #FFFFFF;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+            font-family: inherit;
+            color: var(--text-heading);
+            outline: none;
+            transition: all 0.15s ease;
+        }
+
+        .content-field input:focus,
+        .content-field textarea:focus {
+            border-color: #0F172A;
+            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+        }
+
+        .content-field textarea {
+            resize: vertical;
+            min-height: 85px;
+        }
+
+        /* Login Screen */
         .login-canvas {
             min-height: calc(100vh - 65px);
             display: flex;
@@ -593,7 +784,7 @@
             .main-container {
                 padding: 1rem;
             }
-            .info-grid {
+            .info-grid, .form-grid-2 {
                 grid-template-columns: 1fr;
                 gap: 0.25rem;
             }
@@ -609,7 +800,7 @@
                 <img src="assets/images/logo.png?v=2026_crop" alt="Eternity Echoes">
                 <span>Eternity Echoes</span>
                 <span class="brand-divider">/</span>
-                <span style="font-weight: 600; color: var(--text-muted); font-size: 0.88rem;">Dashboard</span>
+                <span style="font-weight: 600; color: var(--text-muted); font-size: 0.88rem;">Control Center</span>
             </a>
         </div>
 
@@ -619,7 +810,7 @@
                 <span id="user-email-text">admin@eegm.org</span>
             </div>
             <a href="booking.html" target="_blank" class="btn btn-outline" style="font-size: 0.8rem;">
-                <i data-feather="external-link" style="width: 14px; height: 14px;"></i> Form
+                <i data-feather="external-link" style="width: 14px; height: 14px;"></i> Booking Form
             </a>
             <button class="btn btn-ghost" onclick="handleLogout()" style="font-size: 0.8rem;">
                 <i data-feather="log-out" style="width: 14px; height: 14px;"></i> Sign Out
@@ -631,7 +822,7 @@
     <div class="login-canvas" id="login-section">
         <div class="login-box">
             <h1>Admin Sign In</h1>
-            <p>Sign in to manage speaking invitations and conference records.</p>
+            <p>Sign in to manage speaking invitations, conference records, and website content.</p>
 
             <div class="alert-error" id="login-error-msg"></div>
 
@@ -657,7 +848,7 @@
         <!-- Summary Cards -->
         <div class="metrics-row">
             <div class="metric-card">
-                <div class="metric-label">Total Invitations</div>
+                <div class="metric-label">Speaking Invitations</div>
                 <div class="metric-value" id="val-total-bookings">0</div>
             </div>
             <div class="metric-card">
@@ -685,12 +876,20 @@
                     <i data-feather="users" style="width: 14px; height: 14px;"></i>
                     Conference Registrations (<span id="count-badge-conf">0</span>)
                 </button>
+                <button class="tab-btn" id="tab-btn-gallery" onclick="switchView('gallery')">
+                    <i data-feather="image" style="width: 14px; height: 14px;"></i>
+                    Ministry Gallery (<span id="count-badge-gallery">0</span>)
+                </button>
+                <button class="tab-btn" id="tab-btn-content" onclick="switchView('content')">
+                    <i data-feather="edit-3" style="width: 14px; height: 14px;"></i>
+                    Website Content
+                </button>
             </div>
 
-            <div class="search-controls">
+            <div class="search-controls" id="table-search-bar">
                 <div class="search-box">
                     <i data-feather="search"></i>
-                    <input type="text" id="search-input" placeholder="Search by church, contact, venue..." oninput="handleSearch()">
+                    <input type="text" id="search-input" placeholder="Search records..." oninput="handleSearch()">
                 </div>
                 <select id="status-select-filter" class="select-filter" onchange="handleFilter()">
                     <option value="ALL">All Statuses</option>
@@ -705,7 +904,7 @@
             </div>
         </div>
 
-        <!-- MINISTERIAL BOOKINGS TABLE -->
+        <!-- 1. MINISTERIAL BOOKINGS TABLE -->
         <div class="table-card" id="card-bookings">
             <div class="table-wrap">
                 <table>
@@ -734,7 +933,7 @@
             </div>
         </div>
 
-        <!-- CONFERENCE REGISTRATIONS TABLE -->
+        <!-- 2. CONFERENCE REGISTRATIONS TABLE -->
         <div class="table-card" id="card-conf" style="display: none;">
             <div class="table-wrap">
                 <table>
@@ -761,6 +960,90 @@
                 </table>
             </div>
         </div>
+
+        <!-- 3. MINISTRY GALLERY PANEL -->
+        <div id="card-gallery" style="display: none;">
+            <div class="gallery-upload-card">
+                <div class="gallery-upload-header">Upload New Photo</div>
+                <div class="gallery-upload-sub">Upload ministry, crusade, and church photos directly to the website gallery.</div>
+                
+                <form id="gallery-upload-form" onsubmit="handleGalleryUpload(event)">
+                    <div class="upload-row">
+                        <input type="file" id="gallery-file-picker" accept="image/*" required>
+                        <input type="text" id="gallery-caption-input" placeholder="Photo caption (e.g. Jesus Crusade Outreach 2026)">
+                        <button type="submit" id="btn-upload-gallery" class="btn btn-primary">
+                            <i data-feather="upload" style="width: 14px; height: 14px;"></i> Upload Photo
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="gallery-items-container" class="admin-gallery-grid">
+                <div class="empty-state" style="grid-column: 1 / -1;">
+                    <i data-feather="loader"></i>
+                    <p>Loading gallery items...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. WEBSITE CONTENT EDITOR PANEL -->
+        <div id="card-content" style="display: none;">
+            <div class="content-card">
+                <div class="content-section-title">Website Content Editor</div>
+                <div class="content-section-sub">Update homepage text and statements. Changes reflect live on the website immediately.</div>
+
+                <form id="site-content-form" onsubmit="handleContentSave(event)">
+                    <div class="form-grid-2">
+                        <div class="content-field">
+                            <label for="field-hero-h1">Hero Title (HTML Supported)</label>
+                            <input type="text" id="field-hero-h1" placeholder="Igniting the Echoes of Eternity in Every Heart.">
+                        </div>
+                        <div class="content-field">
+                            <label for="field-founder-name">Founder / Speaker Name</label>
+                            <input type="text" id="field-founder-name" placeholder="Evangelist Elisha Olorunda">
+                        </div>
+                    </div>
+
+                    <div class="content-field">
+                        <label for="field-hero-p">Hero Description</label>
+                        <textarea id="field-hero-p" placeholder="Transforming lives through salvation, healing, and kingdom power."></textarea>
+                    </div>
+
+                    <div class="content-field">
+                        <label for="field-founder-p1">About the Founder Bio Paragraph</label>
+                        <textarea id="field-founder-p1" rows="3" placeholder="Evangelist Elisha Olorunda is a passionate preacher of the Gospel of Jesus Christ..."></textarea>
+                    </div>
+
+                    <div class="form-grid-2" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle);">
+                        <div class="content-field">
+                            <label for="field-conf-h1">Conference Portal Heading</label>
+                            <input type="text" id="field-conf-h1" placeholder="ALL BELIEVERS CONFERENCE">
+                        </div>
+                        <div class="content-field">
+                            <label for="field-conf-visioneer">Conference Visioneer Note</label>
+                            <input type="text" id="field-conf-visioneer" placeholder="Visioneer: Evangelist Elisha Olorunda">
+                        </div>
+                    </div>
+
+                    <div class="content-field">
+                        <label for="field-conf-desc">Conference Portal Description</label>
+                        <textarea id="field-conf-desc" rows="2" placeholder="Thank you for your interest in attending the All Believers Conference..."></textarea>
+                    </div>
+
+                    <div class="content-field">
+                        <label for="field-conf-note">Conference Bus & Logistics Note</label>
+                        <input type="text" id="field-conf-note" placeholder="Note: FREE BUS for those coming from ADO, IKERE, FUTA...">
+                    </div>
+
+                    <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+                        <button type="submit" id="btn-save-content" class="btn btn-primary" style="padding: 0.65rem 1.5rem;">
+                            <i data-feather="check" style="width: 14px; height: 14px;"></i> Save Website Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </main>
 
     <!-- DETAIL MODAL -->
@@ -804,6 +1087,7 @@
     <script>
         let allBookings = [];
         let allRegistrations = [];
+        let allGalleryImages = [];
         let currentTab = 'bookings';
         let selectedBooking = null;
 
@@ -843,6 +1127,8 @@
             document.getElementById('user-email-text').textContent = user.email || 'Admin';
             feather.replace();
             loadData();
+            loadGalleryData();
+            loadSiteContentData();
         }
 
         // 2. Auth Actions
@@ -916,6 +1202,171 @@
             } catch (e) {}
         }
 
+        // 4. Gallery Fetching & Actions
+        async function loadGalleryData() {
+            const db = window.supabaseClient;
+            if (!db) return;
+
+            try {
+                const { data, error } = await db
+                    .from('gallery_images')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+                allGalleryImages = data || [];
+                document.getElementById('count-badge-gallery').textContent = allGalleryImages.length;
+                renderGallery();
+            } catch (err) {
+                console.warn("Could not load gallery:", err);
+            }
+        }
+
+        function renderGallery() {
+            const container = document.getElementById('gallery-items-container');
+            if (!allGalleryImages || allGalleryImages.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <i data-feather="image"></i>
+                        <p>No photos in the gallery yet. Upload one above!</p>
+                    </div>
+                `;
+                feather.replace();
+                return;
+            }
+
+            container.innerHTML = allGalleryImages.map(img => {
+                const date = img.created_at ? new Date(img.created_at).toLocaleDateString() : '';
+                return `
+                    <div class="gallery-item-card">
+                        <img src="${img.url}" alt="${escape(img.caption || 'Gallery photo')}" class="gallery-thumb" loading="lazy">
+                        <div class="gallery-meta-box">
+                            <div class="gallery-caption-text">${escape(img.caption || 'No caption')}</div>
+                            <div class="gallery-date-text">${date}</div>
+                            <div class="gallery-card-footer">
+                                <button class="btn-delete-item" onclick="deleteGalleryPhoto('${img.id}')">
+                                    <i data-feather="trash-2" style="width: 12px; height: 12px;"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            feather.replace();
+        }
+
+        async function handleGalleryUpload(e) {
+            e.preventDefault();
+            const filePicker = document.getElementById('gallery-file-picker');
+            const captionInput = document.getElementById('gallery-caption-input');
+            const btn = document.getElementById('btn-upload-gallery');
+            const file = filePicker.files[0];
+
+            if (!file) {
+                alert("Please select an image file to upload.");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = 'Uploading...';
+
+            const db = window.supabaseClient;
+            try {
+                const filePath = `gallery/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '')}`;
+                const { error: uploadError } = await db.storage.from('ministry-assets').upload(filePath, file);
+
+                if (uploadError) throw uploadError;
+
+                const { data: { publicUrl } } = db.storage.from('ministry-assets').getPublicUrl(filePath);
+                const caption = captionInput.value.trim() || 'Eternity Echoes Ministry';
+
+                const { error: insertError } = await db.from('gallery_images').insert([{
+                    url: publicUrl,
+                    caption: caption
+                }]);
+
+                if (insertError) throw insertError;
+
+                alert("Photo uploaded successfully!");
+                filePicker.value = '';
+                captionInput.value = '';
+                loadGalleryData();
+            } catch (err) {
+                alert("Upload failed: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i data-feather="upload" style="width: 14px; height: 14px;"></i> Upload Photo';
+                feather.replace();
+            }
+        }
+
+        async function deleteGalleryPhoto(id) {
+            if (!confirm("Are you sure you want to remove this photo from the gallery?")) return;
+            const db = window.supabaseClient;
+            if (!db) return;
+
+            try {
+                const { error } = await db.from('gallery_images').delete().eq('id', id);
+                if (error) throw error;
+                allGalleryImages = allGalleryImages.filter(item => item.id !== id);
+                document.getElementById('count-badge-gallery').textContent = allGalleryImages.length;
+                renderGallery();
+            } catch (err) {
+                alert("Could not delete photo: " + err.message);
+            }
+        }
+
+        // 5. Website Content Loading & Saving
+        async function loadSiteContentData() {
+            const db = window.supabaseClient;
+            if (!db) return;
+
+            try {
+                const { data, error } = await db.from('site_content').select('*');
+                if (error || !data) return;
+
+                data.forEach(item => {
+                    const el = document.getElementById('field-' + item.section_key.replace(/_/g, '-'));
+                    if (el) {
+                        el.value = item.content_text || '';
+                    }
+                });
+            } catch (err) {
+                console.warn("Could not load content fields:", err);
+            }
+        }
+
+        async function handleContentSave(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-save-content');
+            btn.disabled = true;
+            btn.innerHTML = 'Saving Changes...';
+
+            const fields = [
+                { section_key: 'hero_h1', content_text: document.getElementById('field-hero-h1').value.trim() },
+                { section_key: 'founder_name', content_text: document.getElementById('field-founder-name').value.trim() },
+                { section_key: 'hero_p', content_text: document.getElementById('field-hero-p').value.trim() },
+                { section_key: 'founder_p1', content_text: document.getElementById('field-founder-p1').value.trim() },
+                { section_key: 'conf_h1', content_text: document.getElementById('field-conf-h1').value.trim() },
+                { section_key: 'conf_visioneer', content_text: document.getElementById('field-conf-visioneer').value.trim() },
+                { section_key: 'conf_description', content_text: document.getElementById('field-conf-desc').value.trim() },
+                { section_key: 'conf_note', content_text: document.getElementById('field-conf-note').value.trim() }
+            ];
+
+            const db = window.supabaseClient;
+            try {
+                const { error } = await db.from('site_content').upsert(fields, { onConflict: 'section_key' });
+                if (error) throw error;
+                alert("Website content saved successfully! Changes are live on the homepage.");
+            } catch (err) {
+                alert("Failed to save content: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i data-feather="check" style="width: 14px; height: 14px;"></i> Save Website Changes';
+                feather.replace();
+            }
+        }
+
         function updateCounts() {
             document.getElementById('val-total-bookings').textContent = allBookings.length;
             document.getElementById('count-badge-bookings').textContent = allBookings.length;
@@ -930,14 +1381,27 @@
             document.getElementById('count-badge-conf').textContent = allRegistrations.length;
         }
 
-        // 4. View Switcher
+        // 6. View Switcher
         function switchView(tab) {
             currentTab = tab;
             document.getElementById('tab-btn-bookings').classList.toggle('active', tab === 'bookings');
             document.getElementById('tab-btn-conf').classList.toggle('active', tab === 'conf');
+            document.getElementById('tab-btn-gallery').classList.toggle('active', tab === 'gallery');
+            document.getElementById('tab-btn-content').classList.toggle('active', tab === 'content');
+
             document.getElementById('card-bookings').style.display = tab === 'bookings' ? 'block' : 'none';
             document.getElementById('card-conf').style.display = tab === 'conf' ? 'block' : 'none';
-            document.getElementById('status-select-filter').style.display = tab === 'bookings' ? 'inline-block' : 'none';
+            document.getElementById('card-gallery').style.display = tab === 'gallery' ? 'block' : 'none';
+            document.getElementById('card-content').style.display = tab === 'content' ? 'block' : 'none';
+
+            // Show or hide search & status filter
+            const searchBar = document.getElementById('table-search-bar');
+            if (tab === 'bookings' || tab === 'conf') {
+                searchBar.style.display = 'flex';
+                document.getElementById('status-select-filter').style.display = tab === 'bookings' ? 'inline-block' : 'none';
+            } else {
+                searchBar.style.display = 'none';
+            }
         }
 
         function handleFilter() {
@@ -950,7 +1414,7 @@
             else renderConference();
         }
 
-        // 5. Render Bookings
+        // 7. Render Bookings
         function renderBookings() {
             const tbody = document.getElementById('tbody-bookings');
             const query = document.getElementById('search-input').value.toLowerCase().trim();
@@ -1032,7 +1496,7 @@
             feather.replace();
         }
 
-        // 6. Render Conference
+        // 8. Render Conference
         function renderConference() {
             const tbody = document.getElementById('tbody-conf');
             const query = document.getElementById('search-input').value.toLowerCase().trim();
@@ -1092,7 +1556,7 @@
             feather.replace();
         }
 
-        // 7. Status Update
+        // 9. Status Update
         async function quickUpdateStatus(bookingId, status) {
             const db = window.supabaseClient;
             if (!db) return;
@@ -1110,7 +1574,7 @@
             }
         }
 
-        // 8. Modal Management
+        // 10. Modal Management
         function openModal(id) {
             const b = allBookings.find(item => item.id === id);
             if (!b) return;
