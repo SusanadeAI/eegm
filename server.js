@@ -125,10 +125,58 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
+// Ministerial Booking API Endpoint (Server Fallback)
+app.post('/api/book', async (req, res) => {
+    const data = req.body;
+    const insertQuery = `
+        INSERT INTO minister_bookings (
+            organization_name, contact_person, phone, email, gathering_type,
+            other_gathering_type, event_theme, event_date, ministration_time,
+            venue_location, expected_attendees, event_description,
+            logistics_transportation, logistics_other_details, status
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 'pending')
+        RETURNING id
+    `;
+    const params = [
+        data.organizationName || data.organization_name,
+        data.contactPerson || data.contact_person,
+        data.phone,
+        data.email,
+        data.gatheringType || data.gathering_type,
+        data.otherGatheringType || data.other_gathering_type || null,
+        data.eventTheme || data.event_theme || null,
+        data.eventDate || data.event_date,
+        data.ministrationTime || data.ministration_time,
+        data.venueLocation || data.venue_location,
+        data.expectedAttendees || data.expected_attendees || null,
+        data.eventDescription || data.event_description,
+        data.logisticsTransportation || data.logistics_transportation,
+        data.logisticsOtherDetails || data.logistics_other_details || null
+    ];
+
+    try {
+        const result = await pool.query(insertQuery, params);
+        res.json({ success: true, id: result.rows[0].id });
+    } catch (err) {
+        console.error('Minister Booking DB Error:', err.message);
+        return res.status(500).json({ error: 'Failed to save booking to database.' });
+    }
+});
+
 // Admin API Endpoint (Get all registrations)
 app.get('/api/admin/registrations', async (req, res) => {
     try {
         const result = await pool.query(`SELECT * FROM registrations ORDER BY created_at DESC`);
+        res.json({ data: result.rows });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Admin API Endpoint (Get all ministerial bookings)
+app.get('/api/admin/bookings', async (req, res) => {
+    try {
+        const result = await pool.query(`SELECT * FROM minister_bookings ORDER BY created_at DESC`);
         res.json({ data: result.rows });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -140,5 +188,6 @@ app.listen(port, () => {
     console.log(`App mapping:`);
     console.log(`Homepage: http://localhost:${port}/index.html`);
     console.log(`Conference form: http://localhost:${port}/conference.html`);
+    console.log(`Booking form: http://localhost:${port}/booking.html`);
     console.log(`Admin panel: http://localhost:${port}/admin.html`);
 });

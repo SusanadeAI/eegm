@@ -14,7 +14,7 @@ BEGIN
     EXECUTE (SELECT string_agg('DROP POLICY IF EXISTS ' || quote_ident(policyname) || ' ON ' || quote_ident(tablename) || ';', ' ')
              FROM pg_policies 
              WHERE schemaname = 'public' 
-             AND tablename IN ('site_content', 'conference_registrations', 'admin_profiles', 'gallery_images'));
+             AND tablename IN ('site_content', 'conference_registrations', 'admin_profiles', 'gallery_images', 'minister_bookings'));
 END $$;
 
 -- 2. ENSURE TABLES EXIST
@@ -67,6 +67,27 @@ CREATE TABLE IF NOT EXISTS gallery_images (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
 );
 
+CREATE TABLE IF NOT EXISTS minister_bookings (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  organization_name TEXT NOT NULL,
+  contact_person TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  email TEXT NOT NULL,
+  gathering_type TEXT NOT NULL,
+  other_gathering_type TEXT,
+  event_theme TEXT,
+  event_date TEXT NOT NULL,
+  ministration_time TEXT NOT NULL,
+  venue_location TEXT NOT NULL,
+  expected_attendees TEXT,
+  event_description TEXT,
+  logistics_transportation TEXT NOT NULL,
+  logistics_other_details TEXT,
+  status TEXT DEFAULT 'pending',
+  notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+);
+
 -- ==========================================
 -- NEW ROBUST SECURITY (RLS)
 -- ==========================================
@@ -76,6 +97,7 @@ ALTER TABLE site_content ENABLE ROW LEVEL SECURITY;
 ALTER TABLE conference_registrations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE admin_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE gallery_images ENABLE ROW LEVEL SECURITY;
+ALTER TABLE minister_bookings ENABLE ROW LEVEL SECURITY;
 
 -- 1. ADMIN PROFILES (Safe - no recursion)
 -- Allow anyone logged in to see if a UUID exists in admin_profiles
@@ -95,8 +117,14 @@ CREATE POLICY "Admin Manage Gallery" ON gallery_images FOR ALL
 
 -- 4. REGISTRATIONS
 CREATE POLICY "Public Insert Registration" ON conference_registrations FOR INSERT WITH CHECK (true);
--- This is the one that was failing - the EXISTS check against the safe "Public Admin Read" policy will now work
 CREATE POLICY "Admin View Submissions" ON conference_registrations FOR SELECT 
+  USING (EXISTS (SELECT 1 FROM admin_profiles WHERE id = auth.uid()));
+
+-- 5. MINISTERIAL BOOKINGS
+CREATE POLICY "Public Insert Booking" ON minister_bookings FOR INSERT WITH CHECK (true);
+CREATE POLICY "Admin View Bookings" ON minister_bookings FOR SELECT 
+  USING (EXISTS (SELECT 1 FROM admin_profiles WHERE id = auth.uid()));
+CREATE POLICY "Admin Update Bookings" ON minister_bookings FOR UPDATE 
   USING (EXISTS (SELECT 1 FROM admin_profiles WHERE id = auth.uid()));
 
 -- ==========================================

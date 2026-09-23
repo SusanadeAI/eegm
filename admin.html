@@ -8,9 +8,12 @@
     <link rel="stylesheet" href="style.css">
     <style>
         body { padding: 2rem; background: var(--bg-dark); }
-        .admin-header { margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .admin-header { margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
         .admin-container { max-width: 1400px; margin: 0 auto; }
-        .table-responsive { overflow-x: auto; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; }
+        .tab-btn-group { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+        .tab-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-secondary); padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.95rem; }
+        .tab-btn.active { background: var(--primary); color: #000; border-color: var(--primary); }
+        .table-responsive { overflow-x: auto; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 2rem; }
         table { width: 100%; border-collapse: collapse; min-width: 1200px; }
         th, td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
         th { background: rgba(212, 175, 55, 0.1); color: var(--primary); font-weight: 600; white-space: nowrap; }
@@ -19,17 +22,30 @@
         .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.2rem; }
         .badge-bus { background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid #38bdf8; }
         .badge-acc { background: rgba(244, 114, 182, 0.1); color: #f472b6; border: 1px solid #f472b6; }
+        .badge-gold { background: rgba(212, 175, 55, 0.15); color: var(--primary); border: 1px solid var(--primary); }
         .empty-state { padding: 3rem; text-align: center; color: var(--text-secondary); }
     </style>
 </head>
 <body>
     <div class="admin-container">
         <div class="admin-header">
-            <h1>Conference Registrations <span class="accent">Dashboard</span></h1>
-            <a href="index.html" class="btn btn-outline" style="padding: 0.5rem 1rem;">Back to Home</a>
+            <div>
+                <h1 style="margin-bottom: 0.3rem;">Ministry Portal <span class="accent">Dashboard</span></h1>
+                <p style="color: var(--text-secondary); margin: 0;">Manage Conference Registrations & Ministerial Speaking Engagements</p>
+            </div>
+            <div style="display:flex; gap: 0.8rem;">
+                <a href="booking.html" class="btn btn-outline" style="padding: 0.5rem 1rem;">View Booking Form</a>
+                <a href="index.html" class="btn btn-outline" style="padding: 0.5rem 1rem;">Back to Home</a>
+            </div>
+        </div>
+
+        <div class="tab-btn-group">
+            <button class="tab-btn active" id="tab-btn-conf" onclick="switchTab('conf')">Conference Registrations</button>
+            <button class="tab-btn" id="tab-btn-book" onclick="switchTab('book')">Ministerial Speaking Bookings</button>
         </div>
         
-        <div class="table-responsive">
+        <!-- Conference Table Section -->
+        <div id="section-conf" class="table-responsive">
             <table>
                 <thead>
                     <tr>
@@ -48,63 +64,183 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Ministerial Bookings Table Section -->
+        <div id="section-book" class="table-responsive" style="display: none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date Received</th>
+                        <th>Church / Organization</th>
+                        <th>Contact Person</th>
+                        <th>Gathering Type</th>
+                        <th>Theme / Topic</th>
+                        <th>Event Date & Time</th>
+                        <th>Venue & Attendees</th>
+                        <th>Logistics</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody id="bookings-body">
+                    <tr><td colspan="9" class="empty-state">Loading bookings...</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
+    <!-- Supabase CDN and init for direct client fallback -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-init.js"></script>
+
     <script>
+        let currentTab = 'conf';
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.getElementById('tab-btn-conf').classList.toggle('active', tab === 'conf');
+            document.getElementById('tab-btn-book').classList.toggle('active', tab === 'book');
+            document.getElementById('section-conf').style.display = tab === 'conf' ? 'block' : 'none';
+            document.getElementById('section-book').style.display = tab === 'book' ? 'block' : 'none';
+
+            if (tab === 'book') {
+                fetchBookings();
+            } else {
+                fetchRegistrations();
+            }
+        }
+
         async function fetchRegistrations() {
+            const tbody = document.getElementById('registrations-body');
             try {
-                const res = await fetch('/api/admin/registrations');
-                let result;
+                // Try server endpoint first
+                let data = null;
                 try {
-                    result = await res.json();
-                } catch {
-                    throw new Error("Make sure you are running the Node.js server to fetch data.");
+                    const res = await fetch('/api/admin/registrations');
+                    if (res.ok) {
+                        const json = await res.json();
+                        data = json.data;
+                    }
+                } catch(e) {}
+
+                // Fallback to Supabase Client direct
+                if (!data && window.supabaseClient) {
+                    const { data: sbData, error } = await window.supabaseClient
+                        .from('conference_registrations')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                    if (!error && sbData) {
+                        data = sbData;
+                    }
                 }
                 
-                const tbody = document.getElementById('registrations-body');
-                
-                if (!res.ok) throw new Error(result.error || 'Failed to fetch');
-                
-                if (!result.data || result.data.length === 0) {
+                if (!data || data.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No registrations found yet.</td></tr>';
                     return;
                 }
 
-                tbody.innerHTML = result.data.map(r => `
+                tbody.innerHTML = data.map(r => `
                     <tr>
-                        <td>#${r.id}</td>
-                        <td style="white-space:nowrap">${new Date(r.created_at).toLocaleString()}</td>
-                        <td><strong>${r.fullName || '-'}</strong></td>
+                        <td>#${r.id ? String(r.id).slice(0, 8) : '-'}</td>
+                        <td style="white-space:nowrap">${r.created_at ? new Date(r.created_at).toLocaleDateString() : '-'}</td>
+                        <td><strong>${r.fullName || r.full_name || '-'}</strong></td>
                         <td>
                             ${r.phone || '-'}<br>
                             <small>${r.email || '-'}</small>
                         </td>
                         <td>
-                            ${r.gender || '-'}, ${r.ageRange || '-'}<br>
-                            <small>${r.city || '-'}, ${r.state || '-'}</small>
+                            ${r.gender || '-'}, ${r.ageRange || r.age_range || '-'}<br>
+                            <small>${r.city || '-'}, ${r.state || r.state_country || '-'}</small>
                         </td>
                         <td>
-                            ${r.campus ? r.campus : (r.attendChurch === 'Yes' ? (r.churchRole || '') + ' at ' + (r.churchLocation || '') : 'No Church')}
+                            ${r.campus ? r.campus : ((r.attendChurch === 'Yes' || r.attend_church) ? (r.churchRole || r.church_role || '') + ' at ' + (r.churchLocation || r.church_location || '') : 'No Church')}
                         </td>
                         <td>
-                            ${r.busLocation && r.busLocation !== 'Not Applicable' ? '<span class="badge badge-bus">Bus: ' + r.busLocation + '</span><br>' : ''}
-                            ${r.requireAccommodation === 'Yes' ? '<span class="badge badge-acc">Acc Req</span>' : ''}
-                            ${r.attendingWithOthers === 'Yes' ? '<br><small>+ ' + r.othersCount + ' people</small>' : ''}
+                            ${(r.busLocation || r.bus_location) && (r.busLocation || r.bus_location) !== 'Not Applicable' && (r.busLocation || r.bus_location) !== 'None' ? '<span class="badge badge-bus">Bus: ' + (r.busLocation || r.bus_location) + '</span><br>' : ''}
+                            ${(r.requireAccommodation === 'Yes' || r.require_accommodation) ? '<span class="badge badge-acc">Acc Req</span>' : ''}
+                            ${(r.attendingWithOthers === 'Yes' || r.attending_with_others) ? '<br><small>+ ' + (r.othersCount || r.others_count || 0) + ' people</small>' : ''}
                         </td>
                         <td>
-                            ${r.prayerRequest ? '<small style="color:var(--primary);"><i>"'+r.prayerRequest+'"</i></small><br>' : ''}
-                            ${r.accommodationDetails ? '<small><strong>Acc Details:</strong> '+r.accommodationDetails+'</small>' : ''}
+                            ${(r.prayerRequest || r.prayer_request) ? '<small style="color:var(--primary);"><i>"'+(r.prayerRequest || r.prayer_request)+'"</i></small><br>' : ''}
+                            ${(r.accommodationDetails || r.accommodation_details) ? '<small><strong>Acc Details:</strong> '+(r.accommodationDetails || r.accommodation_details)+'</small>' : ''}
                         </td>
                     </tr>
                 `).join('');
                 
             } catch (err) {
-                document.getElementById('registrations-body').innerHTML = 
-                    `<tr><td colspan="8" class="empty-state" style="color: #f87171;">Error loading data: ${err.message}</td></tr>`;
+                tbody.innerHTML = 
+                    `<tr><td colspan="8" class="empty-state" style="color: #f87171;">Could not load registrations: ${err.message}</td></tr>`;
+            }
+        }
+
+        async function fetchBookings() {
+            const tbody = document.getElementById('bookings-body');
+            tbody.innerHTML = '<tr><td colspan="9" class="empty-state">Loading bookings...</td></tr>';
+            try {
+                let data = null;
+
+                // 1. Try server endpoint
+                try {
+                    const res = await fetch('/api/admin/bookings');
+                    if (res.ok) {
+                        const json = await res.json();
+                        data = json.data;
+                    }
+                } catch(e) {}
+
+                // 2. Fallback to Supabase direct
+                if (!data && window.supabaseClient) {
+                    const { data: sbData, error } = await window.supabaseClient
+                        .from('minister_bookings')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                    if (!error && sbData) {
+                        data = sbData;
+                    }
+                }
+
+                if (!data || data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No ministerial booking requests received yet.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.map(b => `
+                    <tr>
+                        <td style="white-space:nowrap">${b.created_at ? new Date(b.created_at).toLocaleDateString() : '-'}</td>
+                        <td><strong>${b.organization_name || '-'}</strong></td>
+                        <td>
+                            <strong>${b.contact_person || '-'}</strong><br>
+                            <small>${b.phone || '-'}</small><br>
+                            <small>${b.email || '-'}</small>
+                        </td>
+                        <td>
+                            <span class="badge badge-gold">${b.gathering_type || '-'}</span>
+                            ${b.other_gathering_type ? `<br><small>(${b.other_gathering_type})</small>` : ''}
+                        </td>
+                        <td>${b.event_theme || '-'}</td>
+                        <td>
+                            <strong>${b.event_date || '-'}</strong><br>
+                            <small>${b.ministration_time || '-'}</small>
+                        </td>
+                        <td>
+                            ${b.venue_location || '-'}<br>
+                            ${b.expected_attendees ? `<small>Attendees: ${b.expected_attendees}</small>` : ''}
+                        </td>
+                        <td>
+                            <span style="font-size: 0.85rem;">${b.logistics_transportation || '-'}</span>
+                            ${b.logistics_other_details ? `<br><small>Details: ${b.logistics_other_details}</small>` : ''}
+                        </td>
+                        <td>
+                            <small style="max-width: 250px; display: block; line-height: 1.4;">${b.event_description || '-'}</small>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                tbody.innerHTML = 
+                    `<tr><td colspan="9" class="empty-state" style="color: #f87171;">Could not load bookings: ${err.message}</td></tr>`;
             }
         }
         
-        // Init
+        // Init default
         fetchRegistrations();
     </script>
 </body>

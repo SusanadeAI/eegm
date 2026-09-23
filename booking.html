@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking & Speaking Engagements | Evangelist Elisha Olorunda</title>
+    
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,400;1,600&display=swap" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <link rel="stylesheet" href="style.css?v=2026_elevation_v2">
+    <link rel="stylesheet" href="form.css?v=2026_elevation_v2">
+</head>
+<body>
+    <!-- Live Ambient Lighting -->
+    <div class="mesh-glow mesh-1"></div>
+    <div class="mesh-glow mesh-2"></div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Crisp White Elevation-Style Top Bar Navigation -->
+    <header id="main-header" class="elevation-nav">
+        <div class="nav-wrapper">
+            <div class="nav-left">
+                <button class="menu-btn" id="mobile-toggle" aria-label="Toggle navigation menu">
+                    <i data-feather="menu"></i>
+                </button>
+                <a href="index.html" class="brand-logo">
+                    <img src="assets/images/logo.png?v=2026_crop" alt="Eternity Echoes Global Ministry" id="site-logo">
+                </a>
+            </div>
+
+            <div class="nav-center">
+                <div class="search-pill">
+                    <i data-feather="search"></i>
+                    <input type="text" placeholder="Search" id="nav-search-input">
+                </div>
+            </div>
+
+            <div class="nav-right">
+                <nav id="nav-menu">
+                    <ul class="nav-links">
+                        <li><a href="index.html#about">About</a></li>
+                        <li><a href="index.html#ministries">Ministries</a></li>
+                        <li><a href="conference.html">Conference</a></li>
+                        <li><a href="booking.html" class="nav-give-link" style="color: var(--gold-primary); font-weight: 700;">Book Minister</a></li>
+                        <li><a href="index.html#give">Give</a></li>
+                    </ul>
+                </nav>
+                <a href="booking.html" class="mobile-give-pill" style="background: var(--gold-primary); color: #fff;">Book</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Slide-Out Full Navigation Drawer (opened by hamburger menu) -->
+    <div id="nav-drawer-overlay" class="drawer-overlay"></div>
+    <aside id="nav-drawer" class="nav-drawer">
+        <div class="drawer-header">
+            <img src="assets/images/logo.png?v=2026_crop" alt="Eternity Echoes" class="drawer-logo">
+            <button class="drawer-close" id="drawer-close-btn" aria-label="Close menu">&times;</button>
+        </div>
+        <ul class="drawer-links">
+            <li><a href="index.html#hero"><i data-feather="home"></i> Home</a></li>
+            <li><a href="index.html#about"><i data-feather="user"></i> About the Founder</a></li>
+            <li><a href="index.html#ministries"><i data-feather="heart"></i> Ministries</a></li>
+            <li><a href="index.html#our-story"><i data-feather="book"></i> Our Story & Heritage</a></li>
+            <li><a href="index.html#crusades"><i data-feather="activity"></i> Crusades & Impact</a></li>
+            <li><a href="index.html#testimonies"><i data-feather="star"></i> Testimonies of Grace</a></li>
+            <li><a href="conference.html"><i data-feather="calendar"></i> All Believers Conference</a></li>
+            <li><a href="booking.html" class="drawer-highlight"><i data-feather="bookmark"></i> Book Evangelist Elisha</a></li>
+            <li><a href="index.html#give" class="drawer-give"><i data-feather="gift"></i> Give / Partner</a></li>
+        </ul>
+    </aside>
+
+    <section class="section form-section">
+        <div class="container">
+            <div class="form-header motion-reveal">
+                <span class="section-tag"><i data-feather="bookmark"></i> MINISTERIAL INVITATION</span>
+                <h1>EVANGELIST ELISHA <span class="gold-shimmer">OLORUNDA</span></h1>
+                <p class="visioneer">Gospel Ministration & Speaking Engagement Booking Form</p>
+                <p>
+                    <strong>WELCOME!</strong> Thank you for your interest in inviting Evangelist Elisha Olorunda to minister at your gathering. We are honored by your invitation and believe every opportunity to preach Christ is a privilege. This form helps us understand your event and make the necessary arrangements for the ministration.
+                </p>
+                <div class="booking-notice">
+                    <i data-feather="info" style="display:inline-block; vertical-align:middle; margin-right:6px; color:var(--gold-primary);"></i>
+                    <strong>Please note:</strong> This booking is strictly for Gospel ministration and speaking engagements related to the Gospel of Jesus Christ.
+                </div>
+            </div>
+
+            <div class="form-container bento-tile motion-reveal delay-1" style="max-width: 880px; margin: 0 auto; background: var(--bg-card);">
+                <div id="form-message"></div>
+
+                <form id="booking-form" aria-label="Evangelist Elisha Olorunda Booking Form">
+                    <!-- SECTION 1: Organization & Contact Information -->
+                    <fieldset>
+                        <legend>1. Contact & Organization Details</legend>
+                        <div class="form-group">
+                            <label for="organizationName">1. Name of Church / Organization <span style="color:#ef4444;">*</span></label>
+                            <input type="text" id="organizationName" name="organizationName" required placeholder="e.g. Living Word Chapel, Youth Fellowship...">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactPerson">2. Name of Contact Person <span style="color:#ef4444;">*</span></label>
+                            <input type="text" id="contactPerson" name="contactPerson" required placeholder="e.g. Pastor John Doe / Sister Grace">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">3. Phone / WhatsApp Number <span style="color:#ef4444;">*</span></label>
+                                <input type="tel" id="phone" name="phone" required placeholder="e.g. +234 801 234 5678">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">4. Email Address <span style="color:#ef4444;">*</span></label>
+                                <input type="email" id="email" name="email" required placeholder="e.g. churchoffice@example.com">
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- SECTION 2: Gathering & Program Details -->
+                    <fieldset>
+                        <legend>2. Gathering & Ministration Details</legend>
+                        <div class="form-group">
+                            <label>5. Type of Gathering <span style="color:#ef4444;">*</span></label>
+                            <div class="options-grid">
+                                <label class="choice-card">
+                                    <input type="radio" name="gatheringType" value="Church Service" required onchange="toggleOtherGathering(false)">
+                                    <span>Church Service</span>
+                                </label>
+                                <label class="choice-card">
+                                    <input type="radio" name="gatheringType" value="Crusade/Outreach" onchange="toggleOtherGathering(false)">
+                                    <span>Crusade / Outreach</span>
+                                </label>
+                                <label class="choice-card">
+                                    <input type="radio" name="gatheringType" value="Youth Program" onchange="toggleOtherGathering(false)">
+                                    <span>Youth Program</span>
+                                </label>
+                                <label class="choice-card">
+                                    <input type="radio" name="gatheringType" value="Conference/Convention" onchange="toggleOtherGathering(false)">
+                                    <span>Conference / Convention</span>
+                                </label>
+                                <label class="choice-card">
+                                    <input type="radio" name="gatheringType" value="Revival" onchange="toggleOtherGathering(false)">
+                                    <span>Revival</span>
+                                </label>
+                                <label class="choice-card">
+                                    <input type="radio" name="gatheringType" value="Seminar/Teaching" onchange="toggleOtherGathering(false)">
+                                    <span>Seminar / Teaching</span>
+                                </label>
+                                <label class="choice-card">
+                                    <input type="radio" name="gatheringType" value="Other" id="gatheringTypeOtherRadio" onchange="toggleOtherGathering(true)">
+                                    <span>Other Gospel Gathering</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Conditional input for Other Gathering -->
+                        <div class="form-group conditional-field" id="other-gathering-container">
+                            <label for="otherGatheringType">Please Specify Type of Gathering <span style="color:#ef4444;">*</span></label>
+                            <input type="text" id="otherGatheringType" name="otherGatheringType" placeholder="Specify your gospel gathering format">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="eventTheme">6. Theme / Topic of the Event</label>
+                            <input type="text" id="eventTheme" name="eventTheme" placeholder="e.g. Possessing the Echoes of Eternity, Believers in Christ...">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventDate">7. Date of Event <span style="color:#ef4444;">*</span></label>
+                                <input type="text" id="eventDate" name="eventDate" required placeholder="e.g. November 14 - 16, 2026 or Specific Day">
+                            </div>
+                            <div class="form-group">
+                                <label for="ministrationTime">8. Time of Ministration <span style="color:#ef4444;">*</span></label>
+                                <input type="text" id="ministrationTime" name="ministrationTime" required placeholder="e.g. 5:00 PM WAT or Morning & Evening">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="venueLocation">9. Venue & Location <span style="color:#ef4444;">*</span></label>
+                            <input type="text" id="venueLocation" name="venueLocation" required placeholder="Full address, City, State, Country">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="expectedAttendees">10. Expected Number of Attendees</label>
+                            <input type="text" id="expectedAttendees" name="expectedAttendees" placeholder="e.g. 200 - 500 people">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="eventDescription">11. Brief Description / Purpose of the Gathering <span style="color:#ef4444;">*</span></label>
+                            <textarea id="eventDescription" name="eventDescription" rows="4" required placeholder="Provide a brief overview of the vision, heart, and expectation for this gathering..."></textarea>
+                        </div>
+                    </fieldset>
+
+                    <!-- SECTION 3: Logistics & Transportation -->
+                    <fieldset>
+                        <legend>3. Logistics & Transportation Arrangements</legend>
+                        <div class="form-group">
+                            <label>12. Will you be responsible for the logistics of the Man of God, particularly transportation? <span style="color:#ef4444;">*</span></label>
+                            <div class="options-grid" style="grid-template-columns: 1fr;">
+                                <label class="choice-card">
+                                    <input type="radio" name="logisticsTransportation" value="Yes, we will provide transportation" required onchange="toggleOtherLogistics(false)">
+                                    <span>Yes, we will provide transportation</span>
+                                </label>
+                                <label class="choice-card">
+                                    <input type="radio" name="logisticsTransportation" value="Yes, we will cover transportation costs" onchange="toggleOtherLogistics(false)">
+                                    <span>Yes, we will cover transportation costs</span>
+                                </label>
+                                <label class="choice-card">
+                                    <input type="radio" name="logisticsTransportation" value="No, we would like the ministry to make transportation arrangements" onchange="toggleOtherLogistics(false)">
+                                    <span>No, we would like the ministry to make transportation arrangements</span>
+                                </label>
+                                <label class="choice-card">
+                                    <input type="radio" name="logisticsTransportation" value="Other" id="logisticsOtherRadio" onchange="toggleOtherLogistics(true)">
+                                    <span>Other Arrangements</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Conditional input for Other Logistics -->
+                        <div class="form-group conditional-field" id="other-logistics-container">
+                            <label for="logisticsOtherDetails">Please Specify Logistics Details <span style="color:#ef4444;">*</span></label>
+                            <input type="text" id="logisticsOtherDetails" name="logisticsOtherDetails" placeholder="Describe your proposed logistics arrangement...">
+                        </div>
+                    </fieldset>
+
+                    <!-- Ministry Invitation Closing Declaration -->
+                    <div class="booking-invitation-box">
+                        <strong>INVITATION NOTICE:</strong>
+                        <p style="margin-top: 0.5rem; margin-bottom: 0;">
+                            We encourage you to complete this form with accurate information. Our team will review your request and contact you regarding availability and the next steps. Thank you for the opportunity to serve the Gospel. We look forward to partnering with you to proclaim Jesus Christ and reach lives for His glory.
+                        </p>
+                        <div class="booking-invitation-signoff">
+                            — Ministry Office of Evangelist Elisha Olorunda
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <button type="submit" id="submit-btn" class="btn btn-primary" style="padding: 1.1rem 2.8rem; font-size: 1.1rem; border-radius: 9999px; width: 100%; max-width: 420px;">
+                            Submit Booking Request <i data-feather="arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modern Architecture Footer -->
+    <footer class="footer-modern">
+        <div class="container">
+            <div class="footer-bottom-bar">
+                <p>&copy; 2026 Eternity Echoes Global Ministry. All Rights Reserved.</p>
+                <p class="craft-tag"><a href="index.html" style="color: var(--gold-bright); text-decoration: none;">Return to Homepage</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleOtherGathering(show) {
+            const container = document.getElementById('other-gathering-container');
+            const input = document.getElementById('otherGatheringType');
+            if (show) {
+                container.classList.add('active');
+                input.required = true;
+                input.focus();
+            } else {
+                container.classList.remove('active');
+                input.required = false;
+                input.value = '';
+            }
+        }
+
+        function toggleOtherLogistics(show) {
+            const container = document.getElementById('other-logistics-container');
+            const input = document.getElementById('logisticsOtherDetails');
+            if (show) {
+                container.classList.add('active');
+                input.required = true;
+                input.focus();
+            } else {
+                container.classList.remove('active');
+                input.required = false;
+                input.value = '';
+            }
+        }
+
+        window.addEventListener('load', () => {
+            const btn = document.getElementById('submit-btn');
+            const msgBox = document.getElementById('form-message');
+            const form = document.getElementById('booking-form');
+
+            if (!form) return;
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                btn.innerHTML = 'Submitting Request... <span class="spinner" style="display:inline-block; border: 2px solid #fff; border-top-color: transparent; border-radius: 50%; width: 16px; height: 16px; animation: spin 1s linear infinite; margin-left: 8px;"></span>';
+                btn.disabled = true;
+                
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+                
+                try {
+                    const bookingPayload = {
+                        organization_name: data.organizationName,
+                        contact_person: data.contactPerson,
+                        phone: data.phone,
+                        email: data.email,
+                        gathering_type: data.gatheringType,
+                        other_gathering_type: data.otherGatheringType || null,
+                        event_theme: data.eventTheme || null,
+                        event_date: data.eventDate,
+                        ministration_time: data.ministrationTime,
+                        venue_location: data.venueLocation,
+                        expected_attendees: data.expectedAttendees || null,
+                        event_description: data.eventDescription,
+                        logistics_transportation: data.logisticsTransportation,
+                        logistics_other_details: data.logisticsOtherDetails || null,
+                        status: 'pending'
+                    };
+
+                    let isSubmitted = false;
+                    let lastErrorMessage = '';
+
+                    // 1. Try Supabase Client Direct
+                    if (window.supabaseClient) {
+                        try {
+                            const { error: sbError } = await window.supabaseClient
+                                .from('minister_bookings')
+                                .insert([bookingPayload]);
+                            
+                            if (!sbError) {
+                                isSubmitted = true;
+                            } else {
+                                console.warn("Supabase client insert error:", sbError);
+                                lastErrorMessage = sbError.message || "Database insert error";
+                            }
+                        } catch (sbEx) {
+                            console.warn("Supabase direct call exception:", sbEx);
+                            lastErrorMessage = sbEx.message;
+                        }
+                    }
+
+                    // 2. If Supabase direct was not successful, attempt Node Server Endpoint
+                    if (!isSubmitted) {
+                        try {
+                            const response = await fetch('/api/book', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(bookingPayload)
+                            });
+                            if (response.ok) {
+                                const json = await response.json();
+                                if (json.success) {
+                                    isSubmitted = true;
+                                }
+                            }
+                        } catch (fetchEx) {
+                            // Server endpoint not active
+                        }
+                    }
+
+                    if (!isSubmitted) {
+                        throw new Error(lastErrorMessage || "Unable to reach database. Please ensure your Supabase instance is active and reinstated.");
+                    }
+
+                    if (typeof showToast === 'function') {
+                        showToast('Booking request submitted successfully!', 'success');
+                    }
+                    
+                    msgBox.style.display = 'block';
+                    msgBox.style.backgroundColor = 'rgba(74, 222, 128, 0.12)';
+                    msgBox.style.color = '#15803d';
+                    msgBox.style.border = '1px solid #86efac';
+                    msgBox.innerHTML = `
+                        <div style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.4rem;">✨ Booking Request Received!</div>
+                        <p style="margin: 0; color: #166534; font-size: 0.95rem; line-height: 1.6;">
+                            Thank you for inviting Evangelist Elisha Olorunda. Our ministry office has received your request and will contact you shortly via <strong>${data.email}</strong> or <strong>${data.phone}</strong>.
+                        </p>
+                    `;
+                    
+                    e.target.reset();
+                    toggleOtherGathering(false);
+                    toggleOtherLogistics(false);
+                    window.scrollTo({ top: msgBox.offsetTop - 120, behavior: 'smooth' });
+
+                } catch (err) {
+                    console.error("Booking submission error:", err);
+                    msgBox.style.display = 'block';
+                    msgBox.style.backgroundColor = 'rgba(248, 113, 113, 0.12)';
+                    msgBox.style.color = '#b91c1c';
+                    msgBox.style.border = '1px solid #fca5a5';
+                    msgBox.innerHTML = `
+                        <div style="font-weight: 700; margin-bottom: 0.3rem;">⚠️ Could not submit booking</div>
+                        <p style="margin: 0; font-size: 0.95rem; line-height: 1.5;">
+                            ${err.message || "An error occurred while connecting to the database. Please verify your Supabase project status or try again."}
+                        </p>
+                    `;
+                    window.scrollTo({ top: msgBox.offsetTop - 120, behavior: 'smooth' });
+                } finally {
+                    btn.innerHTML = 'Submit Booking Request <i data-feather="arrow-right"></i>';
+                    btn.disabled = false;
+                    if (window.feather) feather.replace();
+                }
+            });
+        });
+    </script>
+    <style>
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
+
+    <!-- Supabase SDK & Configuration -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-init.js"></script>
+    <script src="script.js?v=2026_elevation_v2"></script>
+</body>
+</html>
