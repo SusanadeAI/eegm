@@ -3,245 +3,1180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Conference Registrations</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>Admin Dashboard | Eternity Echoes Ministry Portal</title>
+    
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <link rel="stylesheet" href="style.css?v=2026_elevation_v2">
     <style>
-        body { padding: 2rem; background: var(--bg-dark); }
-        .admin-header { margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-        .admin-container { max-width: 1400px; margin: 0 auto; }
-        .tab-btn-group { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
-        .tab-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-secondary); padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.95rem; }
-        .tab-btn.active { background: var(--primary); color: #000; border-color: var(--primary); }
-        .table-responsive { overflow-x: auto; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 2rem; }
-        table { width: 100%; border-collapse: collapse; min-width: 1200px; }
-        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        th { background: rgba(212, 175, 55, 0.1); color: var(--primary); font-weight: 600; white-space: nowrap; }
-        td { color: var(--text-secondary); }
-        tr:hover { background: rgba(255,255,255,0.05); }
-        .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.2rem; }
-        .badge-bus { background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid #38bdf8; }
-        .badge-acc { background: rgba(244, 114, 182, 0.1); color: #f472b6; border: 1px solid #f472b6; }
-        .badge-gold { background: rgba(212, 175, 55, 0.15); color: var(--primary); border: 1px solid var(--primary); }
-        .empty-state { padding: 3rem; text-align: center; color: var(--text-secondary); }
+        :root {
+            --admin-bg: #0F172A;
+            --admin-card: #1E293B;
+            --admin-card-hover: #243248;
+            --admin-border: #334155;
+            --admin-text-main: #F8FAFC;
+            --admin-text-muted: #94A3B8;
+            --admin-gold: #E5A93C;
+            --admin-gold-glow: rgba(229, 169, 60, 0.15);
+            --admin-success: #22C55E;
+            --admin-warning: #F59E0B;
+            --admin-info: #38BDF8;
+        }
+
+        body {
+            background-color: var(--admin-bg);
+            color: var(--admin-text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .admin-nav {
+            background: #111827;
+            border-bottom: 1px solid var(--admin-border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--admin-text-main);
+        }
+
+        .admin-brand img {
+            height: 38px;
+            width: auto;
+            border-radius: 6px;
+        }
+
+        .admin-brand-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .admin-brand-title span {
+            color: var(--admin-gold);
+        }
+
+        .admin-user-pill {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            padding: 0.4rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.88rem;
+            color: var(--admin-text-muted);
+        }
+
+        .admin-user-pill strong {
+            color: var(--admin-text-main);
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.9rem;
+            font-size: 0.85rem;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-gold {
+            background: var(--admin-gold);
+            color: #000;
+            font-weight: 600;
+        }
+
+        .btn-gold:hover {
+            background: #f3b648;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--admin-text-muted);
+            border: 1px solid var(--admin-border);
+        }
+
+        .btn-ghost:hover {
+            color: #FFF;
+            border-color: #64748B;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: #EF4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
+        .dashboard-container {
+            max-width: 1440px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Login Card */
+        .login-wrapper {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .login-card {
+            background: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            border-radius: 16px;
+            padding: 2.8rem 2.4rem;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .login-card h2 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 1.6rem;
+        }
+
+        .login-card p {
+            color: var(--admin-text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group-adm {
+            margin-bottom: 1.4rem;
+        }
+
+        .form-group-adm label {
+            display: block;
+            font-size: 0.88rem;
+            color: var(--admin-text-muted);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group-adm input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border-radius: 8px;
+            background: #0F172A;
+            border: 1px solid var(--admin-border);
+            color: #FFF;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group-adm input:focus {
+            border-color: var(--admin-gold);
+        }
+
+        .credentials-hint {
+            background: rgba(229, 169, 60, 0.08);
+            border: 1px dashed var(--admin-gold);
+            border-radius: 8px;
+            padding: 0.9rem 1.1rem;
+            margin-bottom: 1.6rem;
+            font-size: 0.85rem;
+            color: var(--admin-text-main);
+            line-height: 1.5;
+        }
+
+        .credentials-hint code {
+            background: rgba(0,0,0,0.3);
+            color: var(--admin-gold);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            border-radius: 12px;
+            padding: 1.4rem 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.85rem;
+            color: var(--admin-text-muted);
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--admin-text-main);
+            line-height: 1;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.05);
+            color: var(--admin-gold);
+        }
+
+        /* Controls & Filter Bar */
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-pills {
+            display: flex;
+            gap: 0.5rem;
+            background: #111827;
+            padding: 0.3rem;
+            border-radius: 8px;
+            border: 1px solid var(--admin-border);
+        }
+
+        .tab-pill {
+            background: transparent;
+            border: none;
+            color: var(--admin-text-muted);
+            padding: 0.55rem 1.2rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-pill.active {
+            background: var(--admin-gold);
+            color: #000;
+        }
+
+        .search-filter-wrap {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            background: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            padding: 0.55rem 1rem;
+            border-radius: 8px;
+            color: #FFF;
+            font-size: 0.9rem;
+            outline: none;
+            min-width: 240px;
+        }
+
+        .filter-select {
+            background: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            padding: 0.55rem 0.9rem;
+            border-radius: 8px;
+            color: #FFF;
+            font-size: 0.9rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Table Architecture */
+        .table-panel {
+            background: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            text-align: left;
+            min-width: 1050px;
+        }
+
+        th {
+            background: #111827;
+            color: var(--admin-gold);
+            font-weight: 600;
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid var(--admin-border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 1.1rem 1.2rem;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+            vertical-align: top;
+            color: #CBD5E1;
+        }
+
+        tr:hover td {
+            background: var(--admin-card-hover);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.65rem;
+            border-radius: 9999px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .badge-pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: #FBBF24;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+
+        .badge-reviewed {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38BDF8;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+        }
+
+        .badge-confirmed {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ADE80;
+            border: 1px solid rgba(34, 197, 94, 0.4);
+        }
+
+        .badge-archived {
+            background: rgba(148, 163, 184, 0.15);
+            color: #94A3B8;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+        }
+
+        .badge-gold {
+            background: rgba(229, 169, 60, 0.15);
+            color: var(--admin-gold);
+            border: 1px solid var(--admin-gold);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .status-dropdown {
+            background: #0F172A;
+            border: 1px solid var(--admin-border);
+            color: #FFF;
+            padding: 0.35rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 720px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            padding: 2.2rem;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--admin-border);
+            padding-bottom: 1.2rem;
+            margin-bottom: 1.6rem;
+        }
+
+        .modal-close-btn {
+            background: transparent;
+            border: none;
+            color: var(--admin-text-muted);
+            font-size: 1.6rem;
+            cursor: pointer;
+            padding: 0.2rem 0.6rem;
+            line-height: 1;
+        }
+
+        .modal-close-btn:hover {
+            color: #FFF;
+        }
+
+        .detail-row {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+            font-size: 0.95rem;
+        }
+
+        .detail-label {
+            color: var(--admin-text-muted);
+            font-weight: 600;
+            font-size: 0.88rem;
+        }
+
+        .detail-val {
+            color: var(--admin-text-main);
+            word-break: break-word;
+        }
+
+        .empty-placeholder {
+            padding: 4rem 2rem;
+            text-align: center;
+            color: var(--admin-text-muted);
+        }
+
+        .empty-placeholder i {
+            width: 48px;
+            height: 48px;
+            color: var(--admin-border);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .admin-nav {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            .dashboard-container {
+                padding: 0 1rem;
+            }
+            .detail-row {
+                grid-template-columns: 1fr;
+                gap: 0.3rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="admin-container">
-        <div class="admin-header">
-            <div>
-                <h1 style="margin-bottom: 0.3rem;">Ministry Portal <span class="accent">Dashboard</span></h1>
-                <p style="color: var(--text-secondary); margin: 0;">Manage Conference Registrations & Ministerial Speaking Engagements</p>
-            </div>
-            <div style="display:flex; gap: 0.8rem;">
-                <a href="booking.html" class="btn btn-outline" style="padding: 0.5rem 1rem;">View Booking Form</a>
-                <a href="index.html" class="btn btn-outline" style="padding: 0.5rem 1rem;">Back to Home</a>
-            </div>
-        </div>
 
-        <div class="tab-btn-group">
-            <button class="tab-btn active" id="tab-btn-conf" onclick="switchTab('conf')">Conference Registrations</button>
-            <button class="tab-btn" id="tab-btn-book" onclick="switchTab('book')">Ministerial Speaking Bookings</button>
-        </div>
-        
-        <!-- Conference Table Section -->
-        <div id="section-conf" class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Date</th>
-                        <th>Name</th>
-                        <th>Contact</th>
-                        <th>Demographics</th>
-                        <th>Campus/Church</th>
-                        <th>Logistics</th>
-                        <th>Additional Details</th>
-                    </tr>
-                </thead>
-                <tbody id="registrations-body">
-                    <tr><td colspan="8" class="empty-state">Loading registrations...</td></tr>
-                </tbody>
-            </table>
-        </div>
+    <!-- Top Admin Header -->
+    <header class="admin-nav">
+        <a href="index.html" class="admin-brand">
+            <img src="assets/images/logo.png?v=2026_crop" alt="Eternity Echoes">
+            <div class="admin-brand-title">MINISTRY <span>PORTAL</span></div>
+        </a>
 
-        <!-- Ministerial Bookings Table Section -->
-        <div id="section-book" class="table-responsive" style="display: none;">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date Received</th>
-                        <th>Church / Organization</th>
-                        <th>Contact Person</th>
-                        <th>Gathering Type</th>
-                        <th>Theme / Topic</th>
-                        <th>Event Date & Time</th>
-                        <th>Venue & Attendees</th>
-                        <th>Logistics</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody id="bookings-body">
-                    <tr><td colspan="9" class="empty-state">Loading bookings...</td></tr>
-                </tbody>
-            </table>
+        <div style="display:flex; align-items:center; gap: 0.8rem; flex-wrap: wrap;" id="nav-actions">
+            <div class="admin-user-pill" id="user-display" style="display:none;">
+                <i data-feather="user"></i>
+                <span id="user-email-label">admin@eegm.org</span>
+            </div>
+            <a href="booking.html" target="_blank" class="btn-sm btn-ghost"><i data-feather="external-link"></i> Live Booking Form</a>
+            <a href="index.html" class="btn-sm btn-ghost"><i data-feather="home"></i> Website</a>
+            <button class="btn-sm btn-danger" id="logout-btn" style="display:none;" onclick="handleLogout()"><i data-feather="log-out"></i> Logout</button>
+        </div>
+    </header>
+
+    <!-- 1. LOGIN SCREEN (shown when logged out) -->
+    <div class="login-wrapper" id="login-section">
+        <div class="login-card">
+            <h2>Admin Sign In</h2>
+            <p>Enter your administrator credentials to access speaking bookings & conference registrations.</p>
+
+            <div class="credentials-hint">
+                <i data-feather="key" style="width:16px; height:16px; vertical-align:middle; color:var(--admin-gold); margin-right:4px;"></i>
+                <strong>Configured Admin Credentials:</strong><br>
+                Email: <code>admin@eegm.org</code><br>
+                Password: <code>AdminPassword2026!</code>
+            </div>
+
+            <div id="login-error" style="display:none; background: rgba(239, 68, 68, 0.15); border: 1px solid #EF4444; color: #FCA5A5; padding: 0.8rem 1rem; border-radius: 8px; margin-bottom: 1.4rem; font-size: 0.9rem;"></div>
+
+            <form id="admin-login-form">
+                <div class="form-group-adm">
+                    <label for="admin-email">Admin Email</label>
+                    <input type="email" id="admin-email" value="admin@eegm.org" required autocomplete="username">
+                </div>
+                <div class="form-group-adm">
+                    <label for="admin-password">Password</label>
+                    <input type="password" id="admin-password" value="AdminPassword2026!" required autocomplete="current-password">
+                </div>
+                <button type="submit" id="login-btn" class="btn-sm btn-gold" style="width: 100%; padding: 0.85rem; font-size: 1rem; justify-content: center; border-radius: 8px;">
+                    Sign In to Portal <i data-feather="arrow-right"></i>
+                </button>
+            </form>
         </div>
     </div>
 
-    <!-- Supabase CDN and init for direct client fallback -->
+    <!-- 2. DASHBOARD (shown when logged in) -->
+    <main class="dashboard-container" id="dashboard-section" style="display: none;">
+        <!-- Top Stats Row -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div>
+                    <div class="stat-label">Total Bookings</div>
+                    <div class="stat-value" id="stat-total-bookings">0</div>
+                </div>
+                <div class="stat-icon"><i data-feather="bookmark"></i></div>
+            </div>
+            <div class="stat-card">
+                <div>
+                    <div class="stat-label">Pending Review</div>
+                    <div class="stat-value" id="stat-pending-bookings" style="color: #FBBF24;">0</div>
+                </div>
+                <div class="stat-icon" style="color: #FBBF24;"><i data-feather="clock"></i></div>
+            </div>
+            <div class="stat-card">
+                <div>
+                    <div class="stat-label">Confirmed Engagements</div>
+                    <div class="stat-value" id="stat-confirmed-bookings" style="color: #4ADE80;">0</div>
+                </div>
+                <div class="stat-icon" style="color: #4ADE80;"><i data-feather="check-circle"></i></div>
+            </div>
+            <div class="stat-card">
+                <div>
+                    <div class="stat-label">Conference Attendees</div>
+                    <div class="stat-value" id="stat-conference-count" style="color: #38BDF8;">0</div>
+                </div>
+                <div class="stat-icon" style="color: #38BDF8;"><i data-feather="users"></i></div>
+            </div>
+        </div>
+
+        <!-- Controls / Switcher Bar -->
+        <div class="controls-bar">
+            <div class="tab-pills">
+                <button class="tab-pill active" id="tab-bookings" onclick="setActiveTab('bookings')">
+                    <i data-feather="calendar"></i> Ministration Bookings (<span id="tab-count-bookings">0</span>)
+                </button>
+                <button class="tab-pill" id="tab-conf" onclick="setActiveTab('conference')">
+                    <i data-feather="users"></i> All Believers Conference (<span id="tab-count-conf">0</span>)
+                </button>
+            </div>
+
+            <div class="search-filter-wrap">
+                <input type="text" id="table-search" placeholder="Search by name, church, phone..." class="search-input" oninput="handleSearch()">
+                <select id="status-filter" class="filter-select" onchange="handleFilter()">
+                    <option value="ALL">All Statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="reviewed">Reviewed</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="archived">Archived</option>
+                </select>
+                <button class="btn-sm btn-ghost" onclick="refreshData()" title="Reload from Supabase">
+                    <i data-feather="refresh-cw"></i> Refresh
+                </button>
+            </div>
+        </div>
+
+        <!-- BOOKINGS TABLE -->
+        <div class="table-panel" id="panel-bookings">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date Received</th>
+                            <th>Church / Organization</th>
+                            <th>Contact Person</th>
+                            <th>Type of Gathering</th>
+                            <th>Theme / Topic</th>
+                            <th>Event Date & Time</th>
+                            <th>Venue & Logistics</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookings-tbody">
+                        <tr>
+                            <td colspan="9" class="empty-placeholder">
+                                <i data-feather="loader"></i>
+                                <p>Loading ministration booking records...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- CONFERENCE REGISTRATIONS TABLE -->
+        <div class="table-panel" id="panel-conference" style="display: none;">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Registered</th>
+                            <th>Name</th>
+                            <th>Contact</th>
+                            <th>Demographics</th>
+                            <th>Church / Campus</th>
+                            <th>Bus / Logistics</th>
+                            <th>Accommodation</th>
+                            <th>Prayer Request</th>
+                        </tr>
+                    </thead>
+                    <tbody id="conference-tbody">
+                        <tr>
+                            <td colspan="8" class="empty-placeholder">
+                                <i data-feather="loader"></i>
+                                <p>Loading conference registrations...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- DETAIL MODAL FOR BOOKINGS -->
+    <div class="modal-overlay" id="booking-modal" onclick="closeModalOnBg(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <span class="badge badge-gold" id="modal-gathering-type">Gospel Gathering</span>
+                    <h2 id="modal-org-name" style="margin: 0.5rem 0 0.2rem 0; font-family:'Playfair Display',serif; color:#FFF;">Church Name</h2>
+                    <p id="modal-timestamp" style="color:var(--admin-text-muted); margin:0; font-size:0.85rem;">Received on --</p>
+                </div>
+                <button class="modal-close-btn" onclick="closeModal()">&times;</button>
+            </div>
+
+            <div id="modal-body-fields"></div>
+
+            <div style="margin-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div style="display:flex; align-items:center; gap: 0.6rem;">
+                    <label style="font-size:0.88rem; color:var(--admin-text-muted);">Change Status:</label>
+                    <select id="modal-status-select" class="filter-select" onchange="updateBookingStatusFromModal()">
+                        <option value="pending">Pending</option>
+                        <option value="reviewed">Reviewed</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="archived">Archived</option>
+                    </select>
+                </div>
+                <div style="display:flex; gap: 0.8rem;">
+                    <button class="btn-sm btn-ghost" onclick="copyBookingSummary()"><i data-feather="copy"></i> Copy WhatsApp Summary</button>
+                    <button class="btn-sm btn-gold" onclick="closeModal()">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supabase JS & Init -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-init.js"></script>
 
     <script>
-        let currentTab = 'conf';
+        let rawBookings = [];
+        let rawRegistrations = [];
+        let activeTab = 'bookings';
+        let currentModalBooking = null;
 
-        function switchTab(tab) {
-            currentTab = tab;
-            document.getElementById('tab-btn-conf').classList.toggle('active', tab === 'conf');
-            document.getElementById('tab-btn-book').classList.toggle('active', tab === 'book');
-            document.getElementById('section-conf').style.display = tab === 'conf' ? 'block' : 'none';
-            document.getElementById('section-book').style.display = tab === 'book' ? 'block' : 'none';
+        window.addEventListener('load', async () => {
+            feather.replace();
+            checkSession();
+        });
 
-            if (tab === 'book') {
-                fetchBookings();
-            } else {
-                fetchRegistrations();
+        // Check if user is logged in via Supabase
+        async function checkSession() {
+            const db = window.supabaseClient;
+            if (!db) {
+                console.error("Supabase client not loaded.");
+                return;
+            }
+
+            try {
+                const { data: { session } } = await db.auth.getSession();
+                if (session && session.user) {
+                    showDashboard(session.user);
+                } else {
+                    showLogin();
+                }
+            } catch (err) {
+                console.error("Session check error:", err);
+                showLogin();
             }
         }
 
-        async function fetchRegistrations() {
-            const tbody = document.getElementById('registrations-body');
+        function showLogin() {
+            document.getElementById('login-section').style.display = 'flex';
+            document.getElementById('dashboard-section').style.display = 'none';
+            document.getElementById('user-display').style.display = 'none';
+            document.getElementById('logout-btn').style.display = 'none';
+            feather.replace();
+        }
+
+        function showDashboard(user) {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('dashboard-section').style.display = 'block';
+            document.getElementById('user-display').style.display = 'flex';
+            document.getElementById('user-email-label').textContent = user.email || 'Admin';
+            document.getElementById('logout-btn').style.display = 'inline-flex';
+            feather.replace();
+            refreshData();
+        }
+
+        // Login Handler
+        document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('admin-email').value.trim();
+            const password = document.getElementById('admin-password').value;
+            const btn = document.getElementById('login-btn');
+            const errBox = document.getElementById('login-error');
+
+            errBox.style.display = 'none';
+            btn.innerHTML = 'Signing In...';
+            btn.disabled = true;
+
+            const db = window.supabaseClient;
+            if (!db) {
+                errBox.textContent = "Supabase client not initialized. Please refresh.";
+                errBox.style.display = 'block';
+                btn.innerHTML = 'Sign In to Portal <i data-feather="arrow-right"></i>';
+                btn.disabled = false;
+                feather.replace();
+                return;
+            }
+
             try {
-                // Try server endpoint first
-                let data = null;
-                try {
-                    const res = await fetch('/api/admin/registrations');
-                    if (res.ok) {
-                        const json = await res.json();
-                        data = json.data;
-                    }
-                } catch(e) {}
-
-                // Fallback to Supabase Client direct
-                if (!data && window.supabaseClient) {
-                    const { data: sbData, error } = await window.supabaseClient
-                        .from('conference_registrations')
-                        .select('*')
-                        .order('created_at', { ascending: false });
-                    if (!error && sbData) {
-                        data = sbData;
-                    }
+                const { data, error } = await db.auth.signInWithPassword({ email, password });
+                if (error) {
+                    throw error;
                 }
-                
-                if (!data || data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No registrations found yet.</td></tr>';
-                    return;
-                }
+                showDashboard(data.user);
+            } catch (err) {
+                errBox.textContent = err.message || "Failed to sign in. Verify your credentials.";
+                errBox.style.display = 'block';
+            } finally {
+                btn.innerHTML = 'Sign In to Portal <i data-feather="arrow-right"></i>';
+                btn.disabled = false;
+                feather.replace();
+            }
+        });
 
-                tbody.innerHTML = data.map(r => `
+        // Logout Handler
+        async function handleLogout() {
+            const db = window.supabaseClient;
+            if (db) {
+                await db.auth.signOut();
+            }
+            showLogin();
+        }
+
+        // Refresh Data from Supabase
+        async function refreshData() {
+            const db = window.supabaseClient;
+            if (!db) return;
+
+            // 1. Fetch Bookings
+            try {
+                const { data: bData, error: bErr } = await db
+                    .from('minister_bookings')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (bErr) throw bErr;
+                rawBookings = bData || [];
+                renderBookings();
+                updateStats();
+            } catch (err) {
+                console.error("Error loading bookings:", err);
+                document.getElementById('bookings-tbody').innerHTML = `
+                    <tr><td colspan="9" class="empty-placeholder" style="color:#EF4444;">
+                        ⚠️ Could not load bookings: ${err.message}
+                    </td></tr>
+                `;
+            }
+
+            // 2. Fetch Conference Registrations
+            try {
+                const { data: cData, error: cErr } = await db
+                    .from('conference_registrations')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (!cErr && cData) {
+                    rawRegistrations = cData;
+                    renderConference();
+                    updateStats();
+                }
+            } catch (cEx) {
+                console.warn("Conference load error:", cEx);
+            }
+        }
+
+        // Update Stats Counters
+        function updateStats() {
+            document.getElementById('stat-total-bookings').textContent = rawBookings.length;
+            document.getElementById('tab-count-bookings').textContent = rawBookings.length;
+            
+            const pending = rawBookings.filter(b => (b.status || 'pending').toLowerCase() === 'pending').length;
+            document.getElementById('stat-pending-bookings').textContent = pending;
+
+            const confirmed = rawBookings.filter(b => (b.status || '').toLowerCase() === 'confirmed').length;
+            document.getElementById('stat-confirmed-bookings').textContent = confirmed;
+
+            document.getElementById('stat-conference-count').textContent = rawRegistrations.length;
+            document.getElementById('tab-count-conf').textContent = rawRegistrations.length;
+        }
+
+        // Tab Switcher
+        function setActiveTab(tab) {
+            activeTab = tab;
+            document.getElementById('tab-bookings').classList.toggle('active', tab === 'bookings');
+            document.getElementById('tab-conf').classList.toggle('active', tab === 'conference');
+            document.getElementById('panel-bookings').style.display = tab === 'bookings' ? 'block' : 'none';
+            document.getElementById('panel-conference').style.display = tab === 'conference' ? 'block' : 'none';
+            document.getElementById('status-filter').style.display = tab === 'bookings' ? 'inline-block' : 'none';
+        }
+
+        // Filter and Search Handlers
+        function handleFilter() {
+            if (activeTab === 'bookings') renderBookings();
+            else renderConference();
+        }
+
+        function handleSearch() {
+            if (activeTab === 'bookings') renderBookings();
+            else renderConference();
+        }
+
+        // Render Bookings Table
+        function renderBookings() {
+            const tbody = document.getElementById('bookings-tbody');
+            const search = document.getElementById('table-search').value.toLowerCase().trim();
+            const filter = document.getElementById('status-filter').value;
+
+            let filtered = rawBookings.filter(b => {
+                // Status Filter
+                if (filter !== 'ALL') {
+                    if ((b.status || 'pending').toLowerCase() !== filter.toLowerCase()) return false;
+                }
+                // Text Search
+                if (search) {
+                    const text = [
+                        b.organization_name,
+                        b.contact_person,
+                        b.phone,
+                        b.email,
+                        b.gathering_type,
+                        b.event_theme,
+                        b.venue_location
+                    ].filter(Boolean).join(' ').toLowerCase();
+                    if (!text.includes(search)) return false;
+                }
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr><td colspan="9" class="empty-placeholder">
+                        <i data-feather="inbox"></i>
+                        <p>No ministration bookings match your filter.</p>
+                    </td></tr>
+                `;
+                feather.replace();
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(b => {
+                const status = (b.status || 'pending').toLowerCase();
+                const statusBadge = `<span class="badge badge-${status}">${status}</span>`;
+                const dateStr = b.created_at ? new Date(b.created_at).toLocaleDateString() : 'N/A';
+
+                return `
                     <tr>
-                        <td>#${r.id ? String(r.id).slice(0, 8) : '-'}</td>
-                        <td style="white-space:nowrap">${r.created_at ? new Date(r.created_at).toLocaleDateString() : '-'}</td>
-                        <td><strong>${r.fullName || r.full_name || '-'}</strong></td>
-                        <td>
-                            ${r.phone || '-'}<br>
-                            <small>${r.email || '-'}</small>
+                        <td style="white-space:nowrap; font-size:0.85rem; color:var(--admin-text-muted);">
+                            ${dateStr}
                         </td>
                         <td>
-                            ${r.gender || '-'}, ${r.ageRange || r.age_range || '-'}<br>
-                            <small>${r.city || '-'}, ${r.state || r.state_country || '-'}</small>
+                            <strong style="color:#FFF; font-size:0.95rem;">${escapeHtml(b.organization_name || '-')}</strong>
                         </td>
                         <td>
-                            ${r.campus ? r.campus : ((r.attendChurch === 'Yes' || r.attend_church) ? (r.churchRole || r.church_role || '') + ' at ' + (r.churchLocation || r.church_location || '') : 'No Church')}
+                            <strong>${escapeHtml(b.contact_person || '-')}</strong><br>
+                            <a href="tel:${b.phone}" style="color:var(--admin-gold); text-decoration:none;"><i data-feather="phone" style="width:12px; height:12px;"></i> ${escapeHtml(b.phone || '-')}</a><br>
+                            <small style="color:var(--admin-text-muted);">${escapeHtml(b.email || '-')}</small>
                         </td>
                         <td>
-                            ${(r.busLocation || r.bus_location) && (r.busLocation || r.bus_location) !== 'Not Applicable' && (r.busLocation || r.bus_location) !== 'None' ? '<span class="badge badge-bus">Bus: ' + (r.busLocation || r.bus_location) + '</span><br>' : ''}
-                            ${(r.requireAccommodation === 'Yes' || r.require_accommodation) ? '<span class="badge badge-acc">Acc Req</span>' : ''}
-                            ${(r.attendingWithOthers === 'Yes' || r.attending_with_others) ? '<br><small>+ ' + (r.othersCount || r.others_count || 0) + ' people</small>' : ''}
+                            <span class="badge badge-gold">${escapeHtml(b.gathering_type || '-')}</span>
+                            ${b.other_gathering_type ? `<br><small style="color:var(--admin-text-muted);">${escapeHtml(b.other_gathering_type)}</small>` : ''}
                         </td>
                         <td>
-                            ${(r.prayerRequest || r.prayer_request) ? '<small style="color:var(--primary);"><i>"'+(r.prayerRequest || r.prayer_request)+'"</i></small><br>' : ''}
-                            ${(r.accommodationDetails || r.accommodation_details) ? '<small><strong>Acc Details:</strong> '+(r.accommodationDetails || r.accommodation_details)+'</small>' : ''}
+                            <span style="font-weight:600; color:#FFF;">${escapeHtml(b.event_theme || 'N/A')}</span>
+                        </td>
+                        <td>
+                            <strong style="color:var(--admin-info);">${escapeHtml(b.event_date || '-')}</strong><br>
+                            <small style="color:var(--admin-text-muted);">${escapeHtml(b.ministration_time || '-')}</small>
+                        </td>
+                        <td>
+                            <span style="display:block; max-width:180px; font-size:0.85rem;">${escapeHtml(b.venue_location || '-')}</span>
+                            <small style="color:var(--admin-gold);">Logistics: ${escapeHtml(b.logistics_transportation || '-')}</small>
+                        </td>
+                        <td>
+                            ${statusBadge}
+                        </td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn-sm btn-gold" onclick="openBookingModal('${b.id}')">View</button>
+                                <select class="status-dropdown" onchange="quickUpdateStatus('${b.id}', this.value)">
+                                    <option value="pending" ${status === 'pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="reviewed" ${status === 'reviewed' ? 'selected' : ''}>Reviewed</option>
+                                    <option value="confirmed" ${status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+                                    <option value="archived" ${status === 'archived' ? 'selected' : ''}>Archived</option>
+                                </select>
+                            </div>
                         </td>
                     </tr>
-                `).join('');
-                
-            } catch (err) {
-                tbody.innerHTML = 
-                    `<tr><td colspan="8" class="empty-state" style="color: #f87171;">Could not load registrations: ${err.message}</td></tr>`;
-            }
+                `;
+            }).join('');
+            feather.replace();
         }
 
-        async function fetchBookings() {
-            const tbody = document.getElementById('bookings-body');
-            tbody.innerHTML = '<tr><td colspan="9" class="empty-state">Loading bookings...</td></tr>';
-            try {
-                let data = null;
+        // Render Conference Registrations Table
+        function renderConference() {
+            const tbody = document.getElementById('conference-tbody');
+            const search = document.getElementById('table-search').value.toLowerCase().trim();
 
-                // 1. Try server endpoint
-                try {
-                    const res = await fetch('/api/admin/bookings');
-                    if (res.ok) {
-                        const json = await res.json();
-                        data = json.data;
-                    }
-                } catch(e) {}
-
-                // 2. Fallback to Supabase direct
-                if (!data && window.supabaseClient) {
-                    const { data: sbData, error } = await window.supabaseClient
-                        .from('minister_bookings')
-                        .select('*')
-                        .order('created_at', { ascending: false });
-                    if (!error && sbData) {
-                        data = sbData;
-                    }
+            let filtered = rawRegistrations.filter(r => {
+                if (search) {
+                    const text = [
+                        r.full_name || r.fullName,
+                        r.phone,
+                        r.email,
+                        r.city,
+                        r.state_country || r.state,
+                        r.campus
+                    ].filter(Boolean).join(' ').toLowerCase();
+                    if (!text.includes(search)) return false;
                 }
+                return true;
+            });
 
-                if (!data || data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No ministerial booking requests received yet.</td></tr>';
-                    return;
-                }
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr><td colspan="8" class="empty-placeholder">
+                        <i data-feather="inbox"></i>
+                        <p>No conference registrations found.</p>
+                    </td></tr>
+                `;
+                feather.replace();
+                return;
+            }
 
-                tbody.innerHTML = data.map(b => `
+            tbody.innerHTML = filtered.map(r => {
+                const dateStr = r.created_at ? new Date(r.created_at).toLocaleDateString() : '-';
+                const name = r.full_name || r.fullName || '-';
+                const phone = r.phone || '-';
+                const email = r.email || '-';
+                const demo = `${r.gender || '-'}, ${r.age_range || r.ageRange || '-'}`;
+                const church = r.campus ? r.campus : (r.church_role ? `${r.church_role} (${r.church_location || ''})` : 'N/A');
+                const bus = r.bus_location || r.busLocation || 'None';
+                const acc = r.require_accommodation || r.requireAccommodation ? 'Yes' : 'No';
+                const prayer = r.prayer_request || r.prayerRequest || '';
+
+                return `
                     <tr>
-                        <td style="white-space:nowrap">${b.created_at ? new Date(b.created_at).toLocaleDateString() : '-'}</td>
-                        <td><strong>${b.organization_name || '-'}</strong></td>
+                        <td style="white-space:nowrap; font-size:0.85rem; color:var(--admin-text-muted);">${dateStr}</td>
+                        <td><strong style="color:#FFF;">${escapeHtml(name)}</strong></td>
                         <td>
-                            <strong>${b.contact_person || '-'}</strong><br>
-                            <small>${b.phone || '-'}</small><br>
-                            <small>${b.email || '-'}</small>
+                            <a href="tel:${phone}" style="color:var(--admin-gold); text-decoration:none;">${escapeHtml(phone)}</a><br>
+                            <small style="color:var(--admin-text-muted);">${escapeHtml(email)}</small>
                         </td>
-                        <td>
-                            <span class="badge badge-gold">${b.gathering_type || '-'}</span>
-                            ${b.other_gathering_type ? `<br><small>(${b.other_gathering_type})</small>` : ''}
-                        </td>
-                        <td>${b.event_theme || '-'}</td>
-                        <td>
-                            <strong>${b.event_date || '-'}</strong><br>
-                            <small>${b.ministration_time || '-'}</small>
-                        </td>
-                        <td>
-                            ${b.venue_location || '-'}<br>
-                            ${b.expected_attendees ? `<small>Attendees: ${b.expected_attendees}</small>` : ''}
-                        </td>
-                        <td>
-                            <span style="font-size: 0.85rem;">${b.logistics_transportation || '-'}</span>
-                            ${b.logistics_other_details ? `<br><small>Details: ${b.logistics_other_details}</small>` : ''}
-                        </td>
-                        <td>
-                            <small style="max-width: 250px; display: block; line-height: 1.4;">${b.event_description || '-'}</small>
-                        </td>
+                        <td>${escapeHtml(demo)}</td>
+                        <td>${escapeHtml(church)}</td>
+                        <td><span class="badge badge-reviewed">${escapeHtml(bus)}</span></td>
+                        <td>${acc === 'Yes' ? '<span class="badge badge-pending">Req</span>' : 'No'}</td>
+                        <td><small style="color:var(--admin-gold); font-style:italic;">${escapeHtml(prayer || '-')}</small></td>
                     </tr>
-                `).join('');
+                `;
+            }).join('');
+            feather.replace();
+        }
+
+        // Quick Status Updater
+        async function quickUpdateStatus(bookingId, newStatus) {
+            const db = window.supabaseClient;
+            if (!db) return;
+
+            try {
+                const { error } = await db
+                    .from('minister_bookings')
+                    .update({ status: newStatus })
+                    .eq('id', bookingId);
+
+                if (error) throw error;
+                const b = rawBookings.find(item => item.id === bookingId);
+                if (b) b.status = newStatus;
+                renderBookings();
+                updateStats();
             } catch (err) {
-                tbody.innerHTML = 
-                    `<tr><td colspan="9" class="empty-state" style="color: #f87171;">Could not load bookings: ${err.message}</td></tr>`;
+                alert("Could not update status: " + err.message);
+                renderBookings();
             }
         }
-        
-        // Init default
-        fetchRegistrations();
+
+        // Detail Modal Logic
+        function openBookingModal(bookingId) {
+            const b = rawBookings.find(item => item.id === bookingId);
+            if (!b) return;
+
+            currentModalBooking = b;
+            document.getElementById('modal-gathering-type').textContent = b.gathering_type || 'Gospel Gathering';
+            document.getElementById('modal-org-name').textContent = b.organization_name || 'Church / Organization';
+            document.getElementById('modal-timestamp').textContent = 'Submitted on: ' + (b.created_at ? new Date(b.created_at).toLocaleString() : 'N/A');
+            document.getElementById('modal-status-select').value = (b.status || 'pending').toLowerCase();
+
+            const rows = [
+                { label: 'Contact Person', val: b.contact_person },
+                { label: 'Phone / WhatsApp', val: `<a href="https://wa.me/${(b.phone||'').replace(/[^0-9]/g,'')}" target="_blank" style="color:var(--admin-gold); font-weight:600;">${escapeHtml(b.phone || '-')} (Open WhatsApp)</a>` },
+                { label: 'Email Address', val: `<a href="mailto:${b.email}" style="color:var(--admin-info);">${escapeHtml(b.email || '-')}</a>` },
+                { label: 'Event Theme / Topic', val: b.event_theme || 'Not specified' },
+                { label: 'Date of Event', val: b.event_date },
+                { label: 'Time of Ministration', val: b.ministration_time },
+                { label: 'Venue & Location', val: b.venue_location },
+                { label: 'Expected Attendees', val: b.expected_attendees || 'Not specified' },
+                { label: 'Description & Purpose', val: b.event_description },
+                { label: 'Logistics Responsibility', val: b.logistics_transportation + (b.logistics_other_details ? ` (${b.logistics_other_details})` : '') }
+            ];
+
+            const html = rows.map(r => `
+                <div class="detail-row">
+                    <div class="detail-label">${r.label}</div>
+                    <div class="detail-val">${r.val || '-'}</div>
+                </div>
+            `).join('');
+
+            document.getElementById('modal-body-fields').innerHTML = html;
+            document.getElementById('booking-modal').classList.add('active');
+            feather.replace();
+        }
+
+        function closeModal() {
+            document.getElementById('booking-modal').classList.remove('active');
+            currentModalBooking = null;
+        }
+
+        function closeModalOnBg(e) {
+            if (e.target.id === 'booking-modal') closeModal();
+        }
+
+        async function updateBookingStatusFromModal() {
+            if (!currentModalBooking) return;
+            const newStatus = document.getElementById('modal-status-select').value;
+            await quickUpdateStatus(currentModalBooking.id, newStatus);
+        }
+
+        function copyBookingSummary() {
+            if (!currentModalBooking) return;
+            const b = currentModalBooking;
+            const summary = `MINISTRATION INVITATION - EVANGELIST ELISHA OLORUNDA
+----------------------------------------
+🏛 Organization: ${b.organization_name || '-'}
+👤 Contact: ${b.contact_person || '-'}
+📞 Phone: ${b.phone || '-'}
+✉️ Email: ${b.email || '-'}
+🕊 Gathering: ${b.gathering_type || '-'}
+📖 Theme: ${b.event_theme || 'N/A'}
+📅 Date: ${b.event_date || '-'}
+⏰ Time: ${b.ministration_time || '-'}
+📍 Venue: ${b.venue_location || '-'}
+👥 Expected Attendees: ${b.expected_attendees || 'N/A'}
+🚗 Transportation/Logistics: ${b.logistics_transportation || '-'}${b.logistics_other_details ? ' (' + b.logistics_other_details + ')' : ''}
+📝 Purpose: ${b.event_description || '-'}
+Status: ${(b.status || 'pending').toUpperCase()}`;
+
+            navigator.clipboard.writeText(summary).then(() => {
+                alert("✅ Booking summary copied to clipboard! You can paste it into WhatsApp.");
+            }).catch(() => {
+                alert("Failed to copy. Please select and copy manually.");
+            });
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
     </script>
 </body>
 </html>
